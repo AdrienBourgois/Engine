@@ -22,5 +22,5 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnQuitButtonClicked();
+	afx_msg virtual void OnQuitButtonClicked() = 0;
 };
