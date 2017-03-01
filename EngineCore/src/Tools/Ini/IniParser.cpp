@@ -41,16 +41,16 @@ bool IniParser::Parse()
 	return true;
 }
 
-bool IniParser::Has(const char* _section_to_find, const char* _key_to_find = "") const
+bool IniParser::Has(const char* _section, const char* _key = "") const
 {
 	for (auto section : content)
 	{
-		if(section.first == _section_to_find)
+		if(section.first == _section)
 		{
-			if (_key_to_find != "")
+			if (_key != "")
 			{
 				for (auto key : *section.second)
-					if (key.first == _key_to_find)
+					if (key.first == _key)
 						return true;
 			}
 			else
@@ -86,10 +86,10 @@ float IniParser::GetFloat(const char* _section, const char* _key) const
 	return 0.f;
 }
 
-void IniParser::Set(const char* _section, const char* _key, const char* _value)
+void IniParser::Set(const char* _section, const char* _key, const char* _new_value)
 {
 	if (Has(_section, _key))
-		content.at(_section)->at(_key) = _value;
+		content.at(_section)->at(_key) = _new_value;
 }
 
 bool IniParser::IsLineToParse(const std::string _line) const

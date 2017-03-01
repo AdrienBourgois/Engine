@@ -4,18 +4,64 @@
 #include <fstream>
 #include <unordered_map>
 
+/**
+ * \brief Class to parse .ini files
+ */
 class IniParser
 {
 public:
-	ENGINEDLL_API explicit IniParser(char *);
+	/**
+	 * \brief
+	 * \param _filePath Path of the file to parse
+	 */
+	ENGINEDLL_API explicit IniParser(char * _filePath);
 	ENGINEDLL_API ~IniParser();
 
+	/**
+	 * \brief Parse file
+	 * \return Is file successfully parsed
+	 */
 	ENGINEDLL_API bool Parse();
-	ENGINEDLL_API bool Has(const char*, const char*) const;
-	ENGINEDLL_API const char* Get(const char*, const char*) const;
-	ENGINEDLL_API int GetInt(const char*, const char*) const;
-	ENGINEDLL_API float GetFloat(const char*, const char*) const;
-	ENGINEDLL_API void Set(const char*, const char*, const char*);
+
+	/**
+	 * \brief Return existence of key in section of file
+	 * \param _section Section name
+	 * \param _key Key name
+	 * \return Is key in file
+	 */
+	ENGINEDLL_API bool Has(const char* _section, const char* _key) const;
+
+	/**
+	 * \brief Return value of key in section of file
+	 * \param _section Section name
+	 * \param _key Key name
+	 * \return String value of key
+	 */
+	ENGINEDLL_API const char* Get(const char* _section, const char* _key) const;
+
+	/**
+	 * \brief Return value of key in section of file as int
+	 * \param _section Section name
+	 * \param _key Key name
+	 * \return Int value of key
+	 */
+	ENGINEDLL_API int GetInt(const char* _section, const char* _key) const;
+
+	/**
+	 * \brief Return value of key in section of file as float
+	 * \param _section Section name
+	 * \param _key Key name
+	 * \return Float value of key
+	 */
+	ENGINEDLL_API float GetFloat(const char* _section, const char* _key) const;
+
+	/**
+	 * \brief Change value of key (any change if file)
+	 * \param _section Section name
+	 * \param _key Key name
+	 * \param _new_value New value of key
+	 */
+	ENGINEDLL_API void Set(const char* _section, const char* _key, const char* _new_value);
 
 private:
 	bool IsLineToParse(const std::string) const;
