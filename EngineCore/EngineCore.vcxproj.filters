@@ -24,6 +24,12 @@
     <ClCompile Include="src\Tools\Logger\LogForm\LogFormHandle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Tools\Logger\Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tools\Logger\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Tools\Ini\IniParser.h">
@@ -35,10 +41,16 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Tools\Logger\Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\Tools\Logger\LogForm\LogForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Tools\Logger\LogForm\LogFormHandle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\Logger\Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
