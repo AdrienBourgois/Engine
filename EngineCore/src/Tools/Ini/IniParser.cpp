@@ -27,6 +27,7 @@ bool IniParser::Parse()
 		{
 			if (current_line.front() == '[' && current_line.back() == ']')
 			{
+				InsertSection();
 				NewSection();
 				ExtractSectionName(current_line);
 			}
@@ -34,6 +35,9 @@ bool IniParser::Parse()
 				current_section->insert(make_pair(ExtractKey(current_line), ExtractValue(current_line)));
 		}
 	}
+
+	InsertSection();
+
 	return true;
 }
 
@@ -64,6 +68,24 @@ const char* IniParser::Get(const char* _section, const char* _key) const
 	return nullptr;
 }
 
+int IniParser::GetInt(const char* _section, const char* _key) const
+{
+	const char* value = Get(_section, _key);
+	if (value)
+		return std::stoi(value);
+
+	return 0;
+}
+
+float IniParser::GetFloat(const char* _section, const char* _key) const
+{
+	const char* value = Get(_section, _key);
+	if (value)
+		return std::stof(value);
+
+	return 0.f;
+}
+
 void IniParser::Set(const char* _section, const char* _key, const char* _value)
 {
 	if (Has(_section, _key))
@@ -72,26 +94,30 @@ void IniParser::Set(const char* _section, const char* _key, const char* _value)
 
 bool IniParser::IsLineToParse(const std::string _line) const
 {
+	bool toParse = false;
 	for (char element : _line)
 	{
 		if (element != ' ')
 		{
-			if (element == ';' || element == '#' || element == '\n')
-				return false;
+			if (element != ';' && element != '#' && element != '\n')
+				toParse = true;
+			break;
 		}
-		else
-			return true;
 	}
-	return false;
+	return toParse;
 }
 
 void IniParser::NewSection()
 {
-	if (current_section)
-		content.insert(make_pair(current_section_name, current_section));
-
 	current_section = new std::unordered_map<std::string, std::string>();
 	current_section_name = "";
+}
+
+void IniParser::InsertSection()
+{
+	if(current_section)
+		if (current_section->size())
+			content.insert(make_pair(current_section_name, current_section));
 }
 
 void IniParser::ExtractSectionName(const std::string _line)
@@ -99,7 +125,7 @@ void IniParser::ExtractSectionName(const std::string _line)
 	std::string name = "";
 	for (char element : _line)
 	{
-		if (element != ' ' && element != '[')
+		if (element != ' ' && element != '[' && element != ']')
 			name += element;
 		if (element == ']')
 			break;
@@ -112,9 +138,12 @@ std::string IniParser::ExtractKey(const std::string _line) const
 	std::string key = "";
 	for (char element : _line)
 	{
-		if (element == ' ' || element == '\n')
+		if (element == '=')
+			break;
+
+		if (element == ' ')
 		{
-			if (key == "")
+			if (key != "")
 				break;
 		}
 		else
@@ -130,9 +159,12 @@ std::string IniParser::ExtractValue(const std::string _line) const
 
 	for (char element : _line.substr(pos + 1))
 	{
-		if (element == ' ' || element == '\n')
+		if (element == '\n')
+			break;
+
+		if (element == ' ')
 		{
-			if (value == "")
+			if (value != "")
 				break;
 		}
 		else
