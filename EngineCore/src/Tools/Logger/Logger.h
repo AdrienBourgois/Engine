@@ -33,6 +33,5 @@ namespace Tools
 
 	private:
 		std::vector<Tools::Log*> logs;
-
 	};
 }

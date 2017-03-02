@@ -9,18 +9,16 @@ class LogForm : public CDialogEx
 	DECLARE_DYNAMIC(LogForm)
 
 public:
-	explicit LogForm(CWnd* pParent = nullptr);   // standard constructor
+	LogForm(CWnd* pParent = NULL);   // standard constructor
 	virtual ~LogForm();
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = LOG_DIALOG };
+	enum { IDD = IDD_DIALOG1 };
 #endif
 
 protected:
-	void DoDataExchange(CDataExchange* pDX) override;    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()
-public:
-	afx_msg virtual void OnQuitButtonClicked() = 0;
 };
