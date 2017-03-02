@@ -8,8 +8,6 @@ namespace Tools
 
 	LogFormHandle::LogFormHandle()
 	{
-		AFX_MANAGE_STATE(AfxGetStaticModuleState());
-		AfxSetResourceHandle(AfxGetStaticModuleState()->m_hCurrentResourceHandle);
 	}
 
 	LogFormHandle::~LogFormHandle()
@@ -27,7 +25,7 @@ namespace Tools
 			}
 			return true;
 		case WM_DESTROY:
-			//PostQuitMessage(0);
+			PostQuitMessage(0);
 			return true;
 
 		default:
@@ -45,11 +43,8 @@ namespace Tools
 
 	void LogFormHandle::DisplayDialog()
 	{
-		/*AFX_MANAGE_STATE(AfxGetStaticModuleState());
-		AfxSetResourceHandle(AfxGetStaticModuleState()->m_hCurrentResourceHandle);*/
-
-		//CreateDialog(nullptr, MAKEINTRESOURCE(IDD_DIALOG1), nullptr, DialogProc);
-		//Create(MAKEINTRESOURCEW(IDD_DIALOG1));
+		//CreateDialog(nullptr, MAKEINTRESOURCE(LOG_DIALOG), nullptr, DialogProc);
+		//Create(MAKEINTRESOURCEW(LOG_DIALOG));
 		DoModal();
 	}
 

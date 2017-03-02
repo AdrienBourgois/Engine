@@ -9,7 +9,6 @@ namespace Tools
 	{
 		DECLARE_DYNAMIC(LogFormHandle)
 
-	public:
 		LogFormHandle();
 		~LogFormHandle();
 

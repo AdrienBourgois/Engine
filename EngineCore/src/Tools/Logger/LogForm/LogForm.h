@@ -2,23 +2,19 @@
 
 #include <afxdialogex.h>
 
-// LogForm dialog
-
 class LogForm : public CDialogEx
 {
 	DECLARE_DYNAMIC(LogForm)
 
-public:
-	LogForm(CWnd* pParent = NULL);   // standard constructor
+	explicit LogForm(CWnd* pParent = nullptr);
 	virtual ~LogForm();
 
-// Dialog Data
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_DIALOG1 };
+	enum { IDD = LOG_DIALOG };
 #endif
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	void DoDataExchange(CDataExchange* pDX) override;
 
 	DECLARE_MESSAGE_MAP()
 };
