@@ -42,6 +42,7 @@ namespace Display
 		int height = 900;
 
 		bool fullscreen = false;
+		bool canReceiveMessage = true;
 	};
 }
 

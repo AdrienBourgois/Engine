@@ -11,29 +11,34 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\ModuleManager.h" />
-    <ClInclude Include="src\Display\Window.h" />
-    <ClInclude Include="src\Engine.h" />
-    <ClInclude Include="src\IModule.h" />
-    <ClInclude Include="src\Includes.h" />
-    <ClInclude Include="src\Maths\Math.h" />
-    <ClInclude Include="src\Render\DirectX\DX12Helper.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="src\Macros.h" />
-    <ClInclude Include="src\Tools\Ini\IniParser.h" />
+    <ClInclude Include="Src\Core\ModuleManager.h" />
+    <ClInclude Include="Src\Display\Window.h" />
+    <ClInclude Include="Src\Engine.h" />
+    <ClInclude Include="Src\IModule.h" />
+    <ClInclude Include="Src\Includes.h" />
+    <ClInclude Include="Src\Maths\Math.h" />
+    <ClInclude Include="Src\Render\DirectX\DX12Helper.h" />
+    <ClInclude Include="Src\Macros.h" />
+    <ClInclude Include="Src\Tools\Ini\IniParser.h" />
+    <ClInclude Include="Src\Tools\Logger\Log.h" />
+    <ClInclude Include="Src\Tools\Logger\Logger.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Core\ModuleManager.cpp" />
-    <ClCompile Include="src\Display\Window.cpp" />
-    <ClCompile Include="src\Engine.cpp" />
-    <ClCompile Include="src\Maths\Math.cpp" />
-    <ClCompile Include="src\Tools\Ini\IniParser.cpp" />
+    <ClCompile Include="Src\Core\ModuleManager.cpp" />
+    <ClCompile Include="Src\Display\Window.cpp" />
+    <ClCompile Include="Src\Engine.cpp" />
+    <ClCompile Include="Src\Maths\Math.cpp" />
+    <ClCompile Include="Src\Tools\Ini\IniParser.cpp" />
+    <ClCompile Include="Src\Tools\Logger\Log.cpp" />
+    <ClCompile Include="Src\Tools\Logger\Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="EngineCore.rc" />
+    <FxCompile Include="Src\Render\Sharders\VertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\Render\Sharders\VertexShader.hlsl" />
+    <None Include="Content\Config\config.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{291D2B5F-EF7F-4C55-B96D-87737397CA51}</ProjectGuid>
@@ -83,16 +88,11 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;ENGINECORE_EXPORTS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)EngineCore\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>kernel32.lib;user32.lib</AdditionalDependencies>
-      <EntryPointSymbol>
-      </EntryPointSymbol>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -105,7 +105,6 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;ENGINECORE_EXPORTS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)EngineCore\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -113,18 +112,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>kernel32.lib;user32.lib</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
-      <EntryPointSymbol>
-      </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties RESOURCE_FILE="EngineCore.rc" />
-    </VisualStudio>
-  </ProjectExtensions>
 </Project>

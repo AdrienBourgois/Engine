@@ -1,5 +1,6 @@
 #include "IniParser.h"
 #include <string>
+#include <Windows.h>
 
 namespace Tools
 {
@@ -16,9 +17,22 @@ namespace Tools
 
 	bool IniParser::Parse()
 	{
+		wchar_t path[100];
+		int bytes = GetModuleFileName(nullptr, path, 100);
+		OutputDebugStringW(path);
+
 		file.open(filePath);
 		if (!file.is_open())
+		{
+			if (file.fail())
+				OutputDebugStringW(L"Failbit");
+			if (file.bad())
+				OutputDebugStringW(L"Badbit");
+			char error[50];
+			strerror_s(error, 50, errno);
+			OutputDebugStringA(error);
 			return false;
+		}
 
 		while (file.good() && !file.eof())
 		{
@@ -86,6 +100,15 @@ namespace Tools
 			return std::stof(value);
 
 		return 0.f;
+	}
+
+	bool IniParser::GetBool(const char* _section, const char* _key) const
+	{
+		const char* value = Get(_section, _key);
+		if (value == "true")
+			return true;
+
+		return false;
 	}
 
 	void IniParser::Set(const char* _section, const char* _key, const char* _new_value)

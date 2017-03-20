@@ -58,6 +58,14 @@ namespace Tools
 		ENGINEDLL_API float GetFloat(const char* _section, const char* _key) const;
 
 		/**
+		 * \brief Return value of key in section of file as float
+		 * \param _section Section name
+		 * \param _key Key name
+		 * \return Bool value of key
+		 */
+		ENGINEDLL_API bool GetBool(const char* _section, const char* _key) const;
+
+		/**
 		 * \brief Change value of key (any change if file)
 		 * \param _section Section name
 		 * \param _key Key name

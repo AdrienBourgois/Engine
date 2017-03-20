@@ -7,6 +7,17 @@
 #include "Tools/Ini/IniParser.h"
 #include "Core/ModuleManager.h"
 
+enum EEngineStates
+{
+	Off = 0,
+	Initializing,
+	Ready,
+	Running,
+	AskToStop,
+	Stopping,
+	Stopped
+};
+
 class ENGINEDLL_API Engine
 {
 public:
@@ -20,15 +31,18 @@ public:
 	}
 
 	void Initialize(HINSTANCE hInstance = nullptr);
-	void Update() const;
+	void Start();
+	void Update();
 	void Stop();
+	void Destruct();
 
 	void SetHInstance(HINSTANCE _hInstance) { h_instance = _hInstance; }
 	HINSTANCE GetHInstance() const { return h_instance; }
+	IModule* GetModule(char module) const { return module_manager->GetModule(module); }
 
 	const Tools::IniParser* GetParameters() const { return parameters; }
 
-	bool isRunning() const { return running; }
+	EEngineStates GetState() const { return state; }
 
 private:
 	Engine() = default;
@@ -40,6 +54,6 @@ private:
 
 	HINSTANCE h_instance = nullptr;
 
-	bool running = false;
+	EEngineStates state = Off;
 };
 

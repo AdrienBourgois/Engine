@@ -47,8 +47,11 @@ void ModuleManager::StopModule(char _module_type)
 
 void ModuleManager::Stop()
 {
-	for (auto module : modules)
+	for (auto module_pair : modules)
 	{
-		module.second->Destruct();
+		IModule* module = module_pair.second;
+		module->Destruct();
+		//delete module;
+		module = nullptr;
 	}
 }

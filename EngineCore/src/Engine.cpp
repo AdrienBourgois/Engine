@@ -1,11 +1,10 @@
 #include "Engine.h"
 
-BOOL APIENTRY DllMain(HINSTANCE _hinstDLL, DWORD _fdwReason, LPVOID _lpReserved )
+BOOL WINAPI DllMain(HINSTANCE _hinstDLL, DWORD _fdwReason, LPVOID _lpReserved )
 {
 	switch( _fdwReason )
 	{
 		case DLL_PROCESS_ATTACH:
-			OutputDebugStringW(L"DllMain !");
 			Engine::GetInstance()->SetHInstance(_hinstDLL);
 			Engine::GetInstance()->Initialize();
 			break;
@@ -25,31 +24,53 @@ BOOL APIENTRY DllMain(HINSTANCE _hinstDLL, DWORD _fdwReason, LPVOID _lpReserved 
 
 void Engine::Initialize(HINSTANCE _hInstance)
 {
+	state = Initializing;
+
 	if(_hInstance)
 		h_instance = _hInstance;
 
-	parameters = new Tools::IniParser("config.ini");
+	parameters = new Tools::IniParser(".\\content\\Config\\config.ini");
 	parameters->Parse();
 
 	module_manager = new ModuleManager();
 
 	module_manager->CreateModule(WINDOW_MODULE);
 
-	running = true;
+	state = Ready;
 }
 
-void Engine::Update() const
+void Engine::Start()
 {
-	while (running)
+	if(state == Ready)
+	{
+		state = Running;
+		Update();
+	}
+}
+
+void Engine::Update()
+{
+	while (state == Running)
 	{
 		module_manager->UpdateModules();
+	}
+	if (state == AskToStop)
+	{
+		Destruct();
 	}
 }
 
 void Engine::Stop()
 {
+	state = AskToStop;
+}
+
+void Engine::Destruct()
+{
+	state = Stopping;
+
 	module_manager->Stop();
 	delete module_manager;
 
-	running = false;
+	state = Stopped;
 }

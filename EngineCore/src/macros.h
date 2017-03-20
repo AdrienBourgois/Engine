@@ -11,6 +11,9 @@
  */
 #define ENGINE Engine::GetInstance()
 
-#define GET_PARAMETER(section, parameter) ENGINE->GetParameters()->Get(section, parameter);
-#define GET_FLOAT_PARAMETER(section, parameter) ENGINE->GetParameters()->GetFloat(section, parameter);
-#define GET_INT_PARAMETER(section, parameter) ENGINE->GetParameters()->GetInt(section, parameter);
+#define GET_PARAMETER(section, parameter) ENGINE->GetParameters()->Get(section, parameter)
+#define GET_FLOAT_PARAMETER(section, parameter) ENGINE->GetParameters()->GetFloat(section, parameter)
+#define GET_INT_PARAMETER(section, parameter) ENGINE->GetParameters()->GetInt(section, parameter)
+#define GET_BOOL_PARAMETER(section, parameter) ENGINE->GetParameters()->GetBool(section, parameter)
+
+#define MODULE(module) ENGINE->GetModule(module)

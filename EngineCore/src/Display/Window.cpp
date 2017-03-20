@@ -12,7 +12,7 @@ Display::Window::~Window()
 bool Display::Window::Initialize()
 {
 	hInstance = ENGINE->GetHInstance();
-	fullscreen = GET_INT_PARAMETER("Display", "fullscreen");
+	fullscreen = GET_BOOL_PARAMETER("Display", "fullscreen");
 
 	int p_width = GET_INT_PARAMETER("Display", "width");
 	int p_height = GET_INT_PARAMETER("Display", "height");
@@ -81,8 +81,10 @@ bool Display::Window::MakeWindow(int _showWindow)
 
 LRESULT CALLBACK Display::Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	switch (msg)
+	if (ENGINE->GetState() == Running)
 	{
+		switch (msg)
+		{
 		case WM_KEYDOWN:
 			if (wParam == VK_ESCAPE)
 				if (MessageBox(nullptr, L"Are you sure you want to exit?", L"Really?", MB_YESNO | MB_ICONHAND) == IDYES)
@@ -95,7 +97,10 @@ LRESULT CALLBACK Display::Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LP
 
 		default:
 			return DefWindowProc(hWnd, msg, wParam, lParam);
+		}
 	}
+
+	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 void Display::Window::GetMessages() const
@@ -124,10 +129,12 @@ bool Display::Window::Destruct()
 {
 	if (windowHandler)
 	{
-		bool result = DestroyWindow(windowHandler);
+		bool result = DestroyWindow(windowHandler)!=0;
 		windowHandler = nullptr;
 		return result;
 	}
+
+	PostQuitMessage(0);
 
 	return true;
 }
