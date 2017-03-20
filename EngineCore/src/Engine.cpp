@@ -69,8 +69,12 @@ void Engine::Destruct()
 {
 	state = Stopping;
 
+	delete parameters;
+	parameters = nullptr;
+
 	module_manager->Stop();
 	delete module_manager;
+	module_manager = nullptr;
 
 	state = Stopped;
 }

@@ -17,20 +17,10 @@ namespace Tools
 
 	bool IniParser::Parse()
 	{
-		wchar_t path[100];
-		int bytes = GetModuleFileName(nullptr, path, 100);
-		OutputDebugStringW(path);
-
 		file.open(filePath);
 		if (!file.is_open())
 		{
-			if (file.fail())
-				OutputDebugStringW(L"Failbit");
-			if (file.bad())
-				OutputDebugStringW(L"Badbit");
-			char error[50];
-			strerror_s(error, 50, errno);
-			OutputDebugStringA(error);
+			file.close();
 			return false;
 		}
 
@@ -53,6 +43,11 @@ namespace Tools
 		}
 
 		InsertSection();
+
+		if (file.is_open())
+		{
+			file.close();
+		}
 
 		return true;
 	}

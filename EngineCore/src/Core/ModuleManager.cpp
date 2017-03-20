@@ -51,7 +51,7 @@ void ModuleManager::Stop()
 	{
 		IModule* module = module_pair.second;
 		module->Destruct();
-		//delete module;
+		delete module;
 		module = nullptr;
 	}
 }
