@@ -22,6 +22,7 @@
     <ClInclude Include="Src\Tools\Ini\IniParser.h" />
     <ClInclude Include="Src\Tools\Logger\Log.h" />
     <ClInclude Include="Src\Tools\Logger\Logger.h" />
+    <ClInclude Include="src\Core\CoreTypes\String.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Core\ModuleManager.cpp" />
@@ -32,6 +33,7 @@
     <ClCompile Include="Src\Tools\Ini\IniParser.cpp" />
     <ClCompile Include="Src\Tools\Logger\Log.cpp" />
     <ClCompile Include="Src\Tools\Logger\Logger.cpp" />
+    <ClCompile Include="src\Core\CoreTypes\String.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Core\Shaders\PixelShader.hlsl">

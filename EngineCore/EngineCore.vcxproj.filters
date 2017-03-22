@@ -43,6 +43,9 @@
     <ClCompile Include="Src\Render\DirectX\DirectX12Wrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\CoreTypes\String.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Tools\Ini\IniParser.h">
@@ -79,6 +82,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Src\Render\DirectX\DirectX12Wrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\CoreTypes\String.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
