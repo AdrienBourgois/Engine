@@ -51,7 +51,6 @@ bool DirectX12Wrapper::Start()
 
 bool DirectX12Wrapper::Update()
 {
-	UpdatePipeline();
 	Render();
 
 	return true;
@@ -356,7 +355,7 @@ void DirectX12Wrapper::WaitForPreviousFrame()
 	{
 		TRYFUNC(fence[frameIndex]->SetEventOnCompletion(fenceValue[frameIndex], fenceEvent))
 
-		WaitForSingleObject(fenceEvent, 1000);
+		WaitForSingleObject(fenceEvent, INFINITE);
 	}
 
 	fenceValue[frameIndex]++;
