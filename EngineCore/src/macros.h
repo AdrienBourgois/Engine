@@ -16,4 +16,4 @@
 #define GET_INT_PARAMETER(section, parameter) ENGINE->GetParameters()->GetInt(section, parameter)
 #define GET_BOOL_PARAMETER(section, parameter) ENGINE->GetParameters()->GetBool(section, parameter)
 
-#define MODULE(module) ENGINE->GetModule(module)
+#define MODULE(T) ENGINE->GetModule<T>()

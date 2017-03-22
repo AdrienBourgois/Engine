@@ -3,6 +3,10 @@
 #include <d3d12.h>
 #include <dxgi1_4.h>
 
+#include "Engine.h"
+#include "IModule.h"
+#include "Display/Window.h"
+
 #define FRAME_BUFFER_COUNT 3
 
 #define CHECK() if(FAILED(hr)) { ENGINE->Stop(); return; }
@@ -30,14 +34,22 @@
    }
 #endif
 
-class DirectX12Wrapper
+class DirectX12Wrapper : public IModule
 {
 public:
 
-	explicit DirectX12Wrapper(HWND*);
+	DECLARE_MODULE("DirectX12Wrapper")
+
+	explicit DirectX12Wrapper();
 	~DirectX12Wrapper();
 
-	void InitD3D();
+	void UpdatePipeline();
+	void Render();
+	void WaitForPreviousFrame();
+
+	void Cleanup();
+
+private:
 
 	void MakeDevice();
 	void MakeCommandQueue();
@@ -51,17 +63,10 @@ public:
 	void MakePipelineStateObject();
 	void MakeVertexBuffer();
 
-	void UpdatePipeline();
-	void Render();
-	void WaitForPreviousFrame();
-
-	void Cleanup();
-
-private:
-
 	HRESULT hr = 0;
 
 //Reference Objects
+	Display::Window* window_reference = nullptr;
 	HWND* window_handle_reference = nullptr;
 
 //Init Objects

@@ -15,7 +15,7 @@
     </Filter>
     <Filter Include="Shader Files">
       <UniqueIdentifier>{99834b83-e09f-4d32-969d-a07ccabce814}</UniqueIdentifier>
-      <Extensions>hsls</Extensions>
+      <Extensions>hlsl</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -38,6 +38,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Tools\Logger\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Render\DirectX\DirectX12Wrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -66,9 +69,6 @@
     <ClInclude Include="src\IModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Includes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\ModuleManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -78,14 +78,20 @@
     <ClInclude Include="src\Tools\Logger\Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Render\DirectX\DirectX12Wrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="content\Config\config.ini">
+    <None Include="Content\Config\config.ini">
       <Filter>Content Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\Render\Sharders\VertexShader.hlsl">
+    <FxCompile Include="Content\Core\Shaders\VertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Content\Core\Shaders\PixelShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
   </ItemGroup>

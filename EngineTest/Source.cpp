@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Windows.h"
+#include <string>
 
 int WINAPI wWinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, PWSTR _pCmdLine, int _nCmdShow)
 {

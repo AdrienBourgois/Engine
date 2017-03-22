@@ -33,15 +33,20 @@ void Engine::Initialize(HINSTANCE _hInstance)
 	parameters->Parse();
 
 	module_manager = new ModuleManager();
-
-	module_manager->CreateModule(WINDOW_MODULE);
+	module_manager->InitializedModules();
 
 	state = Ready;
 }
 
 void Engine::Start()
 {
-	if(state == Ready)
+	if (state == Ready)
+	{
+		module_manager->StartModules();
+		state = Starting;
+	}
+
+	if (state == Starting)
 	{
 		state = Running;
 		Update();

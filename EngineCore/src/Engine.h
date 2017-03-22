@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 
-#include "macros.h"
+#include "Macros.h"
 
 #include "Tools/Ini/IniParser.h"
 #include "Core/ModuleManager.h"
@@ -12,6 +12,7 @@ enum EEngineStates
 	Off = 0,
 	Initializing,
 	Ready,
+	Starting,
 	Running,
 	AskToStop,
 	Stopping,
@@ -38,7 +39,9 @@ public:
 
 	void SetHInstance(HINSTANCE _hInstance) { h_instance = _hInstance; }
 	HINSTANCE GetHInstance() const { return h_instance; }
-	IModule* GetModule(char module) const { return module_manager->GetModule(module); }
+
+	template<typename T>
+	T* GetModule() const;
 
 	const Tools::IniParser* GetParameters() const { return parameters; }
 
@@ -57,3 +60,8 @@ private:
 	EEngineStates state = Off;
 };
 
+template <typename T>
+T* Engine::GetModule() const
+{
+	return module_manager->GetModule<T>();
+}

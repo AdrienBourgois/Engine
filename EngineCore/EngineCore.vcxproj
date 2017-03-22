@@ -15,8 +15,8 @@
     <ClInclude Include="Src\Display\Window.h" />
     <ClInclude Include="Src\Engine.h" />
     <ClInclude Include="Src\IModule.h" />
-    <ClInclude Include="Src\Includes.h" />
     <ClInclude Include="Src\Maths\Math.h" />
+    <ClInclude Include="Src\Render\DirectX\DirectX12Wrapper.h" />
     <ClInclude Include="Src\Render\DirectX\DX12Helper.h" />
     <ClInclude Include="Src\Macros.h" />
     <ClInclude Include="Src\Tools\Ini\IniParser.h" />
@@ -28,17 +28,20 @@
     <ClCompile Include="Src\Display\Window.cpp" />
     <ClCompile Include="Src\Engine.cpp" />
     <ClCompile Include="Src\Maths\Math.cpp" />
+    <ClCompile Include="Src\Render\DirectX\DirectX12Wrapper.cpp" />
     <ClCompile Include="Src\Tools\Ini\IniParser.cpp" />
     <ClCompile Include="Src\Tools\Logger\Log.cpp" />
     <ClCompile Include="Src\Tools\Logger\Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Src\Render\Sharders\VertexShader.hlsl" />
+    <FxCompile Include="Content\Core\Shaders\PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Content\Core\Shaders\VertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Config\config.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Content\Config\config.ini" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{291D2B5F-EF7F-4C55-B96D-87737397CA51}</ProjectGuid>
@@ -92,8 +95,14 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib</AdditionalDependencies>
+      <AdditionalDependencies>D3DCompiler.lib;d3d12.lib;dxgi.lib;kernel32.lib;user32.lib</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(ProjectDir)Content" "$(TargetDir)\Content\" /S /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy Content folder in output folder</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -111,8 +120,14 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib</AdditionalDependencies>
+      <AdditionalDependencies>D3DCompiler.lib;d3d12.lib;dxgi.lib;kernel32.lib;user32.lib</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(ProjectDir)Content" "$(TargetDir)\Content\" /S /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy Content folder in output folder</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

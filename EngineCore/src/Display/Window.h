@@ -14,9 +14,7 @@ namespace Display
 		Window();
 		~Window();
 
-		bool Initialize() override;
-		bool Update() override;
-		bool Destruct() override;
+		DECLARE_MODULE("Window")
 
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		void GetMessages() const;

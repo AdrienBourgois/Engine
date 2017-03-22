@@ -17,7 +17,11 @@ bool Display::Window::Initialize()
 	int p_width = GET_INT_PARAMETER("Display", "width");
 	int p_height = GET_INT_PARAMETER("Display", "height");
 
-	PrepareWindow(p_width, p_height);
+	return PrepareWindow(p_width, p_height);
+}
+
+bool Display::Window::Start()
+{
 	return MakeWindow(1);
 }
 

@@ -3,17 +3,37 @@
 #include <D3Dcompiler.h>
 #include "DX12Helper.h"
 #include "Maths/Math.h"
-#include "macros.h"
-#include "Includes.h"
+#include "Macros.h"
 
-DirectX12Wrapper::DirectX12Wrapper(HWND* _window_handle_reference): window_handle_reference(_window_handle_reference)
-{}
+DirectX12Wrapper::DirectX12Wrapper()
+{
+	window_reference = MODULE(Display::Window);
+	window_handle_reference = window_reference->getHandle();
+}
 
 DirectX12Wrapper::~DirectX12Wrapper()
 {}
 
-void DirectX12Wrapper::InitD3D()
+bool DirectX12Wrapper::Initialize()
 {
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+
+	scissorRect.left   = 0;
+	scissorRect.top    = 0;
+
+	return true;
+}
+
+bool DirectX12Wrapper::Start()
+{
+	viewport.Width    = static_cast<FLOAT>(MODULE(Display::Window)->getWidth());
+	viewport.Height   = static_cast<FLOAT>(MODULE(Display::Window)->getHeight());
+	scissorRect.right  = MODULE(Display::Window)->getWidth();
+	scissorRect.bottom = MODULE(Display::Window)->getHeight();
+
 	MakeDevice();
 	MakeCommandQueue();
 	MakeSwapChain();
@@ -23,30 +43,25 @@ void DirectX12Wrapper::InitD3D()
 	MakeRootDescriptor();
 	MakeVertexShader();
 	MakePixelShader();
-
-	D3D12_INPUT_ELEMENT_DESC inputLayout[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
-	};
-
-	inputLayoutDesc.NumElements = sizeof(inputLayout) / sizeof(D3D12_INPUT_ELEMENT_DESC);
-	inputLayoutDesc.pInputElementDescs = inputLayout;
-
 	MakePipelineStateObject();
 	MakeVertexBuffer();
 
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.Width    = static_cast<FLOAT>(ENGINE->getWindow()->getWidth());
-	viewport.Height   = static_cast<FLOAT>(ENGINE->getWindow()->getHeight());
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
+	return true;
+}
 
-	scissorRect.left   = 0;
-	scissorRect.top    = 0;
-	scissorRect.right  = ENGINE->getWindow()->getWidth();
-	scissorRect.bottom = ENGINE->getWindow()->getHeight();
+bool DirectX12Wrapper::Update()
+{
+	UpdatePipeline();
+	Render();
+
+	return true;
+}
+
+bool DirectX12Wrapper::Destruct()
+{
+	Cleanup();
+
+	return true;
 }
 
 void DirectX12Wrapper::MakeDevice()
@@ -91,8 +106,8 @@ void DirectX12Wrapper::MakeCommandQueue()
 void DirectX12Wrapper::MakeSwapChain()
 {
 	DXGI_MODE_DESC backBufferDesc;
-	backBufferDesc.Width  = ENGINE->getWindow()->getWidth();
-	backBufferDesc.Height = ENGINE->getWindow()->getHeight();
+	backBufferDesc.Width  = MODULE(Display::Window)->getWidth();
+	backBufferDesc.Height = MODULE(Display::Window)->getHeight();
 	backBufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
 	sampleDesc.Count = 1;
@@ -104,7 +119,7 @@ void DirectX12Wrapper::MakeSwapChain()
 	swapChainDesc.SwapEffect           = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	swapChainDesc.OutputWindow         = *window_handle_reference;
 	swapChainDesc.SampleDesc           = sampleDesc;
-	swapChainDesc.Windowed             = !ENGINE->getWindow()->isFullscreen();
+	swapChainDesc.Windowed             = !MODULE(Display::Window)->isFullscreen();
 
 	IDXGISwapChain* tempSwapChain;
 
@@ -174,7 +189,7 @@ void DirectX12Wrapper::MakeVertexShader()
 {
 	ID3DBlob* vertexShader;
 	ID3DBlob* errorBuff;
-	hr = D3DCompileFromFile(L"VertexShader.hlsl", nullptr, nullptr, "main", "vs_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &vertexShader, &errorBuff);
+	hr = D3DCompileFromFile(L"Content\\Core\\Shaders\\VertexShader.hlsl", nullptr, nullptr, "main", "vs_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &vertexShader, &errorBuff);
 	CHECK_BLOB(errorBuff)
 
 	vertexShaderBytecode.BytecodeLength = vertexShader->GetBufferSize();
@@ -185,7 +200,7 @@ void DirectX12Wrapper::MakePixelShader()
 {
 	ID3DBlob* pixelShader;
 	ID3DBlob* errorBuff;
-	hr = D3DCompileFromFile(L"PixelShader.hlsl", nullptr, nullptr, "main", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &pixelShader, &errorBuff);
+	hr = D3DCompileFromFile(L"Content\\Core\\Shaders\\PixelShader.hlsl", nullptr, nullptr, "main", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &pixelShader, &errorBuff);
 	CHECK_BLOB(errorBuff)
 
 	pixelShaderBytecode.BytecodeLength = pixelShader->GetBufferSize();
@@ -194,6 +209,15 @@ void DirectX12Wrapper::MakePixelShader()
 
 void DirectX12Wrapper::MakePipelineStateObject()
 {
+	D3D12_INPUT_ELEMENT_DESC inputLayout[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+	};
+
+	inputLayoutDesc.NumElements = sizeof(inputLayout) / sizeof(D3D12_INPUT_ELEMENT_DESC);
+	inputLayoutDesc.pInputElementDescs = inputLayout;
+
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
 	psoDesc.InputLayout                        = inputLayoutDesc;
 	psoDesc.pRootSignature                     = rootSignature;
@@ -309,7 +333,7 @@ void DirectX12Wrapper::Cleanup()
 	SAFE_RELEASE(device);
 	SAFE_RELEASE(swapChain);
 	SAFE_RELEASE(commandQueue);
-	//SAFE_RELEASE(rtvDescriptorHeap);
+	SAFE_RELEASE(rtvDescriptorHeap);
 	SAFE_RELEASE(commandList);
 
 	SAFE_RELEASE(pipelineStateObject);
@@ -332,7 +356,7 @@ void DirectX12Wrapper::WaitForPreviousFrame()
 	{
 		TRYFUNC(fence[frameIndex]->SetEventOnCompletion(fenceValue[frameIndex], fenceEvent))
 
-		WaitForSingleObject(fenceEvent, INFINITE);
+		WaitForSingleObject(fenceEvent, 1000);
 	}
 
 	fenceValue[frameIndex]++;
