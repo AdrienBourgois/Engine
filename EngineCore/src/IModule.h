@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Macros.h"
-#include <string>
 
 #define DECLARE_MODULE(name)\
 	bool Initialize() override;\
@@ -21,9 +20,9 @@ public:
 	virtual bool Destruct() = 0;
 	virtual void SetDefaultModuleName() = 0;
 
-	void SetModuleName(char* _new_name = "") { moduleName = _new_name; };
-	const char* GetModuleName() const { return moduleName.c_str(); }
+	void SetModuleName(CoreType::String _new_name = S("")) { moduleName = _new_name; };
+	const char* GetModuleName() const { return moduleName.CStr(); }
 
 protected:
-	std::string moduleName = "Unamed Module";
+	CoreType::String moduleName = S("Unamed Module");
 };

@@ -6,6 +6,8 @@
 #define ENGINEDLL_API __declspec(dllimport)
 #endif
 
+#include "Core/CoreTypes/String.h"
+
 /**
  * \brief Return instance of the engine class
  */

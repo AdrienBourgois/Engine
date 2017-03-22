@@ -1,12 +1,7 @@
 ﻿#pragma once
 
-#ifdef ENGINECORE_EXPORTS
-#define ENGINEDLL_API __declspec(dllexport)
-#else
-#define ENGINEDLL_API __declspec(dllimport)
-#endif
-
 #include <vector>
+#include "Macros.h"
 #include "Log.h"
 
 namespace Tools
@@ -17,19 +12,19 @@ namespace Tools
 	class Logger
 	{
 	public:
-		Logger();
-		~Logger();
+		ENGINEDLL_API Logger();
+		ENGINEDLL_API ~Logger();
 
 		/**
 		 * \brief Create log entry
 		 * \param _message Message of log
 		 */
-		void CreateEntry(char* _message, ELog_level _level);
+		ENGINEDLL_API void CreateEntry(CoreType::String _message, ELog_level _level);
 
 		/**
 		 * \brief Clear all entries
 		 */
-		void ClearAllEntries();
+		ENGINEDLL_API void ClearAllEntries();
 
 	private:
 		std::vector<Tools::Log*> logs;

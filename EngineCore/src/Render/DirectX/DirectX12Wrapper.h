@@ -38,7 +38,7 @@ class DirectX12Wrapper : public IModule
 {
 public:
 
-	DECLARE_MODULE("DirectX12Wrapper")
+	DECLARE_MODULE(S("DirectX12Wrapper"))
 
 	explicit DirectX12Wrapper();
 	~DirectX12Wrapper();

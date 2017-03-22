@@ -11,9 +11,9 @@ ModuleManager::~ModuleManager()
 
 bool ModuleManager::InitializedModules()
 {
-	if (!CreateModule<Display::Window>("Window"))
+	if (!CreateModule<Display::Window>(S("Window")))
 		return false;
-	if (!CreateModule<DirectX12Wrapper>("DX12"))
+	if (!CreateModule<DirectX12Wrapper>(S("DX12")))
 		return false;
 
 	return true;

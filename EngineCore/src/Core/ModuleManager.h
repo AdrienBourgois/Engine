@@ -17,7 +17,7 @@ public:
 	bool StartModules();
 
 	template<typename T>
-	bool CreateModule(char* _name = nullptr);
+	bool CreateModule(CoreType::String _name);
 
 	template<typename T>
 	T* GetModule() const;
@@ -37,7 +37,7 @@ private:
 };
 
 template <typename T>
-bool ModuleManager::CreateModule(char* _name)
+bool ModuleManager::CreateModule(CoreType::String _name)
 {
 	IModule* module;
 

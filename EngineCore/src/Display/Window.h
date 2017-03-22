@@ -14,7 +14,7 @@ namespace Display
 		Window();
 		~Window();
 
-		DECLARE_MODULE("Window")
+		DECLARE_MODULE(S("Window"))
 
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		void GetMessages() const;

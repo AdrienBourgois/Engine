@@ -6,7 +6,6 @@
 
 #include "Tools/Ini/IniParser.h"
 #include "Core/ModuleManager.h"
-#include "Core/CoreTypes/String.h"
 
 enum EEngineStates
 {

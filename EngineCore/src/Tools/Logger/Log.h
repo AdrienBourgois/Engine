@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <string>
+#include "Core/CoreTypes/String.h"
 
 namespace Tools
 {
@@ -27,20 +27,20 @@ namespace Tools
 		 * \param _message Message of log
 		 * \param _level Level of log
 		 */
-		Log(char* _message, ELog_level _level);
+		Log(CoreType::String _message, ELog_level _level);
 		~Log() = default;
 
 		/**
 		 * \brief Return the message of the log
 		 * \return Message of log
 		 */
-		std::string GetMessage() const { return message; }
+		CoreType::String GetMessage() const { return message; }
 
 		/**
 		 * \brief Return the message of the log as C String
 		 * \return Message of log
 		 */
-		const char* GetCMessage() const { return message.c_str(); }
+		const char* GetCMessage() const { return message.CStr(); }
 
 		/**
 		 * \brief Return the level of the log
@@ -49,7 +49,7 @@ namespace Tools
 		ELog_level GetLevel() const { return level; }
 
 	private:
-		std::string message;
-		ELog_level level;
+		CoreType::String message;
+		ELog_level level = VERBOSE;
 	};
 }

@@ -55,6 +55,14 @@ bool CoreType::String::operator==(String _other_string) const
 	return true;
 }
 
+CoreType::String::operator bool() const
+{
+	if (size)
+		return true;
+
+	return false;
+}
+
 void CoreType::String::Append(String _other_string)
 {
 	unsigned int new_size = size + _other_string.size;

@@ -12,6 +12,9 @@ char (& StringSizeHelper(T (&array)[N]))[N]{return N;}
 
 #define S(_text) CoreType::String(_text, stringsize(_text))
 
+#define MACRO_TO_STRING(macro) S(#macro).CStr()
+#define MTOS(macro) MACRO_TO_STRING(macro)
+
 namespace CoreType
 {
 	class ENGINEDLL_API String
@@ -26,6 +29,7 @@ namespace CoreType
 		String operator+(String _other_string) const;
 		void operator+=(String _other_string);
 		bool operator==(String _other_string) const;
+		explicit operator bool() const;
 
 		void Append(String _string);
 
