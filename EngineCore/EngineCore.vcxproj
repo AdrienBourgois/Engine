@@ -12,6 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Manager\ModuleManager.h" />
+    <ClInclude Include="Src\Maths\Vec2.h" />
+    <ClInclude Include="src\Maths\Vec3.h" />
     <ClInclude Include="src\Modules\Display\Window.h" />
     <ClInclude Include="Src\Engine.h" />
     <ClInclude Include="src\Core\Interface\IModule.h" />
@@ -26,6 +28,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Manager\ModuleManager.cpp" />
+    <ClCompile Include="Src\Maths\Vec2.cpp" />
+    <ClCompile Include="src\Maths\Vec3.cpp" />
     <ClCompile Include="src\Modules\Display\Window.cpp" />
     <ClCompile Include="Src\Engine.cpp" />
     <ClCompile Include="Src\Maths\Math.cpp" />
