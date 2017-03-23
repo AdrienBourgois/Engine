@@ -55,6 +55,11 @@ bool Core::CoreType::String::operator==(String _other_string) const
 	return true;
 }
 
+bool Core::CoreType::String::operator!=(String _other_string) const
+{
+	return !(operator==(_other_string));
+}
+
 Core::CoreType::String::operator bool() const
 {
 	if (size)

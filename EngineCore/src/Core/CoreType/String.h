@@ -95,6 +95,12 @@ char (& StringSizeHelper(T (&array)[N]))[N]{return N;}
 			 */
 			bool operator==(String _other_string) const;
 			/**
+			 * \brief Compare content of Strings
+			 * \param _other_string String to compare
+			 * \return Comparison result
+			 */
+			bool operator!=(String _other_string) const;
+			/**
 			 * \brief Does String has content
 			 */
 			explicit operator bool() const;
