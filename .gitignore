@@ -1,3 +1,6 @@
+# Doxygen Documentation files
+Documentation/
+
 # User-specific files
 *.suo
 *.user

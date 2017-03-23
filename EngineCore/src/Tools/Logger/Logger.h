@@ -18,6 +18,7 @@ namespace Tools
 		/**
 		 * \brief Create log entry
 		 * \param _message Message of log
+		 * \param _level Lvel of log
 		 */
 		ENGINEDLL_API void CreateEntry(CoreType::String _message, ELog_level _level);
 
