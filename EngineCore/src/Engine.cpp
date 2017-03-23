@@ -32,7 +32,7 @@ void Engine::Initialize(HINSTANCE _hInstance)
 	parameters = new Tools::IniParser(".\\content\\Config\\config.ini");
 	parameters->Parse();
 
-	module_manager = new ModuleManager();
+	module_manager = new Core::Manager::ModuleManager();
 	module_manager->InitializedModules();
 
 	state = Ready;

@@ -11,29 +11,29 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Core\ModuleManager.h" />
-    <ClInclude Include="Src\Display\Window.h" />
+    <ClInclude Include="src\Core\Manager\ModuleManager.h" />
+    <ClInclude Include="src\Modules\Display\Window.h" />
     <ClInclude Include="Src\Engine.h" />
-    <ClInclude Include="Src\IModule.h" />
+    <ClInclude Include="src\Core\Interface\IModule.h" />
     <ClInclude Include="Src\Maths\Math.h" />
-    <ClInclude Include="Src\Render\DirectX\DirectX12Wrapper.h" />
-    <ClInclude Include="Src\Render\DirectX\DX12Helper.h" />
+    <ClInclude Include="src\Modules\Render\DirectX\DirectX12Wrapper.h" />
+    <ClInclude Include="src\Modules\Render\DirectX\DX12Helper.h" />
     <ClInclude Include="Src\Macros.h" />
     <ClInclude Include="Src\Tools\Ini\IniParser.h" />
     <ClInclude Include="Src\Tools\Logger\Log.h" />
     <ClInclude Include="Src\Tools\Logger\Logger.h" />
-    <ClInclude Include="src\Core\CoreTypes\String.h" />
+    <ClInclude Include="src\Core\CoreType\String.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\Core\ModuleManager.cpp" />
-    <ClCompile Include="Src\Display\Window.cpp" />
+    <ClCompile Include="src\Core\Manager\ModuleManager.cpp" />
+    <ClCompile Include="src\Modules\Display\Window.cpp" />
     <ClCompile Include="Src\Engine.cpp" />
     <ClCompile Include="Src\Maths\Math.cpp" />
-    <ClCompile Include="Src\Render\DirectX\DirectX12Wrapper.cpp" />
+    <ClCompile Include="src\Modules\Render\DirectX\DirectX12Wrapper.cpp" />
     <ClCompile Include="Src\Tools\Ini\IniParser.cpp" />
     <ClCompile Include="Src\Tools\Logger\Log.cpp" />
     <ClCompile Include="Src\Tools\Logger\Logger.cpp" />
-    <ClCompile Include="src\Core\CoreTypes\String.cpp" />
+    <ClCompile Include="src\Core\CoreType\String.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Core\Shaders\PixelShader.hlsl">

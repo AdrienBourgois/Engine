@@ -1,20 +1,20 @@
-#include "DirectX12Wrapper.h"
+#include "Modules/Render/DirectX/DirectX12Wrapper.h"
 
 #include <D3Dcompiler.h>
-#include "DX12Helper.h"
+#include "Modules/Render/DirectX/DX12Helper.h"
 #include "Maths/Math.h"
 #include "Macros.h"
 
-DirectX12Wrapper::DirectX12Wrapper()
+Module::Render::DirectX12::DirectX12Wrapper::DirectX12Wrapper()
 {
 	window_reference = MODULE(Display::Window);
 	window_handle_reference = window_reference->getHandle();
 }
 
-DirectX12Wrapper::~DirectX12Wrapper()
+Module::Render::DirectX12::DirectX12Wrapper::~DirectX12Wrapper()
 {}
 
-bool DirectX12Wrapper::Initialize()
+bool Module::Render::DirectX12::DirectX12Wrapper::Initialize()
 {
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
@@ -27,7 +27,7 @@ bool DirectX12Wrapper::Initialize()
 	return true;
 }
 
-bool DirectX12Wrapper::Start()
+bool Module::Render::DirectX12::DirectX12Wrapper::Start()
 {
 	viewport.Width    = static_cast<FLOAT>(MODULE(Display::Window)->getWidth());
 	viewport.Height   = static_cast<FLOAT>(MODULE(Display::Window)->getHeight());
@@ -49,21 +49,21 @@ bool DirectX12Wrapper::Start()
 	return true;
 }
 
-bool DirectX12Wrapper::Update()
+bool Module::Render::DirectX12::DirectX12Wrapper::Update()
 {
 	Render();
 
 	return true;
 }
 
-bool DirectX12Wrapper::Destruct()
+bool Module::Render::DirectX12::DirectX12Wrapper::Destruct()
 {
 	Cleanup();
 
 	return true;
 }
 
-void DirectX12Wrapper::MakeDevice()
+void Module::Render::DirectX12::DirectX12Wrapper::MakeDevice()
 {
 	TRYFUNC(CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory)))
 	IDXGIAdapter1* adapter;
@@ -95,14 +95,14 @@ void DirectX12Wrapper::MakeDevice()
 	TRYFUNC(D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device)))
 }
 
-void DirectX12Wrapper::MakeCommandQueue()
+void Module::Render::DirectX12::DirectX12Wrapper::MakeCommandQueue()
 {
 	D3D12_COMMAND_QUEUE_DESC cqDesc = {};
 
 	TRYFUNC(device->CreateCommandQueue(&cqDesc, IID_PPV_ARGS(&commandQueue)))
 }
 
-void DirectX12Wrapper::MakeSwapChain()
+void Module::Render::DirectX12::DirectX12Wrapper::MakeSwapChain()
 {
 	DXGI_MODE_DESC backBufferDesc;
 	backBufferDesc.Width  = MODULE(Display::Window)->getWidth();
@@ -129,7 +129,7 @@ void DirectX12Wrapper::MakeSwapChain()
 	frameIndex = swapChain->GetCurrentBackBufferIndex();
 }
 
-void DirectX12Wrapper::MakeDescriptorHeap()
+void Module::Render::DirectX12::DirectX12Wrapper::MakeDescriptorHeap()
 {
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
 	rtvHeapDesc.NumDescriptors             = FRAME_BUFFER_COUNT;
@@ -152,7 +152,7 @@ void DirectX12Wrapper::MakeDescriptorHeap()
 	}
 }
 
-void DirectX12Wrapper::MakeCommandList()
+void Module::Render::DirectX12::DirectX12Wrapper::MakeCommandList()
 {
 	for (int i = 0; i < FRAME_BUFFER_COUNT; i++)
 	{
@@ -162,7 +162,7 @@ void DirectX12Wrapper::MakeCommandList()
 	TRYFUNC(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator[0], nullptr, IID_PPV_ARGS(&commandList)))
 }
 
-void DirectX12Wrapper::MakeFence()
+void Module::Render::DirectX12::DirectX12Wrapper::MakeFence()
 {
 	for (int i = 0; i < FRAME_BUFFER_COUNT; i++)
 	{
@@ -173,7 +173,7 @@ void DirectX12Wrapper::MakeFence()
 	fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 }
 
-void DirectX12Wrapper::MakeRootDescriptor()
+void Module::Render::DirectX12::DirectX12Wrapper::MakeRootDescriptor()
 {
 	CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;
 	rootSignatureDesc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
@@ -184,7 +184,7 @@ void DirectX12Wrapper::MakeRootDescriptor()
 	TRYFUNC(device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature)))
 }
 
-void DirectX12Wrapper::MakeVertexShader()
+void Module::Render::DirectX12::DirectX12Wrapper::MakeVertexShader()
 {
 	ID3DBlob* vertexShader;
 	ID3DBlob* errorBuff;
@@ -195,7 +195,7 @@ void DirectX12Wrapper::MakeVertexShader()
 	vertexShaderBytecode.pShaderBytecode = vertexShader->GetBufferPointer();
 }
 
-void DirectX12Wrapper::MakePixelShader()
+void Module::Render::DirectX12::DirectX12Wrapper::MakePixelShader()
 {
 	ID3DBlob* pixelShader;
 	ID3DBlob* errorBuff;
@@ -206,7 +206,7 @@ void DirectX12Wrapper::MakePixelShader()
 	pixelShaderBytecode.pShaderBytecode = pixelShader->GetBufferPointer();
 }
 
-void DirectX12Wrapper::MakePipelineStateObject()
+void Module::Render::DirectX12::DirectX12Wrapper::MakePipelineStateObject()
 {
 	D3D12_INPUT_ELEMENT_DESC inputLayout[] =
 	{
@@ -233,7 +233,7 @@ void DirectX12Wrapper::MakePipelineStateObject()
 	TRYFUNC(device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pipelineStateObject)))
 }
 
-void DirectX12Wrapper::MakeVertexBuffer()
+void Module::Render::DirectX12::DirectX12Wrapper::MakeVertexBuffer()
 {
 	Vertex vList[] = {
 		{ 0.0f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f },
@@ -276,7 +276,7 @@ void DirectX12Wrapper::MakeVertexBuffer()
 	vertexBufferView.SizeInBytes    = vBufferSize;
 }
 
-void DirectX12Wrapper::UpdatePipeline()
+void Module::Render::DirectX12::DirectX12Wrapper::UpdatePipeline()
 {
 	WaitForPreviousFrame();
 
@@ -307,7 +307,7 @@ void DirectX12Wrapper::UpdatePipeline()
 	TRYFUNC(commandList->Close())
 }
 
-void DirectX12Wrapper::Render()
+void Module::Render::DirectX12::DirectX12Wrapper::Render()
 {
 	UpdatePipeline();
 
@@ -320,7 +320,7 @@ void DirectX12Wrapper::Render()
 	TRYFUNC(swapChain->Present(0, 0))
 }
 
-void DirectX12Wrapper::Cleanup()
+void Module::Render::DirectX12::DirectX12Wrapper::Cleanup()
 {
 	CloseHandle(fenceEvent);
 	WaitForPreviousFrame();
@@ -347,7 +347,7 @@ void DirectX12Wrapper::Cleanup()
 	};
 }
 
-void DirectX12Wrapper::WaitForPreviousFrame()
+void Module::Render::DirectX12::DirectX12Wrapper::WaitForPreviousFrame()
 {
 	frameIndex = swapChain->GetCurrentBackBufferIndex();
 

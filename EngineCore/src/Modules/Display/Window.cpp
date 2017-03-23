@@ -1,15 +1,15 @@
-#include "Window.h"
+#include "Modules/Display/Window.h"
 
-Display::Window::Window()
+Module::Display::Window::Window()
 {
 }
 
-Display::Window::~Window()
+Module::Display::Window::~Window()
 {
 	PostQuitMessage(0);
 }
 
-bool Display::Window::Initialize()
+bool Module::Display::Window::Initialize()
 {
 	hInstance = ENGINE->GetHInstance();
 	fullscreen = GET_BOOL_PARAMETER("Display", "fullscreen");
@@ -20,12 +20,12 @@ bool Display::Window::Initialize()
 	return PrepareWindow(p_width, p_height);
 }
 
-bool Display::Window::Start()
+bool Module::Display::Window::Start()
 {
 	return MakeWindow(1);
 }
 
-bool Display::Window::PrepareWindow(int _width, int _height)
+bool Module::Display::Window::PrepareWindow(int _width, int _height)
 {
 	if (fullscreen)
 	{
@@ -64,7 +64,7 @@ bool Display::Window::PrepareWindow(int _width, int _height)
 	return true;
 }
 
-bool Display::Window::MakeWindow(int _showWindow)
+bool Module::Display::Window::MakeWindow(int _showWindow)
 {
 	windowHandler = CreateWindowEx(NULL, windowClassName, windowTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, width, height, nullptr, nullptr, hInstance, nullptr);
 
@@ -83,7 +83,7 @@ bool Display::Window::MakeWindow(int _showWindow)
 	return true;
 }
 
-LRESULT CALLBACK Display::Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK Module::Display::Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (ENGINE->GetState() == Running)
 	{
@@ -107,7 +107,7 @@ LRESULT CALLBACK Display::Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LP
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-void Display::Window::GetMessages() const
+void Module::Display::Window::GetMessages() const
 {
 	MSG msg;
 	ZeroMemory(&msg, sizeof(MSG));
@@ -122,14 +122,14 @@ void Display::Window::GetMessages() const
 	}
 }
 
-bool Display::Window::Update()
+bool Module::Display::Window::Update()
 {
 	GetMessages();
 
 	return true;
 }
 
-bool Display::Window::Destruct()
+bool Module::Display::Window::Destruct()
 {
 	if (windowHandler)
 	{

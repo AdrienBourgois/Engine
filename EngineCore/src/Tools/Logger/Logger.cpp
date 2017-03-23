@@ -12,7 +12,7 @@ namespace Tools
 		ClearAllEntries();
 	}
 
-	void Logger::CreateEntry(CoreType::String _message, ELog_level _level)
+	void Logger::CreateEntry(Core::CoreType::String _message, ELog_level _level)
 	{
 		Log* log = new Log(_message, _level);
 		logs.push_back(log);

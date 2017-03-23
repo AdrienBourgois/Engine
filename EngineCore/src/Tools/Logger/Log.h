@@ -1,6 +1,11 @@
 ﻿#pragma once
 
-#include "Core/CoreTypes/String.h"
+#include "Core/CoreType/String.h"
+
+namespace Core {namespace CoreType {
+	class String;
+}
+}
 
 namespace Tools
 {
@@ -27,14 +32,14 @@ namespace Tools
 		 * \param _message Message of log
 		 * \param _level Level of log
 		 */
-		Log(CoreType::String _message, ELog_level _level);
+		Log(Core::CoreType::String _message, ELog_level _level);
 		~Log() = default;
 
 		/**
 		 * \brief Return the message of the log
 		 * \return Message of log
 		 */
-		CoreType::String GetMessage() const { return message; }
+		Core::CoreType::String GetMessage() const { return message; }
 
 		/**
 		 * \brief Return the message of the log as C String
@@ -49,7 +54,7 @@ namespace Tools
 		ELog_level GetLevel() const { return level; }
 
 	private:
-		CoreType::String message;
+		Core::CoreType::String message;
 		ELog_level level = VERBOSE;
 	};
 }

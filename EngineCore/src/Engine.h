@@ -5,7 +5,7 @@
 #include "Macros.h"
 
 #include "Tools/Ini/IniParser.h"
-#include "Core/ModuleManager.h"
+#include "Core/Manager/ModuleManager.h"
 
 enum EEngineStates
 {
@@ -53,7 +53,7 @@ private:
 
 	Tools::IniParser* parameters = nullptr;
 
-	ModuleManager* module_manager = nullptr;
+	Core::Manager::ModuleManager* module_manager = nullptr;
 
 	HINSTANCE h_instance = nullptr;
 

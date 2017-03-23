@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "Macros.h"
-#include "Log.h"
+#include "Tools/Logger/Log.h"
 
 namespace Tools
 {
@@ -20,7 +20,7 @@ namespace Tools
 		 * \param _message Message of log
 		 * \param _level Lvel of log
 		 */
-		ENGINEDLL_API void CreateEntry(CoreType::String _message, ELog_level _level);
+		ENGINEDLL_API void CreateEntry(Core::CoreType::String _message, ELog_level _level);
 
 		/**
 		 * \brief Clear all entries
