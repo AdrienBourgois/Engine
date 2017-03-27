@@ -2,7 +2,7 @@
 
 #include <D3Dcompiler.h>
 #include "Modules/Render/DirectX/DX12Helper.h"
-#include "Maths/Math.h"
+#include "Core/CoreType/Vertex.h"
 #include "Macros.h"
 
 Module::Render::DirectX12::DirectX12Wrapper::DirectX12Wrapper()
@@ -79,7 +79,7 @@ void Module::Render::DirectX12::DirectX12Wrapper::MakeDevice()
 		if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
 			adapterIndex++;
 
-		TRYFUNC(D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr))
+		TRYFUNC(D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_12_1, _uuidof(ID3D12Device), nullptr))
 		if (SUCCEEDED(hr))
 		{
 			adapterFound = true;
@@ -92,7 +92,7 @@ void Module::Render::DirectX12::DirectX12Wrapper::MakeDevice()
 	if (!adapterFound)
 		return;
 
-	TRYFUNC(D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device)))
+	TRYFUNC(D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_12_1, IID_PPV_ARGS(&device)))
 }
 
 void Module::Render::DirectX12::DirectX12Wrapper::MakeCommandQueue()
@@ -235,8 +235,11 @@ void Module::Render::DirectX12::DirectX12Wrapper::MakePipelineStateObject()
 
 void Module::Render::DirectX12::DirectX12Wrapper::MakeVertexBuffer()
 {
-	Vertex vList[] = {
-		{ 0.0f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f },
+	Core::CoreType::Vertex point1 = Core::CoreType::Vertex(Math::Vec3(0.f, .5f, .5f), Core::CoreType::Color::White);
+	point1.SetColor(Core::CoreType::Color::Black);
+
+	Core::CoreType::Vertex vList[] = {
+		point1,
 		{ 0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f },
 		{ -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f },
 	};
@@ -272,7 +275,7 @@ void Module::Render::DirectX12::DirectX12Wrapper::MakeVertexBuffer()
 	TRYFUNC(commandQueue->Signal(fence[frameIndex], fenceValue[frameIndex]))
 
 	vertexBufferView.BufferLocation = vertexBuffer->GetGPUVirtualAddress();
-	vertexBufferView.StrideInBytes  = sizeof(Vertex);
+	vertexBufferView.StrideInBytes  = sizeof(Core::CoreType::Vertex);
 	vertexBufferView.SizeInBytes    = vBufferSize;
 }
 

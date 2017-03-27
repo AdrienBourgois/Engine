@@ -6,7 +6,7 @@
 #else
 #define ENGINEDLL_API __declspec(dllimport)
 #endif
-///endcond
+///@endcond
 
 namespace Math
 {
