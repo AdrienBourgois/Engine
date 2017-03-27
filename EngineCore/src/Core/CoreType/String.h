@@ -1,14 +1,12 @@
 #pragma once
 
-/**
- * \brief
- */
-
+///@cond DUPLICATE_MACRO
 #ifdef ENGINECORE_EXPORTS
 #define ENGINEDLL_API __declspec(dllexport)
 #else
 #define ENGINEDLL_API __declspec(dllimport)
 #endif
+///@endcond
 
 /**
  * \brief Helper template to define size of a string at compilation
@@ -42,7 +40,7 @@ char (& StringSizeHelper(T (&array)[N]))[N]{return N;}
  */
 #define MTOS(macro) TEXT_TO_STRING(macro)
 
-	namespace Core
+namespace Core
 {
 	namespace CoreType
 	{

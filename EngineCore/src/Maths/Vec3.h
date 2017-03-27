@@ -1,11 +1,19 @@
 ﻿#pragma once
 
+///@cond DUPLICATE_MACRO
+#ifdef ENGINECORE_EXPORTS
+#define ENGINEDLL_API __declspec(dllexport)
+#else
+#define ENGINEDLL_API __declspec(dllimport)
+#endif
+///endcond
+
 namespace Math
 {
 	/**
 	 * \brief Vector 3D Float class
 	 */
-	class Vec3
+	class ENGINEDLL_API Vec3
 	{
 	public:
 		/**

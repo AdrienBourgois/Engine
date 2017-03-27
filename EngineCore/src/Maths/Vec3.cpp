@@ -1,7 +1,7 @@
 ﻿#include "Vec3.h"
 #include <cmath>
 
-Math::Vec3::Vec3(float _value): x(_value), y(_value)
+Math::Vec3::Vec3(float _value): x(_value), y(_value), z(_value)
 {}
 
 Math::Vec3::Vec3(float _x, float _y, float _z): x(_x), y(_y), z(_z)

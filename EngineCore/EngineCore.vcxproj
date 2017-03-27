@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\CoreType\Color.h" />
     <ClInclude Include="src\Core\Manager\ModuleManager.h" />
     <ClInclude Include="Src\Maths\Vec2.h" />
     <ClInclude Include="src\Maths\Vec3.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="src\Core\CoreType\String.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\CoreType\Color.cpp" />
     <ClCompile Include="src\Core\Manager\ModuleManager.cpp" />
     <ClCompile Include="Src\Maths\Vec2.cpp" />
     <ClCompile Include="src\Maths\Vec3.cpp" />
