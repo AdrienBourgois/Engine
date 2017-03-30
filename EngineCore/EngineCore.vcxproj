@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="src\Core\CoreType\Color.h" />
     <ClInclude Include="Src\Core\CoreType\Vertex.h" />
+    <ClInclude Include="src\Core\Interface\IRender.h" />
     <ClInclude Include="src\Core\Manager\ModuleManager.h" />
     <ClInclude Include="Src\Maths\Vec2.h" />
     <ClInclude Include="src\Maths\Vec3.h" />
@@ -23,6 +24,7 @@
     <ClInclude Include="src\Modules\Render\DirectX\Dx12Factory.h" />
     <ClInclude Include="src\Modules\Render\DirectX\DX12Helper.h" />
     <ClInclude Include="Src\Macros.h" />
+    <ClInclude Include="src\Modules\Render\RenderInterface.h" />
     <ClInclude Include="Src\Tools\Ini\IniParser.h" />
     <ClInclude Include="Src\Tools\Logger\Log.h" />
     <ClInclude Include="Src\Tools\Logger\Logger.h" />
@@ -38,6 +40,7 @@
     <ClCompile Include="Src\Engine.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Dx12.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Dx12Factory.cpp" />
+    <ClCompile Include="src\Modules\Render\RenderInterface.cpp" />
     <ClCompile Include="Src\Tools\Ini\IniParser.cpp" />
     <ClCompile Include="Src\Tools\Logger\Log.cpp" />
     <ClCompile Include="Src\Tools\Logger\Logger.cpp" />

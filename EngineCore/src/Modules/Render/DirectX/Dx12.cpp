@@ -3,7 +3,6 @@
 #include <D3Dcompiler.h>
 #include "Modules/Render/DirectX/DX12Helper.h"
 #include "Core/CoreType/Vertex.h"
-#include "Macros.h"
 
 void Module::Render::DirectX12::DirectX12::MakeVertexBuffer()
 {
@@ -44,25 +43,19 @@ void Module::Render::DirectX12::DirectX12::MakeVertexBuffer()
 	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
 	fenceValue[frameIndex]++;
-	TRYFUNC(commandQueue->Signal(fence[frameIndex], fenceValue[frameIndex]))
+	TRYFUNC(commandQueue->Signal(fence[frameIndex], fenceValue[frameIndex]));
 
 	vertexBufferView.BufferLocation = vertexBuffer->GetGPUVirtualAddress();
 	vertexBufferView.StrideInBytes  = sizeof(Core::CoreType::Vertex);
 	vertexBufferView.SizeInBytes    = vBufferSize;
 }
 
-Module::Render::DirectX12::DirectX12::DirectX12()
-{}
-
-Module::Render::DirectX12::DirectX12::~DirectX12()
-{}
-
 bool Module::Render::DirectX12::DirectX12::Initialize()
 {
 	return true;
 }
 
-bool Module::Render::DirectX12::DirectX12::Start()
+bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 {
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
@@ -96,27 +89,13 @@ bool Module::Render::DirectX12::DirectX12::Start()
 	return true;
 }
 
-bool Module::Render::DirectX12::DirectX12::Update()
-{
-	Render();
-
-	return true;
-}
-
-bool Module::Render::DirectX12::DirectX12::Destruct()
-{
-	Cleanup();
-
-	return true;
-}
-
-void Module::Render::DirectX12::DirectX12::UpdatePipeline()
+bool Module::Render::DirectX12::DirectX12::UpdatePipeline()
 {
 	WaitForPreviousFrame();
 
-	TRYFUNC(commandAllocator[frameIndex]->Reset())
+	TRYFUNC(commandAllocator[frameIndex]->Reset());
 
-	TRYFUNC(commandList->Reset(commandAllocator[frameIndex], pipelineStateObject))
+	TRYFUNC(commandList->Reset(commandAllocator[frameIndex], pipelineStateObject));
 
 	CD3DX12_RESOURCE_BARRIER present_to_target_barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	commandList->ResourceBarrier(1, &present_to_target_barrier);
@@ -138,10 +117,12 @@ void Module::Render::DirectX12::DirectX12::UpdatePipeline()
 	CD3DX12_RESOURCE_BARRIER target_to_present_barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	commandList->ResourceBarrier(1, &target_to_present_barrier);
 
-	TRYFUNC(commandList->Close())
+	TRYFUNC(commandList->Close());
+
+	return true;
 }
 
-void Module::Render::DirectX12::DirectX12::Render()
+bool Module::Render::DirectX12::DirectX12::Render()
 {
 	UpdatePipeline();
 
@@ -149,12 +130,14 @@ void Module::Render::DirectX12::DirectX12::Render()
 
 	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
-	TRYFUNC(commandQueue->Signal(fence[frameIndex], fenceValue[frameIndex]))
+	TRYFUNC(commandQueue->Signal(fence[frameIndex], fenceValue[frameIndex]));
 
-	TRYFUNC(swapChain->Present(0, 0))
+	TRYFUNC(swapChain->Present(0, 0));
+
+	return true;
 }
 
-void Module::Render::DirectX12::DirectX12::Cleanup()
+bool Module::Render::DirectX12::DirectX12::Cleanup()
 {
 	CloseHandle(fenceEvent);
 	WaitForPreviousFrame();
@@ -182,18 +165,22 @@ void Module::Render::DirectX12::DirectX12::Cleanup()
 
 	if (factory)
 		delete factory;
+
+	return true;
 }
 
-void Module::Render::DirectX12::DirectX12::WaitForPreviousFrame()
+bool Module::Render::DirectX12::DirectX12::WaitForPreviousFrame()
 {
 	frameIndex = swapChain->GetCurrentBackBufferIndex();
 
 	if (fence[frameIndex]->GetCompletedValue() < fenceValue[frameIndex])
 	{
-		TRYFUNC(fence[frameIndex]->SetEventOnCompletion(fenceValue[frameIndex], fenceEvent))
+		TRYFUNC(fence[frameIndex]->SetEventOnCompletion(fenceValue[frameIndex], fenceEvent));
 
 		WaitForSingleObject(fenceEvent, INFINITE);
 	}
 
 	fenceValue[frameIndex]++;
+
+	return true;
 }

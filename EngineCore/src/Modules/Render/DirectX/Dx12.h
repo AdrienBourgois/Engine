@@ -3,18 +3,13 @@
 #include <d3d12.h>
 #include <dxgi1_4.h>
 
-#include "Engine.h"
-#include "Core/Interface/IModule.h"
+#include "Macros.h"
+#include "Core/Interface/IRender.h"
 #include "Modules/Display/Window.h"
 
 #include "Modules/Render/DirectX/Dx12Factory.h"
 
 #define FRAME_BUFFER_COUNT 3
-
-#define CHECK() if(FAILED(hr)) { ENGINE->Stop(); return; }
-
-#define TRYFUNC(command) hr = command;\
-	if(FAILED(hr)) { MessageBox(nullptr, L"Error", L"Error", MB_OK | MB_ICONERROR); ENGINE->Stop(); return; }
 
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(x) \
@@ -40,23 +35,23 @@ namespace Module
 	{
 		namespace DirectX12
 		{
-			class DirectX12 : public Core::Interface::IModule
+			class DirectX12 : public Core::Interface::IRender
 			{
 			public:
 
-				DECLARE_MODULE(S("DirectX12"))
+				explicit DirectX12() = default;
+				~DirectX12() = default;
 
-				explicit DirectX12();
-				~DirectX12();
-
-				void UpdatePipeline();
-				void Render();
-				void WaitForPreviousFrame();
-
-				void Cleanup();
+				bool Initialize() override;
+				bool CreatePipeline() override;
+				bool Render() override;
+				bool Cleanup() override;
 
 			private:
+				bool UpdatePipeline();
+				bool WaitForPreviousFrame();
 				void MakeVertexBuffer();
+
 				HRESULT hr = 0;
 
 				Dx12Factory* factory = nullptr;

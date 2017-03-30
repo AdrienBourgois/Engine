@@ -1,7 +1,7 @@
 #include "Core/Manager/ModuleManager.h"
 
 #include "Modules/Display/Window.h"
-#include "Modules/Render/DirectX/Dx12.h"
+#include "Modules/Render/RenderInterface.h"
 
 Core::Manager::ModuleManager::ModuleManager()
 {}
@@ -13,7 +13,7 @@ bool Core::Manager::ModuleManager::InitializedModules()
 {
 	if (!CreateModule<Module::Display::Window>(S("Window")))
 		return false;
-	if (!CreateModule<Module::Render::DirectX12::DirectX12>(S("DX12")))
+	if (!CreateModule<Module::Render::RenderInterface>(S("RenderInterface")))
 		return false;
 
 	return true;
