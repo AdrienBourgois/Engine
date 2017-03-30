@@ -7,11 +7,11 @@
 #include "Core/Interface/IModule.h"
 #include "Modules/Display/Window.h"
 
+#include "Modules/Render/DirectX/Dx12Factory.h"
+
 #define FRAME_BUFFER_COUNT 3
 
 #define CHECK() if(FAILED(hr)) { ENGINE->Stop(); return; }
-
-#define CHECK_BLOB(blob) if(FAILED(hr)) { OutputDebugStringA((char*)errorBuff->GetBufferPointer()); return; }
 
 #define TRYFUNC(command) hr = command;\
 	if(FAILED(hr)) { MessageBox(nullptr, L"Error", L"Error", MB_OK | MB_ICONERROR); ENGINE->Stop(); return; }
@@ -40,14 +40,14 @@ namespace Module
 	{
 		namespace DirectX12
 		{
-			class DirectX12Wrapper : public Core::Interface::IModule
+			class DirectX12 : public Core::Interface::IModule
 			{
 			public:
 
-				DECLARE_MODULE(S("DirectX12Wrapper"))
+				DECLARE_MODULE(S("DirectX12"))
 
-				explicit DirectX12Wrapper();
-				~DirectX12Wrapper();
+				explicit DirectX12();
+				~DirectX12();
 
 				void UpdatePipeline();
 				void Render();
@@ -56,34 +56,22 @@ namespace Module
 				void Cleanup();
 
 			private:
-
-				void MakeDevice();
-				void MakeCommandQueue();
-				void MakeSwapChain();
-				void MakeDescriptorHeap();
-				void MakeCommandList();
-				void MakeFence();
-				void MakeRootDescriptor();
-				void MakeVertexShader();
-				void MakePixelShader();
-				void MakePipelineStateObject();
 				void MakeVertexBuffer();
-
 				HRESULT hr = 0;
+
+				Dx12Factory* factory = nullptr;
 
 				//Reference Objects
 				Module::Display::Window* window_reference = nullptr;
 				HWND* window_handle_reference = nullptr;
 
 				//Init Objects
-				IDXGIFactory4* dxgiFactory = nullptr;
-
 				DXGI_SAMPLE_DESC sampleDesc = {};
 
 				D3D12_INPUT_LAYOUT_DESC inputLayoutDesc = {};
 
 				ID3D12DescriptorHeap* rtvDescriptorHeap = nullptr;
-				int rtvDescriptorSize = 0;
+				UINT rtvDescriptorSize = 0;
 
 				//Handle Objects
 				ID3D12Device* device = nullptr;
