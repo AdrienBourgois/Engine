@@ -2,8 +2,13 @@
 
 #include <D3Dcompiler.h>
 #include "Modules/Render/DirectX/DX12Helper.h"
-#include "Core/CoreType/Vertex.h"
-#include "Macros.h"
+
+bool Module::Render::DirectX12::Dx12Factory::CreateObjectCommandList(ID3D12CommandAllocator* _command_allocator, ID3D12GraphicsCommandList** _command_list)
+{
+	TRYFUNC(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _command_allocator, nullptr, IID_PPV_ARGS(_command_list)));
+
+	return true;
+}
 
 bool Module::Render::DirectX12::Dx12Factory::InitFactory()
 {

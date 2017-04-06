@@ -5,12 +5,14 @@ bool Module::Render::RenderInterface::Initialize()
 {
 	switch (api) { case DirectX12Api : renderer = new DirectX12::DirectX12(); }
 
-	return true;
+	return renderer->Initialize();
 }
 
 bool Module::Render::RenderInterface::Start()
 {
-	return renderer->CreatePipeline();
+	renderer->CreatePipeline();
+
+	return true;
 }
 
 bool Module::Render::RenderInterface::Update()
@@ -22,4 +24,9 @@ bool Module::Render::RenderInterface::Update()
 bool Module::Render::RenderInterface::Destruct()
 {
 	return renderer->Cleanup();
+}
+
+bool Module::Render::RenderInterface::CreateBuffer(TempObject* _object)
+{
+	return true;
 }

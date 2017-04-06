@@ -4,52 +4,6 @@
 #include "Modules/Render/DirectX/DX12Helper.h"
 #include "Core/CoreType/Vertex.h"
 
-void Module::Render::DirectX12::DirectX12::MakeVertexBuffer()
-{
-	Core::CoreType::Vertex point1 = Core::CoreType::Vertex(Math::Vec3(0.f, .5f, .5f), Core::CoreType::Color::White);
-	point1.SetColor(Core::CoreType::Color::Black);
-
-	Core::CoreType::Vertex vList[] = {
-		point1,
-		{ 0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f },
-		{ -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f },
-	};
-
-	int vBufferSize = sizeof(vList);
-
-	CD3DX12_HEAP_PROPERTIES default_heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-	CD3DX12_HEAP_PROPERTIES upload_heap_properties  = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	CD3DX12_RESOURCE_DESC buffer_size_desc          = CD3DX12_RESOURCE_DESC::Buffer(vBufferSize);
-
-	device->CreateCommittedResource(&default_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&vertexBuffer));
-	vertexBuffer->SetName(L"Vertex Buffer Resource Heap");
-
-	ID3D12Resource* vBufferUploadHeap;
-	device->CreateCommittedResource(&upload_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vBufferUploadHeap));
-	vBufferUploadHeap->SetName(L"Vertex Buffer Upload Resource Heap");
-
-	D3D12_SUBRESOURCE_DATA vertexData = {};
-	vertexData.pData                  = reinterpret_cast<BYTE*>(vList);
-	vertexData.RowPitch               = vBufferSize;
-	vertexData.SlicePitch             = vBufferSize;
-
-	UpdateSubresources(commandList, vertexBuffer, vBufferUploadHeap, 0, 0, 1, &vertexData);
-
-	CD3DX12_RESOURCE_BARRIER transition_barrier = CD3DX12_RESOURCE_BARRIER::Transition(vertexBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
-	commandList->ResourceBarrier(1, &transition_barrier);
-
-	commandList->Close();
-	ID3D12CommandList* ppCommandLists[] = { commandList };
-	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
-
-	fenceValue[frameIndex]++;
-	TRYFUNC(commandQueue->Signal(fence[frameIndex], fenceValue[frameIndex]));
-
-	vertexBufferView.BufferLocation = vertexBuffer->GetGPUVirtualAddress();
-	vertexBufferView.StrideInBytes  = sizeof(Core::CoreType::Vertex);
-	vertexBufferView.SizeInBytes    = vBufferSize;
-}
-
 bool Module::Render::DirectX12::DirectX12::Initialize()
 {
 	return true;
@@ -76,7 +30,6 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	factory->MakeDevice(&device);
 	factory->MakeCommandQueue(&commandQueue);
 	factory->MakeSwapChain(commandQueue,FRAME_BUFFER_COUNT, *MODULE(Display::Window)->getHandle(), MODULE(Display::Window)->getWidth(), MODULE(Display::Window)->getHeight(), MODULE(Display::Window)->isFullscreen(), commandQueue, &swapChain);
-	frameIndex = swapChain->GetCurrentBackBufferIndex();
 	factory->MakeDescriptorHeap(FRAME_BUFFER_COUNT, swapChain, &rtvDescriptorHeap, &rtvDescriptorSize, renderTargets);
 	factory->MakeCommandList(FRAME_BUFFER_COUNT, commandAllocator, &commandList);
 	factory->MakeFence(FRAME_BUFFER_COUNT, fence, fenceValue, &fenceEvent);
@@ -84,7 +37,20 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	factory->MakeVertexShader(L"Content\\Core\\Shaders\\VertexShader.hlsl", &vertexShaderBytecode);
 	factory->MakePixelShader(L"Content\\Core\\Shaders\\PixelShader.hlsl", &pixelShaderBytecode);
 	factory->MakePipelineStateObject(rootSignature, &vertexShaderBytecode, &pixelShaderBytecode, &pipelineStateObject);
-	MakeVertexBuffer();
+
+	Core::CoreType::Vertex point1 = Core::CoreType::Vertex(Math::Vec3(0.f, .5f, .5f), Core::CoreType::Color::Red);
+	Core::CoreType::Vertex point2 = Core::CoreType::Vertex(Math::Vec3(.5f, -.5f, .5f), Core::CoreType::Color::Blue);
+	Core::CoreType::Vertex point3 = Core::CoreType::Vertex(Math::Vec3(-.5f, -.5f, .5f), Core::CoreType::Color::Green);
+
+	Core::CoreType::Vertex point4 = Core::CoreType::Vertex(Math::Vec3(0.f, -.5f, .5f), Core::CoreType::Color::White);
+	Core::CoreType::Vertex point5 = Core::CoreType::Vertex(Math::Vec3(-.5f, .5f, .5f), Core::CoreType::Color::Black);
+	Core::CoreType::Vertex point6 = Core::CoreType::Vertex(Math::Vec3(.5f, .5f, .5f), Core::CoreType::Color::Red);
+
+	Core::CoreType::Vertex triangle[] = { point1, point2, point3 };
+	Core::CoreType::Vertex triangle2[] = { point4, point5, point6 };
+
+	MakeVertexBuffer(0, triangle, 3, L"Triangle 1", false);
+	MakeVertexBuffer(1, triangle2, 3, L"Triangle 2", true);
 
 	return true;
 }
@@ -111,7 +77,9 @@ bool Module::Render::DirectX12::DirectX12::UpdatePipeline()
 	commandList->RSSetViewports(1, &viewport);
 	commandList->RSSetScissorRects(1, &scissorRect);
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	commandList->IASetVertexBuffers(0, 1, &vertexBufferView);
+	commandList->IASetVertexBuffers(0, 1, vertexBufferViews[0]);
+	commandList->DrawInstanced(3, 1, 0, 0);
+	commandList->IASetVertexBuffers(0, 1, vertexBufferViews[1]);
 	commandList->DrawInstanced(3, 1, 0, 0);
 
 	CD3DX12_RESOURCE_BARRIER target_to_present_barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
@@ -154,7 +122,6 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 
 	SAFE_RELEASE(pipelineStateObject);
 	SAFE_RELEASE(rootSignature);
-	SAFE_RELEASE(vertexBuffer);
 
 	for (int i = 0; i < FRAME_BUFFER_COUNT; ++i)
 	{
@@ -165,6 +132,61 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 
 	if (factory)
 		delete factory;
+
+	return true;
+}
+
+bool Module::Render::DirectX12::DirectX12::MakeVertexBuffer(int _id, const Core::CoreType::Vertex* _vertex, UINT _size, LPCWSTR _name, bool _reset)
+{
+	Core::CoreType::Vertex* vertex_list = new Core::CoreType::Vertex[_size];
+
+	for (UINT i = 0; i < _size; ++i)
+		vertex_list[i] = _vertex[i];
+
+	int buffer_size = _size * sizeof(Core::CoreType::Vertex);
+
+	CD3DX12_HEAP_PROPERTIES default_heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+	CD3DX12_HEAP_PROPERTIES upload_heap_properties  = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	CD3DX12_RESOURCE_DESC buffer_size_desc          = CD3DX12_RESOURCE_DESC::Buffer(buffer_size);
+
+	ID3D12Resource* vertex_buffer = nullptr;
+	device->CreateCommittedResource(&default_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&vertex_buffer));
+	vertex_buffer->SetName(_name);
+
+	ID3D12Resource* vBufferUploadHeap;
+	device->CreateCommittedResource(&upload_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vBufferUploadHeap));
+	vBufferUploadHeap->SetName(_name);
+
+	D3D12_SUBRESOURCE_DATA vertexData = {};
+	vertexData.pData                  = reinterpret_cast<BYTE*>(vertex_list);
+	vertexData.RowPitch               = buffer_size;
+	vertexData.SlicePitch             = buffer_size;
+
+	if (_reset)
+		commandList->Reset(commandAllocator[frameIndex], pipelineStateObject);
+
+	UpdateSubresources(commandList, vertex_buffer, vBufferUploadHeap, 0, 0, 1, &vertexData);
+
+	CD3DX12_RESOURCE_BARRIER transition_barrier = CD3DX12_RESOURCE_BARRIER::Transition(vertex_buffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+	commandList->ResourceBarrier(1, &transition_barrier);
+
+	commandList->Close();
+	ID3D12CommandList* ppCommandLists[] = { commandList };
+	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+
+	fenceValue[frameIndex]++;
+	TRYFUNC(commandQueue->Signal(fence[frameIndex], fenceValue[frameIndex]));
+	fence[frameIndex]->SetEventOnCompletion(fenceValue[frameIndex], fenceEvent);
+	WaitForSingleObject(fenceEvent, INFINITE);
+
+	D3D12_VERTEX_BUFFER_VIEW* buffer_view = new D3D12_VERTEX_BUFFER_VIEW;
+	buffer_view->BufferLocation = vertex_buffer->GetGPUVirtualAddress();
+	buffer_view->StrideInBytes  = sizeof(Core::CoreType::Vertex);
+	buffer_view->SizeInBytes    = buffer_size;
+
+	delete[] vertex_list;
+
+	vertexBufferViews.insert_or_assign(_id, buffer_view);
 
 	return true;
 }

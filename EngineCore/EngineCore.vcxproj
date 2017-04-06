@@ -25,6 +25,7 @@
     <ClInclude Include="src\Modules\Render\DirectX\DX12Helper.h" />
     <ClInclude Include="Src\Macros.h" />
     <ClInclude Include="src\Modules\Render\RenderInterface.h" />
+    <ClInclude Include="src\TempObject.h" />
     <ClInclude Include="Src\Tools\Ini\IniParser.h" />
     <ClInclude Include="Src\Tools\Logger\Log.h" />
     <ClInclude Include="Src\Tools\Logger\Logger.h" />
@@ -41,6 +42,7 @@
     <ClCompile Include="src\Modules\Render\DirectX\Dx12.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Dx12Factory.cpp" />
     <ClCompile Include="src\Modules\Render\RenderInterface.cpp" />
+    <ClCompile Include="src\TempObject.cpp" />
     <ClCompile Include="Src\Tools\Ini\IniParser.cpp" />
     <ClCompile Include="Src\Tools\Logger\Log.cpp" />
     <ClCompile Include="Src\Tools\Logger\Logger.cpp" />

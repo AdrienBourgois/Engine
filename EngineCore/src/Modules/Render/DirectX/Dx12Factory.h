@@ -9,7 +9,7 @@
  */
 #define TRYFUNC(function) hr = 0;\
 						  hr = function;\
-						  //if(FAILED(hr)) return false;
+						  if(FAILED(hr)) return false;
 
 /**
  * \brief Return false if Blob has error
@@ -39,7 +39,7 @@ namespace Module
 				 */
 				~Dx12Factory() = default;
 
-
+				bool CreateObjectCommandList(ID3D12CommandAllocator* _command_allocator, ID3D12GraphicsCommandList** _command_list);
 				/**
 				 * \brief Initialize DXGIFactory
 				 * \return Is function success
@@ -61,6 +61,7 @@ namespace Module
 				bool MakeCommandQueue(ID3D12CommandQueue** _commandQueue);
 				/**
 				 * \brief Create SwapChain
+				 * \param _device A Direct Command Queue
 				 * \param _frame_buffer_count Count of frames buffer used
 				 * \param _window Window reference
 				 * \param _width Width of render

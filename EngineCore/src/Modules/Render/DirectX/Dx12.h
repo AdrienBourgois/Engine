@@ -8,6 +8,7 @@
 #include "Modules/Display/Window.h"
 
 #include "Modules/Render/DirectX/Dx12Factory.h"
+#include "Core/CoreType/Vertex.h"
 
 #define FRAME_BUFFER_COUNT 3
 
@@ -47,10 +48,11 @@ namespace Module
 				bool Render() override;
 				bool Cleanup() override;
 
+				bool MakeVertexBuffer(int _id, const Core::CoreType::Vertex* _vertex, UINT _size, LPCWSTR _name, bool _reset);
+
 			private:
 				bool UpdatePipeline();
 				bool WaitForPreviousFrame();
-				void MakeVertexBuffer();
 
 				HRESULT hr = 0;
 
@@ -85,9 +87,6 @@ namespace Module
 				D3D12_SHADER_BYTECODE vertexShaderBytecode = {};
 				D3D12_SHADER_BYTECODE pixelShaderBytecode  = {};
 
-				ID3D12Resource* vertexBuffer = nullptr;
-				D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
-
 				//Per-frame used Objects
 				IDXGISwapChain3* swapChain = nullptr;
 
@@ -96,6 +95,9 @@ namespace Module
 				ID3D12CommandQueue* commandQueue = nullptr;
 				ID3D12CommandAllocator* commandAllocator[FRAME_BUFFER_COUNT];
 				ID3D12GraphicsCommandList* commandList = nullptr;
+
+				std::unordered_map<int, ID3D12GraphicsCommandList*> commandLists;
+				std::unordered_map<int, D3D12_VERTEX_BUFFER_VIEW*> vertexBufferViews;
 
 				int frameIndex = 0;
 			};
