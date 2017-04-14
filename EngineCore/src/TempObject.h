@@ -1,14 +1,20 @@
 ﻿#pragma once
 
 #include "Core/CoreType/Vertex.h"
+#include "Core/CoreType/Id.h"
 
 class TempObject
 {
 public:
 	TempObject() = default;
 
-	TempObject(Math::Vec3 _vec, Core::CoreType::Color _color, int _id) : vertex(_vec, _color), id(_id) {}
+	explicit TempObject(Core::CoreType::Vertex _points[], int _size);
 
-	Core::CoreType::Vertex vertex;
-	int id = 0;
+	Core::CoreType::Vertex* GetPoints();
+	size_t GetSize() const;
+	uint16_t GetId();
+
+private:
+	std::vector<Core::CoreType::Vertex> vertexs;
+	Core::CoreType::Id id = Core::CoreType::Id(Core::CoreType::EObjectSubtype::DefaultGameObject);
 };

@@ -85,14 +85,21 @@ namespace Module
 				 */
 				bool MakeDescriptorHeap(UINT _frame_buffer_count, IDXGISwapChain3* _swap_chain, ID3D12DescriptorHeap** _rtv_descriptor_heap, UINT* _rtv_descriptor_size, ID3D12Resource** _render_targets);
 				/**
-				 * \brief Create Command list and allocators
+				 * \brief Create Command allocators
 				 * \param _frame_buffer_count Count of frames buffer used
 				 * \param[out] _command_allocator Pointer to an array of ID3D12CommandAllocator
+				 * \return Is function success
+				 * \note Must be called after Dx12Factory::MakeDevice
+				 */
+				bool MakeCommandAllocator(UINT _frame_buffer_count, ID3D12CommandAllocator** _command_allocator);
+				/**
+				 * \brief Create Command list
+				 * \param _command_allocator Pointer to ID3D12CommandAllocator
 				 * \param[out] _command_list Pointer to ID3D12GraphicsCommandList
 				 * \return Is function success
 				 * \note Must be called after Dx12Factory::MakeDevice
 				 */
-				bool MakeCommandList(UINT _frame_buffer_count, ID3D12CommandAllocator** _command_allocator, ID3D12GraphicsCommandList** _command_list);
+				bool MakeCommandList(ID3D12CommandAllocator* _command_allocator, ID3D12GraphicsCommandList** _command_list);
 				/**
 				 * \brief Create fences and event
 				 * \param _frame_buffer_count Count of frames buffer used

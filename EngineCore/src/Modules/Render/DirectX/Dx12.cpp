@@ -3,6 +3,8 @@
 #include <D3Dcompiler.h>
 #include "Modules/Render/DirectX/DX12Helper.h"
 #include "Core/CoreType/Vertex.h"
+#include "Core/CoreType/Id.h"
+#include "TempObject.h"
 
 bool Module::Render::DirectX12::DirectX12::Initialize()
 {
@@ -31,7 +33,8 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	factory->MakeCommandQueue(&commandQueue);
 	factory->MakeSwapChain(commandQueue,FRAME_BUFFER_COUNT, *MODULE(Display::Window)->getHandle(), MODULE(Display::Window)->getWidth(), MODULE(Display::Window)->getHeight(), MODULE(Display::Window)->isFullscreen(), commandQueue, &swapChain);
 	factory->MakeDescriptorHeap(FRAME_BUFFER_COUNT, swapChain, &rtvDescriptorHeap, &rtvDescriptorSize, renderTargets);
-	factory->MakeCommandList(FRAME_BUFFER_COUNT, commandAllocator, &commandList);
+	factory->MakeCommandAllocator(FRAME_BUFFER_COUNT, commandAllocator);
+	factory->MakeCommandList(commandAllocator[0], &commandList);
 	factory->MakeFence(FRAME_BUFFER_COUNT, fence, fenceValue, &fenceEvent);
 	factory->MakeRootSignature(&rootSignature);
 	factory->MakeVertexShader(L"Content\\Core\\Shaders\\VertexShader.hlsl", &vertexShaderBytecode);
@@ -49,8 +52,11 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	Core::CoreType::Vertex triangle[] = { point1, point2, point3 };
 	Core::CoreType::Vertex triangle2[] = { point4, point5, point6 };
 
-	MakeVertexBuffer(0, triangle, 3, L"Triangle 1", false);
-	MakeVertexBuffer(1, triangle2, 3, L"Triangle 2", true);
+	TempObject object1(triangle, 3);
+	TempObject object2(triangle2, 3);
+
+	MakeVertexBuffer(object1.GetId(), object1.GetPoints(), object1.GetSize(), L"Triangle 1", false);
+	MakeVertexBuffer(object2.GetId(), object2.GetPoints(), object2.GetSize(), L"Triangle 2", true);
 
 	return true;
 }
@@ -77,9 +83,9 @@ bool Module::Render::DirectX12::DirectX12::UpdatePipeline()
 	commandList->RSSetViewports(1, &viewport);
 	commandList->RSSetScissorRects(1, &scissorRect);
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	commandList->IASetVertexBuffers(0, 1, vertexBufferViews[0]);
-	commandList->DrawInstanced(3, 1, 0, 0);
 	commandList->IASetVertexBuffers(0, 1, vertexBufferViews[1]);
+	commandList->DrawInstanced(3, 1, 0, 0);
+	commandList->IASetVertexBuffers(0, 1, vertexBufferViews[2]);
 	commandList->DrawInstanced(3, 1, 0, 0);
 
 	CD3DX12_RESOURCE_BARRIER target_to_present_barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
@@ -157,7 +163,7 @@ bool Module::Render::DirectX12::DirectX12::MakeVertexBuffer(int _id, const Core:
 	device->CreateCommittedResource(&upload_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vBufferUploadHeap));
 	vBufferUploadHeap->SetName(_name);
 
-	D3D12_SUBRESOURCE_DATA vertexData = {};
+	D3D12_SUBRESOURCE_DATA vertexData;
 	vertexData.pData                  = reinterpret_cast<BYTE*>(vertex_list);
 	vertexData.RowPitch               = buffer_size;
 	vertexData.SlicePitch             = buffer_size;

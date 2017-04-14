@@ -113,14 +113,19 @@ bool Module::Render::DirectX12::Dx12Factory::MakeDescriptorHeap(UINT _frame_buff
 	return true;
 }
 
-bool Module::Render::DirectX12::Dx12Factory::MakeCommandList(UINT _frame_buffer_count, ID3D12CommandAllocator** _command_allocator, ID3D12GraphicsCommandList** _command_list)
+bool Module::Render::DirectX12::Dx12Factory::MakeCommandAllocator(UINT _frame_buffer_count, ID3D12CommandAllocator** _command_allocator)
 {
 	for (unsigned int i = 0; i < _frame_buffer_count; i++)
 	{
 		TRYFUNC(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&_command_allocator[i])));
 	}
 
-	TRYFUNC(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _command_allocator[0], nullptr, IID_PPV_ARGS(_command_list)));
+	return true;
+}
+
+bool Module::Render::DirectX12::Dx12Factory::MakeCommandList(ID3D12CommandAllocator* _command_allocator, ID3D12GraphicsCommandList** _command_list)
+{
+	TRYFUNC(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _command_allocator, nullptr, IID_PPV_ARGS(_command_list)));
 
 	return true;
 }
@@ -185,7 +190,7 @@ bool Module::Render::DirectX12::Dx12Factory::MakePipelineStateObject(ID3D12RootS
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
 	};
 
-	D3D12_INPUT_LAYOUT_DESC input_layout_desc = {};
+	D3D12_INPUT_LAYOUT_DESC input_layout_desc;
 	input_layout_desc.NumElements = sizeof(input_layout) / sizeof(D3D12_INPUT_ELEMENT_DESC);
 	input_layout_desc.pInputElementDescs = input_layout;
 

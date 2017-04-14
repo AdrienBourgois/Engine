@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\CoreType\Id.h" />
     <ClInclude Include="src\Core\CoreType\Color.h" />
     <ClInclude Include="Src\Core\CoreType\Vertex.h" />
     <ClInclude Include="src\Core\Interface\IRender.h" />
@@ -32,6 +33,7 @@
     <ClInclude Include="src\Core\CoreType\String.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\CoreType\Id.cpp" />
     <ClCompile Include="src\Core\CoreType\Color.cpp" />
     <ClCompile Include="Src\Core\CoreType\Vertex.cpp" />
     <ClCompile Include="src\Core\Manager\ModuleManager.cpp" />
