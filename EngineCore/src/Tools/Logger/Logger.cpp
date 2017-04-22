@@ -4,11 +4,14 @@ namespace Tools
 {
 	Logger::Logger()
 	{
-		CreateEntry(S("Logger Initialized !"), INFO);
+		CreateEntry(S("Logger Initialized !"), ELog_level::LOG_DEBUG);
+
+		outputFile.open(".\\Logs\\Default.log");
 	}
 
 	Logger::~Logger()
 	{
+		WriteLogs();
 		ClearAllEntries();
 	}
 
@@ -22,5 +25,20 @@ namespace Tools
 	{
 		for (Log* log : logs) { delete log; }
 		logs.clear();
+	}
+
+	bool Logger::WriteLogs()
+	{
+		if(outputFile.is_open())
+		{
+			for (Log* log : logs)
+			{
+				outputFile.write(log->GetCMessage(), log->GetMessage().SafeLength());
+				outputFile.put('\n');
+			}
+			return true;
+		}
+
+		return false;
 	}
 }

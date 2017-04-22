@@ -2,25 +2,20 @@
 
 #include "Core/CoreType/String.h"
 
-namespace Core {namespace CoreType {
-	class String;
-}
-}
+/**
+* \brief Define the level of log
+*/
+enum class ELog_level
+{
+	LOG_ERROR,
+	LOG_WARNING,
+	LOG_INFO,
+	LOG_DEBUG,
+	LOG_VERBOSE
+};
 
 namespace Tools
 {
-	/**
-	 * \brief Define the level of log
-	 */
-	enum ELog_level : char
-	{
-		ERROR,
-		WARNING,
-		INFO,
-		DEBUG,
-		VERBOSE,
-	};
-
 	/**
 	 * \brief Log with message, level, ...
 	 */
@@ -55,6 +50,6 @@ namespace Tools
 
 	private:
 		Core::CoreType::String message;
-		ELog_level level = VERBOSE;
+		ELog_level level = ELog_level::LOG_VERBOSE;
 	};
 }

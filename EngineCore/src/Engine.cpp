@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+#include "Tools/Logger/Logger.h"
+
 BOOL WINAPI DllMain(HINSTANCE _hinstDLL, DWORD _fdwReason, LPVOID _lpReserved )
 {
 	switch( _fdwReason )
@@ -24,6 +26,8 @@ BOOL WINAPI DllMain(HINSTANCE _hinstDLL, DWORD _fdwReason, LPVOID _lpReserved )
 
 void Engine::Initialize(HINSTANCE _hInstance)
 {
+	LOG(LOG_DEBUG, "Engine start !");
+
 	state = Initializing;
 
 	if(_hInstance)

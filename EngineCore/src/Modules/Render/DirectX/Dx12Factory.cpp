@@ -32,8 +32,8 @@ bool Module::Render::DirectX12::Dx12Factory::MakeDevice(ID3D12Device** _device)
 		if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
 			adapterIndex++;
 
-		TRYFUNC(D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_12_1, _uuidof(ID3D12Device), nullptr));
-		if (SUCCEEDED(hr))
+		HRESULT adapter_compatible = D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_12_1, _uuidof(ID3D12Device), nullptr);
+		if (SUCCEEDED(adapter_compatible))
 		{
 			adapterFound = true;
 			break;
