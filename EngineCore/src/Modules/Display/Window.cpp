@@ -85,7 +85,7 @@ bool Module::Display::Window::MakeWindow(int _showWindow)
 
 LRESULT CALLBACK Module::Display::Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (ENGINE->GetState() == Running)
+	if (ENGINE->GetState() == EEngineStates::Running)
 	{
 		switch (msg)
 		{

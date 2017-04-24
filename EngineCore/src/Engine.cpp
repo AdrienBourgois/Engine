@@ -1,7 +1,5 @@
 #include "Engine.h"
 
-#include "Tools/Logger/Logger.h"
-
 BOOL WINAPI DllMain(HINSTANCE _hinstDLL, DWORD _fdwReason, LPVOID _lpReserved )
 {
 	switch( _fdwReason )
@@ -26,44 +24,42 @@ BOOL WINAPI DllMain(HINSTANCE _hinstDLL, DWORD _fdwReason, LPVOID _lpReserved )
 
 void Engine::Initialize(HINSTANCE _hInstance)
 {
-	LOG(LOG_DEBUG, "Engine start !");
-
-	state = Initializing;
+	state = EEngineStates::Initializing;
 
 	if(_hInstance)
 		h_instance = _hInstance;
 
-	parameters = new Tools::IniParser(".\\content\\Config\\config.ini");
+	parameters = new Utility::IniParser(".\\content\\Config\\config.ini");
 	parameters->Parse();
 
 	module_manager = new Core::Manager::ModuleManager();
 	module_manager->InitializedModules();
 
-	state = Ready;
+	state = EEngineStates::Ready;
 }
 
 void Engine::Start()
 {
-	if (state == Ready)
+	if (state == EEngineStates::Ready)
 	{
 		module_manager->StartModules();
-		state = Starting;
+		state = EEngineStates::Starting;
 	}
 
-	if (state == Starting)
+	if (state == EEngineStates::Starting)
 	{
-		state = Running;
+		state = EEngineStates::Running;
 		Update();
 	}
 }
 
 void Engine::Update()
 {
-	while (state == Running)
+	while (state == EEngineStates::Running)
 	{
 		module_manager->UpdateModules();
 	}
-	if (state == AskToStop)
+	if (state == EEngineStates::AskToStop)
 	{
 		Destruct();
 	}
@@ -71,12 +67,12 @@ void Engine::Update()
 
 void Engine::Stop()
 {
-	state = AskToStop;
+	state = EEngineStates::AskToStop;
 }
 
 void Engine::Destruct()
 {
-	state = Stopping;
+	state = EEngineStates::Stopping;
 
 	delete parameters;
 	parameters = nullptr;
@@ -85,5 +81,5 @@ void Engine::Destruct()
 	delete module_manager;
 	module_manager = nullptr;
 
-	state = Stopped;
+	state = EEngineStates::Stopped;
 }

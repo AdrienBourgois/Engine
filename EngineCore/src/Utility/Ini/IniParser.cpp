@@ -2,7 +2,7 @@
 #include <string>
 #include <Windows.h>
 
-namespace Tools
+namespace Utility
 {
 	IniParser::IniParser(char * _filePath)
 	{

@@ -4,10 +4,10 @@
 
 #include "Macros.h"
 
-#include "Tools/Ini/IniParser.h"
+#include "Utility/Ini/IniParser.h"
 #include "Core/Manager/ModuleManager.h"
 
-enum EEngineStates
+enum class EEngineStates : int
 {
 	Off = 0,
 	Initializing,
@@ -43,7 +43,7 @@ public:
 	template<typename T>
 	T* GetModule() const;
 
-	const Tools::IniParser* GetParameters() const { return parameters; }
+	const Utility::IniParser* GetParameters() const { return parameters; }
 
 	EEngineStates GetState() const { return state; }
 
@@ -51,13 +51,13 @@ private:
 	Engine() = default;
 	~Engine() = default;
 
-	Tools::IniParser* parameters = nullptr;
+	Utility::IniParser* parameters = nullptr;
 
 	Core::Manager::ModuleManager* module_manager = nullptr;
 
 	HINSTANCE h_instance = nullptr;
 
-	EEngineStates state = Off;
+	EEngineStates state = EEngineStates::Off;
 };
 
 template <typename T>

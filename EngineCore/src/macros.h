@@ -8,7 +8,7 @@
 
 #include "Core/CoreType/Id.h"
 #include "Core/CoreType/String.h"
-#include "Tools/Logger/Logger.h"
+#include "Modules/Tools/Logger/Logger.h"
 
 /**
  * \brief Return instance of the engine class
@@ -20,6 +20,6 @@
 #define GET_INT_PARAMETER(section, parameter) ENGINE->GetParameters()->GetInt(section, parameter)
 #define GET_BOOL_PARAMETER(section, parameter) ENGINE->GetParameters()->GetBool(section, parameter)
 
-#define LOG(level, log) Tools::Logger::GetInstance()->CreateEntry(S(log), ELog_level::level)
-
 #define MODULE(T) ENGINE->GetModule<T>()
+
+#define LOG(level, log) MODULE(Tools::Logger)->CreateEntry(S(log), ELog_level::level)

@@ -4,7 +4,7 @@
 #include <fstream>
 #include <unordered_map>
 
-namespace Tools
+namespace Utility
 {
 	/**
 	 * \brief Class to parse .ini files
