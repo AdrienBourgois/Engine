@@ -16,19 +16,19 @@ namespace Core
 		{
 		public:
 			/**
-			 * \brief Constructor
+			 * \brief Default constructor
 			 */
-			ModuleManager();
+			ModuleManager() = default;
 			/**
-			 * \brief Destructor
+			 * \brief Default destructor
 			 */
-			~ModuleManager();
+			~ModuleManager() = default;
 
 			/**
 			 * \brief Initialize all modules
 			 * \return Is all module sucessfully initialized
 			 */
-			bool InitializedModules();
+			bool InitializeModules();
 			/**
 			 * \brief Start all modules
 			 * \return Is all modules sucessfully stared

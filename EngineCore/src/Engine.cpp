@@ -33,7 +33,7 @@ void Engine::Initialize(HINSTANCE _hInstance)
 	parameters->Parse();
 
 	module_manager = new Core::Manager::ModuleManager();
-	module_manager->InitializedModules();
+	module_manager->InitializeModules();
 
 	state = EEngineStates::Ready;
 }

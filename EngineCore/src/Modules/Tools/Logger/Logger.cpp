@@ -2,6 +2,7 @@
 #include <Windows.h>
 
 #define FILE_NON_EXISTANT 0xFFFFFFFF
+
 namespace Module
 {
 	namespace Tools
@@ -9,6 +10,7 @@ namespace Module
 		bool Logger::Initialize()
 		{
 			CreateEntry(S("Logger Initialized !"), ELog_level::LOG_DEBUG);
+
 			if (GetFileAttributes(L".\\Logs\\Default.log") != FILE_NON_EXISTANT)
 			{
 				if (GetFileAttributes(L".\\Logs\\Previous.log") != FILE_NON_EXISTANT)

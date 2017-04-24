@@ -3,17 +3,13 @@
 #include "Modules/Display/Window.h"
 #include "Modules/Render/RenderInterface.h"
 
-Core::Manager::ModuleManager::ModuleManager()
-{}
-
-Core::Manager::ModuleManager::~ModuleManager()
-{}
-
-bool Core::Manager::ModuleManager::InitializedModules()
+bool Core::Manager::ModuleManager::InitializeModules()
 {
 	if (!CreateModule<Module::Display::Window>(S("Window")))
 		return false;
 	if (!CreateModule<Module::Render::RenderInterface>(S("RenderInterface")))
+		return false;
+	if (!CreateModule<Module::Tools::Logger>(S("Logger")))
 		return false;
 
 	return true;

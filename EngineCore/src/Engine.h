@@ -7,18 +7,6 @@
 #include "Utility/Ini/IniParser.h"
 #include "Core/Manager/ModuleManager.h"
 
-enum class EEngineStates : int
-{
-	Off = 0,
-	Initializing,
-	Ready,
-	Starting,
-	Running,
-	AskToStop,
-	Stopping,
-	Stopped
-};
-
 class ENGINEDLL_API Engine
 {
 public:
@@ -44,6 +32,18 @@ public:
 	T* GetModule() const;
 
 	const Utility::IniParser* GetParameters() const { return parameters; }
+
+	enum class EEngineStates : int
+	{
+		Off = 0,
+		Initializing,
+		Ready,
+		Starting,
+		Running,
+		AskToStop,
+		Stopping,
+		Stopped
+	};
 
 	EEngineStates GetState() const { return state; }
 
