@@ -26,7 +26,7 @@ bool Module::Render::RenderInterface::Destruct()
 	return renderer->Cleanup();
 }
 
-bool Module::Render::RenderInterface::CreateBuffer(TempObject* _object)
+bool Module::Render::RenderInterface::CreateBuffer(Object::Component::GraphicComponent* _object)
 {
 	return true;
 }

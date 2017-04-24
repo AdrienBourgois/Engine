@@ -96,9 +96,7 @@ namespace Core
 template <typename T>
 bool Core::Manager::ModuleManager::CreateModule(CoreType::String _name)
 {
-	Interface::IModule* module;
-
-	module = static_cast<Interface::IModule*>(new T);
+	Interface::IModule * module = static_cast<Interface::IModule*>(new T);
 
 	if (module)
 	{

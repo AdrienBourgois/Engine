@@ -61,10 +61,13 @@
     <ClCompile Include="src\Modules\Render\RenderInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\TempObject.cpp">
+    <ClCompile Include="src\Core\CoreType\Id.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\CoreType\Id.cpp">
+    <ClCompile Include="src\Objects\Components\GraphicComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Objects\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -126,10 +129,16 @@
     <ClInclude Include="src\Core\Interface\IRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\TempObject.h">
+    <ClInclude Include="src\Core\CoreType\Id.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\CoreType\Id.h">
+    <ClInclude Include="src\Objects\Components\GraphicComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Objects\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Interface\IComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

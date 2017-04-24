@@ -6,6 +6,7 @@
 #define ENGINEDLL_API __declspec(dllimport)
 #endif
 
+#include "Core/CoreType/Id.h"
 #include "Core/CoreType/String.h"
 #include "Tools/Logger/Logger.h"
 

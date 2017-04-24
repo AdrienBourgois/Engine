@@ -4,7 +4,7 @@
 #include "Modules/Render/DirectX/DX12Helper.h"
 #include "Core/CoreType/Vertex.h"
 #include "Core/CoreType/Id.h"
-#include "TempObject.h"
+#include "Objects/Components/GraphicComponent.h"
 
 bool Module::Render::DirectX12::DirectX12::Initialize()
 {
@@ -52,11 +52,11 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	Core::CoreType::Vertex triangle[] = { point1, point2, point3 };
 	Core::CoreType::Vertex triangle2[] = { point4, point5, point6 };
 
-	TempObject object1(triangle, 3);
-	TempObject object2(triangle2, 3);
+	Object::Component::GraphicComponent object1(triangle, 3);
+	Object::Component::GraphicComponent object2(triangle2, 3);
 
-	MakeVertexBuffer(object1.GetId(), object1.GetPoints(), object1.GetSize(), L"Triangle 1", false);
-	MakeVertexBuffer(object2.GetId(), object2.GetPoints(), object2.GetSize(), L"Triangle 2", true);
+	MakeVertexBuffer(object1.GetId().GetInstanceNumber(), object1.GetPoints(), object1.GetSize(), L"Triangle 1", false);
+	MakeVertexBuffer(object2.GetId().GetInstanceNumber(), object2.GetPoints(), object2.GetSize(), L"Triangle 2", true);
 
 	return true;
 }
@@ -123,11 +123,12 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 	SAFE_RELEASE(device);
 	SAFE_RELEASE(swapChain);
 	SAFE_RELEASE(commandQueue);
-	SAFE_RELEASE(rtvDescriptorHeap);
 	SAFE_RELEASE(commandList);
 
 	SAFE_RELEASE(pipelineStateObject);
 	SAFE_RELEASE(rootSignature);
+
+	SAFE_RELEASE(rtvDescriptorHeap);
 
 	for (int i = 0; i < FRAME_BUFFER_COUNT; ++i)
 	{

@@ -15,9 +15,8 @@ namespace Core
 		{
 			Undefined = 1 << 0,
 			GameObject = 1 << 1,
-			Resource = 1 << 2,
+			ObjectComponent = 1 << 2,
 		};
-
 
 		/**
 		 * \brief Secondary type of an object (directly implies the main type) : 32 values max with Undefined
@@ -29,8 +28,9 @@ namespace Core
 
 			/// EObjectType::GameObject
 			DefaultGameObject = 1 << 1,
-			/// EObjectType::GameObject
-			OtherGameObject = 1 << 2,
+
+			/// EObjectType::ObjectComponent
+			GraphicComponent = 1 << 2,
 		};
 
 		/**
@@ -41,59 +41,80 @@ namespace Core
 		 * - 8 bits for various flags
 		 * - 16 bits for instance number of defined subtype
 		 */
-		class Id
+		class ENGINEDLL_API Id
 		{
 		public:
 			/**
-			 * \brief Constructor
+			 * \brief Constructor with main type
+			 * \param _type Secondary type of object
+			 */
+			explicit Id(EObjectType _type);
+			/**
+			 * \brief Constructor with secondary type
 			 * \param _subtype Secondary type of object
 			 */
-			ENGINEDLL_API explicit Id(EObjectSubtype _subtype);
+			explicit Id(EObjectSubtype _subtype);
 			/**
 			 * \brief Default destructor
 			 */
-			ENGINEDLL_API ~Id() = default;
+			~Id() = default;
+
+			/**
+			 * \brief Change subtype of Id
+			 * \param _subtype New subtype
+			 */
+			void operator=(EObjectSubtype _subtype);
+			/**
+			 * \brief Change type of Id
+			 * \param _type New type
+			 */
+			void operator=(EObjectType _type);
 
 			/**
 			 * \brief Compare types of id's
 			 * \param _other_id Other Id to compare
 			 * \return Are id's sames
 			 */
-			ENGINEDLL_API bool operator==(Id _other_id);
+			bool operator==(Id _other_id);
 			/**
 			 * \brief Compare id main type
 			 * \param _other_type Type to compare
 			 * \return Is Id of type
 			 */
-			ENGINEDLL_API bool operator==(EObjectType _other_type);
+			bool operator==(EObjectType _other_type);
 			/**
 			 * \brief Compare types of id's
 			 * \param _other_subtype Subtype to compare
 			 * \return Is Id of subtype
 			 */
-			ENGINEDLL_API bool operator==(EObjectSubtype _other_subtype);
+			bool operator==(EObjectSubtype _other_subtype);
 
 			/**
 			 * \brief Return main type of Id
 			 * \return Type of Id
 			 */
-			ENGINEDLL_API EObjectType GetType();
+			EObjectType GetType();
 			/**
 			 * \brief Return secondary type of Id
 			 * \return Subtype of Id
 			 */
-			ENGINEDLL_API EObjectSubtype GetSubtype();
+			EObjectSubtype GetSubtype();
 			/**
 			 * \brief Return instance number
 			 * \return Instance number of object
 			 */
-			ENGINEDLL_API uint16_t GetInstanceNumber();
+			uint16_t GetInstanceNumber();
 
 		private:
 			/**
 			 * \brief Id storage
 			 */
 			uint64_t id = 0;
+
+			uint16_t Register();
+			void Unregister();
+
+			EObjectType GetMainType(EObjectSubtype _subtype) const;
 
 			uint8_t* GetTypePointer();
 			uint32_t* GetSubtypePointer();
@@ -104,11 +125,22 @@ namespace Core
 			void SetSubtype(uint32_t _new_subtype);
 			void SetFlag(uint8_t _new_flag);
 			void SetInstanceNumber(uint16_t _new_number);
+		};
 
+		/**
+		 * \brief Static class that handle instance numbers for id's
+		 */
+		class InstancecountHandle
+		{
+		public:
 			/**
-			 * \brief Handle current instance numbers of each subtypes
+			 * \brief Handle live objects numbers of each subtypes
 			 */
-			static std::unordered_map<EObjectSubtype, unsigned int> currentCount;
+			static std::unordered_map<EObjectSubtype, unsigned int> currentInstanceCount;
+			/**
+			 * \brief Handle next instance numbers of each subtypes
+			 */
+			static std::unordered_map<EObjectSubtype, unsigned int> nextInstanceCount;
 		};
 	}
 }

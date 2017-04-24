@@ -11,6 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\Interface\IComponent.h" />
+    <ClInclude Include="src\Objects\GameObject.h" />
+    <ClInclude Include="src\Objects\Components\GraphicComponent.h" />
     <ClInclude Include="src\Core\CoreType\Id.h" />
     <ClInclude Include="src\Core\CoreType\Color.h" />
     <ClInclude Include="Src\Core\CoreType\Vertex.h" />
@@ -26,13 +29,14 @@
     <ClInclude Include="src\Modules\Render\DirectX\DX12Helper.h" />
     <ClInclude Include="Src\Macros.h" />
     <ClInclude Include="src\Modules\Render\RenderInterface.h" />
-    <ClInclude Include="src\TempObject.h" />
     <ClInclude Include="Src\Tools\Ini\IniParser.h" />
     <ClInclude Include="Src\Tools\Logger\Log.h" />
     <ClInclude Include="Src\Tools\Logger\Logger.h" />
     <ClInclude Include="src\Core\CoreType\String.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Objects\GameObject.cpp" />
+    <ClCompile Include="src\Objects\Components\GraphicComponent.cpp" />
     <ClCompile Include="src\Core\CoreType\Id.cpp" />
     <ClCompile Include="src\Core\CoreType\Color.cpp" />
     <ClCompile Include="Src\Core\CoreType\Vertex.cpp" />
@@ -44,7 +48,6 @@
     <ClCompile Include="src\Modules\Render\DirectX\Dx12.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Dx12Factory.cpp" />
     <ClCompile Include="src\Modules\Render\RenderInterface.cpp" />
-    <ClCompile Include="src\TempObject.cpp" />
     <ClCompile Include="Src\Tools\Ini\IniParser.cpp" />
     <ClCompile Include="Src\Tools\Logger\Log.cpp" />
     <ClCompile Include="Src\Tools\Logger\Logger.cpp" />

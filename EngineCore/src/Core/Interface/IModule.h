@@ -8,11 +8,11 @@
  * \param name Default name for module
  */
 #define DECLARE_MODULE(name)\
-	bool Initialize() override;\
-	bool Start() override;\
-	bool Update() override;\
-	bool Destruct() override;\
-	void SetDefaultModuleName() override { moduleName = name; }
+		bool Initialize() override;\
+		bool Start() override;\
+		bool Update() override;\
+		bool Destruct() override;\
+		void SetDefaultModuleName() override { moduleName = name; }
 
 namespace Core
 {
@@ -53,7 +53,6 @@ namespace Core
 			 * \brief Set a default name for module
 			 */
 			virtual void SetDefaultModuleName() = 0;
-
 
 			/**
 			 * \brief Set a new name for module

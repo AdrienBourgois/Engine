@@ -1,12 +1,13 @@
 ﻿#include "Logger.h"
+#include <direct.h>
 
 namespace Tools
 {
 	Logger::Logger()
 	{
 		CreateEntry(S("Logger Initialized !"), ELog_level::LOG_DEBUG);
-
-		outputFile.open(".\\Logs\\Default.log");
+		_mkdir("Logs");
+		outputFile.open(".\\Logs\\Default.log", std::ios::app);
 	}
 
 	Logger::~Logger()

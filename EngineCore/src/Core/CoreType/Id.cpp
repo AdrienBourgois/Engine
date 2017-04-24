@@ -1,23 +1,55 @@
 #include "Id.h"
 
-std::unordered_map<Core::CoreType::EObjectSubtype, unsigned int> Core::CoreType::Id::currentCount;
+std::unordered_map<Core::CoreType::EObjectSubtype, unsigned int> Core::CoreType::InstancecountHandle::currentInstanceCount;
+std::unordered_map<Core::CoreType::EObjectSubtype, unsigned int> Core::CoreType::InstancecountHandle::nextInstanceCount;
+
+Core::CoreType::Id::Id(EObjectType _type)
+{
+	EObjectType type = _type;
+	EObjectSubtype subtype = UndefinedSubtype;
+
+	SetType(type);
+	SetSubtype(subtype);
+	SetInstanceNumber(Register());
+}
 
 Core::CoreType::Id::Id(EObjectSubtype _subtype)
 {
-	uint8_t type = Undefined;
-
-	if (_subtype & UndefinedSubtype)
-		type = Undefined;
-	else if (_subtype & DefaultGameObject || _subtype & OtherGameObject)
-		type = GameObject;
-
-
-	currentCount[_subtype]++;
-	uint16_t instance_number = currentCount[_subtype];
+	EObjectType type = GetMainType(_subtype);
 
 	SetType(type);
 	SetSubtype(_subtype);
-	SetInstanceNumber(instance_number);
+	SetInstanceNumber(Register());
+}
+
+void Core::CoreType::Id::operator=(EObjectSubtype _subtype)
+{
+	Unregister();
+	SetSubtype(_subtype);
+	SetType(GetMainType(_subtype));
+	Register();
+}
+
+void Core::CoreType::Id::operator=(EObjectType _type)
+{
+	Unregister();
+	SetSubtype(UndefinedSubtype);
+	SetType(_type);
+	Register();
+}
+
+uint16_t Core::CoreType::Id::Register()
+{
+	EObjectSubtype subtype = GetSubtype();
+	InstancecountHandle::currentInstanceCount[subtype]++;
+	InstancecountHandle::nextInstanceCount[subtype]++;
+	return InstancecountHandle::nextInstanceCount[subtype];
+}
+
+void Core::CoreType::Id::Unregister()
+{
+	EObjectSubtype subtype = GetSubtype();
+	InstancecountHandle::currentInstanceCount[subtype]--;
 }
 
 bool Core::CoreType::Id::operator==(Id _other_id)
@@ -58,6 +90,20 @@ Core::CoreType::EObjectSubtype Core::CoreType::Id::GetSubtype()
 uint16_t Core::CoreType::Id::GetInstanceNumber()
 {
 	return *GetInstanceNumberPointer();
+}
+
+Core::CoreType::EObjectType Core::CoreType::Id::GetMainType(EObjectSubtype _subtype) const
+{
+	EObjectType type = Undefined;
+
+	if (_subtype & UndefinedSubtype)
+		type = Undefined;
+	else if (_subtype & DefaultGameObject)
+		type = GameObject;
+	else if (_subtype & GraphicComponent)
+		type = ObjectComponent;
+
+	return type;
 }
 
 uint8_t* Core::CoreType::Id::GetTypePointer()
