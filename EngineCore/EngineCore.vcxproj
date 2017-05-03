@@ -12,6 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Interface\IComponent.h" />
+    <ClInclude Include="src\Maths\Constants.h" />
+    <ClInclude Include="src\Maths\Mat4.h" />
     <ClInclude Include="src\Objects\GameObject.h" />
     <ClInclude Include="src\Objects\Components\GraphicComponent.h" />
     <ClInclude Include="src\Core\CoreType\Id.h" />
@@ -35,6 +37,7 @@
     <ClInclude Include="src\Core\CoreType\String.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Maths\Mat4.cpp" />
     <ClCompile Include="src\Objects\GameObject.cpp" />
     <ClCompile Include="src\Objects\Components\GraphicComponent.cpp" />
     <ClCompile Include="src\Core\CoreType\Id.cpp" />
