@@ -8,7 +8,7 @@
 #include "Modules/Display/Window.h"
 
 #include "Modules/Render/DirectX/Dx12Factory.h"
-#include "Core/CoreType/Vertex.h"
+#include "Modules/Render/DirectX/Objects/Dx12GraphicObject.h"
 
 #define FRAME_BUFFER_COUNT 3
 
@@ -45,24 +45,23 @@ namespace Module
 
 				bool Initialize() override;
 				bool CreatePipeline() override;
+				bool CreateVertexBuffer(int _id, const Core::CoreType::Vertex* _vertex, int _size, Core::CoreType::String _name) override;
 				bool Render() override;
 				bool Cleanup() override;
-
-				bool MakeVertexBuffer(int _id, const Core::CoreType::Vertex* _vertex, UINT _size, LPCWSTR _name);
 
 			private:
 				bool UpdatePipeline();
 				bool WaitForPreviousFrame();
 				bool PreparePreRenderCommandList();
 				bool PreparePostRenderCommandList();
-				bool PrepareObjectCommandList(int _objectCommandListNumber);
+				bool PrepareObjectCommandList(Objects::Dx12GraphicObject* _graphic_object);
 
 				HRESULT hr = 0;
 
 				Dx12Factory* factory = nullptr;
 
 				//Reference Objects
-				Module::Display::Window* window_reference = nullptr;
+				Display::Window* window_reference = nullptr;
 				HWND* window_handle_reference = nullptr;
 
 				//Init Objects
@@ -99,10 +98,8 @@ namespace Module
 				ID3D12CommandAllocator* commandAllocator[FRAME_BUFFER_COUNT];
 				ID3D12GraphicsCommandList* preRenderCommandList = nullptr;
 				ID3D12GraphicsCommandList* postRenderCommandList = nullptr;
-				ID3D12GraphicsCommandList* resourcesRenderCommandList = nullptr;
 
-				std::unordered_map<int, ID3D12GraphicsCommandList*> objectCommandLists;
-				std::unordered_map<int, D3D12_VERTEX_BUFFER_VIEW*> vertexBufferViews;
+				std::unordered_map<int, Objects::Dx12GraphicObject*> graphicsObjects;
 
 				int frameIndex = 0;
 			};

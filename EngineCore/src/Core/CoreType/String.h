@@ -124,6 +124,11 @@ namespace Core
 			 * \return Length of String with '\0'
 			 */
 			unsigned int SafeLength() const { return size + 1; }
+			/**
+			 * \brief Return a wide version of string
+			 * \return String with wide char
+			 */
+			wchar_t const* ToWideString();
 
 		private:
 			/**
@@ -135,6 +140,10 @@ namespace Core
 			 * \brief Pointer to data
 			 */
 			char* pointer = nullptr;
+			/**
+			 * \brief Pointer to wide data (only populate if ToWideString is called)
+			 */
+			wchar_t* widePointer = nullptr;
 			/**
 			 * \brief Length of String without null terminated character
 			 */

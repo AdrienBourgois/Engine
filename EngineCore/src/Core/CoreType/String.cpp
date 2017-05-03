@@ -1,5 +1,6 @@
 #include "Core/CoreType/String.h"
 #include <cstring>
+#include <stdlib.h>
 
 Core::CoreType::String::String(const char* _text, unsigned int _size)
 {
@@ -78,10 +79,27 @@ void Core::CoreType::String::Append(String _other_string)
 	size = new_size;
 }
 
+wchar_t const* Core::CoreType::String::ToWideString()
+{
+	if(!widePointer)
+	{
+		widePointer = new wchar_t[size + 1];
+		size_t out_size = 0;
+		mbstowcs_s(&out_size, widePointer, size + 1, pointer, size);
+	}
+
+	return widePointer;
+}
+
 void Core::CoreType::String::DeletePointer()
 {
 	if (pointer)
 		delete pointer;
+	if (widePointer)
+		delete widePointer;
+
+	pointer = nullptr;
+	widePointer = nullptr;
 
 	size = 0;
 }

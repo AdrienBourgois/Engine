@@ -73,6 +73,9 @@
     <ClCompile Include="src\Maths\Mat4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\macros.h">
@@ -148,6 +151,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Maths\Mat4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

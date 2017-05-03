@@ -3,7 +3,6 @@
 #include <D3Dcompiler.h>
 #include "Modules/Render/DirectX/DX12Helper.h"
 #include "Core/CoreType/Vertex.h"
-#include "Core/CoreType/Id.h"
 #include "Objects/Components/GraphicComponent.h"
 
 bool Module::Render::DirectX12::DirectX12::Initialize()
@@ -36,29 +35,14 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	factory->MakeCommandAllocator(FRAME_BUFFER_COUNT, commandAllocator);
 	factory->MakeCommandList(commandAllocator[0], &preRenderCommandList);
 	factory->MakeCommandList(commandAllocator[0], &postRenderCommandList);
-	factory->MakeCommandList(commandAllocator[0], &resourcesRenderCommandList);
 	factory->MakeFence(FRAME_BUFFER_COUNT, fence, fenceValue, &fenceEvent);
 	factory->MakeRootSignature(&rootSignature);
 	factory->MakeVertexShader(L"Content\\Core\\Shaders\\VertexShader.hlsl", &vertexShaderBytecode);
 	factory->MakePixelShader(L"Content\\Core\\Shaders\\PixelShader.hlsl", &pixelShaderBytecode);
 	factory->MakePipelineStateObject(rootSignature, &vertexShaderBytecode, &pixelShaderBytecode, &pipelineStateObject);
 
-	Core::CoreType::Vertex point1 = Core::CoreType::Vertex(Math::Vec3(0.f, .5f, .5f), Core::CoreType::Color::Red);
-	Core::CoreType::Vertex point2 = Core::CoreType::Vertex(Math::Vec3(.5f, -.5f, .5f), Core::CoreType::Color::Blue);
-	Core::CoreType::Vertex point3 = Core::CoreType::Vertex(Math::Vec3(-.5f, -.5f, .5f), Core::CoreType::Color::Green);
-
-	Core::CoreType::Vertex point4 = Core::CoreType::Vertex(Math::Vec3(0.f, -.5f, .5f), Core::CoreType::Color::White);
-	Core::CoreType::Vertex point5 = Core::CoreType::Vertex(Math::Vec3(-.5f, .5f, .5f), Core::CoreType::Color::Black);
-	Core::CoreType::Vertex point6 = Core::CoreType::Vertex(Math::Vec3(.5f, .5f, .5f), Core::CoreType::Color::Red);
-
-	Core::CoreType::Vertex triangle[] = { point1, point2, point3 };
-	Core::CoreType::Vertex triangle2[] = { point4, point5, point6 };
-
-	Object::Component::GraphicComponent object1(triangle, 3);
-	Object::Component::GraphicComponent object2(triangle2, 3);
-
-	MakeVertexBuffer(object1.GetId().GetInstanceNumber(), object1.GetPoints(), object1.GetSize(), L"Triangle 1");
-	MakeVertexBuffer(object2.GetId().GetInstanceNumber(), object2.GetPoints(), object2.GetSize(), L"Triangle 2");
+	preRenderCommandList->SetName(L"Pre-Render Command List");
+	postRenderCommandList->SetName(L"Post-Render Command List");
 
 	return true;
 }
@@ -70,10 +54,8 @@ bool Module::Render::DirectX12::DirectX12::UpdatePipeline()
 	TRYFUNC(commandAllocator[frameIndex]->Reset());
 
 	PreparePreRenderCommandList();
-
-	for (int i = 0; i < objectCommandLists.size(); ++i)
-		PrepareObjectCommandList(i);
-
+	for (std::pair<const int, Objects::Dx12GraphicObject*> object : graphicsObjects)
+		PrepareObjectCommandList(object.second);
 	PreparePostRenderCommandList();
 
 	return true;
@@ -83,15 +65,19 @@ bool Module::Render::DirectX12::DirectX12::Render()
 {
 	UpdatePipeline();
 
-	ID3D12CommandList** ppCommandLists = new ID3D12CommandList*[2];
+	ID3D12CommandList** ppCommandLists = new ID3D12CommandList*[graphicsObjects.size() + 2];
 
-	//ppCommandLists[0] = resourcesRenderCommandList;
 	ppCommandLists[0] = preRenderCommandList;
-	/*for (std::pair<const int, struct ID3D12GraphicsCommandList*> object_command_list : objectCommandLists)
-		ppCommandLists.push_back(object_command_list.second);*/
-	ppCommandLists[1] = postRenderCommandList;
 
-	commandQueue->ExecuteCommandLists(2, ppCommandLists);
+	unsigned int i = 0;
+	for (std::pair<const int, Objects::Dx12GraphicObject*> object_command_list : graphicsObjects)
+	{
+		ppCommandLists[i + 1] = object_command_list.second->GetCommandList();
+		++i;
+	}
+	ppCommandLists[i + 1] = postRenderCommandList;
+
+	commandQueue->ExecuteCommandLists(static_cast<UINT>(graphicsObjects.size()) + 2, ppCommandLists);
 
 	TRYFUNC(commandQueue->Signal(fence[frameIndex], fenceValue[frameIndex]));
 
@@ -114,7 +100,9 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 	SAFE_RELEASE(commandQueue);
 	SAFE_RELEASE(preRenderCommandList);
 	SAFE_RELEASE(postRenderCommandList);
-	SAFE_RELEASE(resourcesRenderCommandList);
+
+	for (std::pair<const int, Objects::Dx12GraphicObject*> object : graphicsObjects)
+		delete object.second;
 
 	SAFE_RELEASE(pipelineStateObject);
 	SAFE_RELEASE(rootSignature);
@@ -134,13 +122,16 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 	return true;
 }
 
-bool Module::Render::DirectX12::DirectX12::MakeVertexBuffer(int _id, const Core::CoreType::Vertex* _vertex, UINT _size, LPCWSTR _name)
+bool Module::Render::DirectX12::DirectX12::CreateVertexBuffer(int _id, const Core::CoreType::Vertex* _vertex, int _size, Core::CoreType::String _name)
 {
-	TRYFUNC(resourcesRenderCommandList->Reset(commandAllocator[frameIndex], pipelineStateObject));
+	ID3D12GraphicsCommandList* command_list = nullptr;
+	factory->MakeCommandList(commandAllocator[frameIndex], &command_list);
+
+	TRYFUNC(command_list->Reset(commandAllocator[frameIndex], pipelineStateObject));
 
 	Core::CoreType::Vertex* vertex_list = new Core::CoreType::Vertex[_size];
 
-	for (UINT i = 0; i < _size; ++i)
+	for (int i = 0; i < _size; ++i)
 		vertex_list[i] = _vertex[i];
 
 	int buffer_size = _size * sizeof(Core::CoreType::Vertex);
@@ -151,24 +142,24 @@ bool Module::Render::DirectX12::DirectX12::MakeVertexBuffer(int _id, const Core:
 
 	ID3D12Resource* vertex_buffer = nullptr;
 	device->CreateCommittedResource(&default_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&vertex_buffer));
-	vertex_buffer->SetName(_name);
+	vertex_buffer->SetName((_name + S(" - Buffer")).ToWideString());
 
 	ID3D12Resource* vBufferUploadHeap;
 	device->CreateCommittedResource(&upload_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vBufferUploadHeap));
-	vBufferUploadHeap->SetName(_name);
+	vBufferUploadHeap->SetName((_name + S(" - Upload")).ToWideString());
 
 	D3D12_SUBRESOURCE_DATA vertexData;
 	vertexData.pData                  = reinterpret_cast<BYTE*>(vertex_list);
 	vertexData.RowPitch               = buffer_size;
 	vertexData.SlicePitch             = buffer_size;
 
-	UpdateSubresources(resourcesRenderCommandList, vertex_buffer, vBufferUploadHeap, 0, 0, 1, &vertexData);
+	UpdateSubresources(command_list, vertex_buffer, vBufferUploadHeap, 0, 0, 1, &vertexData);
 
 	CD3DX12_RESOURCE_BARRIER transition_barrier = CD3DX12_RESOURCE_BARRIER::Transition(vertex_buffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
-	resourcesRenderCommandList->ResourceBarrier(1, &transition_barrier);
+	command_list->ResourceBarrier(1, &transition_barrier);
 
-	resourcesRenderCommandList->Close();
-	ID3D12CommandList* ppCommandLists[] = { resourcesRenderCommandList };
+	command_list->Close();
+	ID3D12CommandList* ppCommandLists[] = { command_list };
 	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
 	fenceValue[frameIndex]++;
@@ -183,7 +174,7 @@ bool Module::Render::DirectX12::DirectX12::MakeVertexBuffer(int _id, const Core:
 
 	delete[] vertex_list;
 
-	vertexBufferViews.insert_or_assign(_id, buffer_view);
+	graphicsObjects[_id] = new Objects::Dx12GraphicObject(_id, _vertex, _name, command_list, buffer_view);
 
 	return true;
 }
@@ -235,9 +226,9 @@ bool Module::Render::DirectX12::DirectX12::PreparePostRenderCommandList()
 	return true;
 }
 
-bool Module::Render::DirectX12::DirectX12::PrepareObjectCommandList(int _objectCommandListNumber)
+bool Module::Render::DirectX12::DirectX12::PrepareObjectCommandList(Objects::Dx12GraphicObject* _graphic_object)
 {
-	ID3D12GraphicsCommandList* command_list = objectCommandLists[_objectCommandListNumber];
+	ID3D12GraphicsCommandList* command_list = _graphic_object->GetCommandList();
 
 	TRYFUNC(command_list->Reset(commandAllocator[frameIndex], pipelineStateObject));
 
@@ -248,9 +239,8 @@ bool Module::Render::DirectX12::DirectX12::PrepareObjectCommandList(int _objectC
 	command_list->SetGraphicsRootSignature(rootSignature);
 	command_list->RSSetViewports(1, &viewport);
 	command_list->RSSetScissorRects(1, &scissorRect);
-	command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	command_list->IASetVertexBuffers(0, 1, vertexBufferViews[_objectCommandListNumber]);
-	command_list->DrawInstanced(3, 1, 0, 0);
+
+	_graphic_object->PrepareCommandList();
 
 	TRYFUNC(command_list->Close());
 

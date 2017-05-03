@@ -130,7 +130,7 @@ namespace Core
 		/**
 		 * \brief Static class that handle instance numbers for id's
 		 */
-		class InstancecountHandle
+		class InstanceCountHandle
 		{
 		public:
 			/**

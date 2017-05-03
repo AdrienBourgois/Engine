@@ -1,7 +1,7 @@
 #include "Id.h"
 
-std::unordered_map<Core::CoreType::EObjectSubtype, unsigned int> Core::CoreType::InstancecountHandle::currentInstanceCount;
-std::unordered_map<Core::CoreType::EObjectSubtype, unsigned int> Core::CoreType::InstancecountHandle::nextInstanceCount;
+std::unordered_map<Core::CoreType::EObjectSubtype, unsigned int> Core::CoreType::InstanceCountHandle::currentInstanceCount;
+std::unordered_map<Core::CoreType::EObjectSubtype, unsigned int> Core::CoreType::InstanceCountHandle::nextInstanceCount;
 
 Core::CoreType::Id::Id(EObjectType _type)
 {
@@ -41,15 +41,15 @@ void Core::CoreType::Id::operator=(EObjectType _type)
 uint16_t Core::CoreType::Id::Register()
 {
 	EObjectSubtype subtype = GetSubtype();
-	InstancecountHandle::currentInstanceCount[subtype]++;
-	InstancecountHandle::nextInstanceCount[subtype]++;
-	return InstancecountHandle::nextInstanceCount[subtype];
+	InstanceCountHandle::currentInstanceCount[subtype]++;
+	InstanceCountHandle::nextInstanceCount[subtype]++;
+	return InstanceCountHandle::nextInstanceCount[subtype];
 }
 
 void Core::CoreType::Id::Unregister()
 {
 	EObjectSubtype subtype = GetSubtype();
-	InstancecountHandle::currentInstanceCount[subtype]--;
+	InstanceCountHandle::currentInstanceCount[subtype]--;
 }
 
 bool Core::CoreType::Id::operator==(Id _other_id)

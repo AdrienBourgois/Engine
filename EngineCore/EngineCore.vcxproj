@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.h" />
     <ClInclude Include="src\Core\Interface\IComponent.h" />
     <ClInclude Include="src\Maths\Constants.h" />
     <ClInclude Include="src\Maths\Mat4.h" />
@@ -37,6 +38,7 @@
     <ClInclude Include="src\Core\CoreType\String.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.cpp" />
     <ClCompile Include="src\Maths\Mat4.cpp" />
     <ClCompile Include="src\Objects\GameObject.cpp" />
     <ClCompile Include="src\Objects\Components\GraphicComponent.cpp" />
