@@ -127,6 +127,8 @@ bool Module::Render::DirectX12::Dx12Factory::MakeCommandList(ID3D12CommandAlloca
 {
 	TRYFUNC(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _command_allocator, nullptr, IID_PPV_ARGS(_command_list)));
 
+	(*_command_list)->Close();
+
 	return true;
 }
 

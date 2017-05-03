@@ -34,7 +34,9 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	factory->MakeSwapChain(commandQueue,FRAME_BUFFER_COUNT, *MODULE(Display::Window)->getHandle(), MODULE(Display::Window)->getWidth(), MODULE(Display::Window)->getHeight(), MODULE(Display::Window)->isFullscreen(), commandQueue, &swapChain);
 	factory->MakeDescriptorHeap(FRAME_BUFFER_COUNT, swapChain, &rtvDescriptorHeap, &rtvDescriptorSize, renderTargets);
 	factory->MakeCommandAllocator(FRAME_BUFFER_COUNT, commandAllocator);
-	factory->MakeCommandList(commandAllocator[0], &commandList);
+	factory->MakeCommandList(commandAllocator[0], &preRenderCommandList);
+	factory->MakeCommandList(commandAllocator[0], &postRenderCommandList);
+	factory->MakeCommandList(commandAllocator[0], &resourcesRenderCommandList);
 	factory->MakeFence(FRAME_BUFFER_COUNT, fence, fenceValue, &fenceEvent);
 	factory->MakeRootSignature(&rootSignature);
 	factory->MakeVertexShader(L"Content\\Core\\Shaders\\VertexShader.hlsl", &vertexShaderBytecode);
@@ -55,8 +57,8 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	Object::Component::GraphicComponent object1(triangle, 3);
 	Object::Component::GraphicComponent object2(triangle2, 3);
 
-	MakeVertexBuffer(object1.GetId().GetInstanceNumber(), object1.GetPoints(), object1.GetSize(), L"Triangle 1", false);
-	MakeVertexBuffer(object2.GetId().GetInstanceNumber(), object2.GetPoints(), object2.GetSize(), L"Triangle 2", true);
+	MakeVertexBuffer(object1.GetId().GetInstanceNumber(), object1.GetPoints(), object1.GetSize(), L"Triangle 1");
+	MakeVertexBuffer(object2.GetId().GetInstanceNumber(), object2.GetPoints(), object2.GetSize(), L"Triangle 2");
 
 	return true;
 }
@@ -67,31 +69,12 @@ bool Module::Render::DirectX12::DirectX12::UpdatePipeline()
 
 	TRYFUNC(commandAllocator[frameIndex]->Reset());
 
-	TRYFUNC(commandList->Reset(commandAllocator[frameIndex], pipelineStateObject));
+	PreparePreRenderCommandList();
 
-	CD3DX12_RESOURCE_BARRIER present_to_target_barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-	commandList->ResourceBarrier(1, &present_to_target_barrier);
+	for (int i = 0; i < objectCommandLists.size(); ++i)
+		PrepareObjectCommandList(i);
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
-
-	commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
-
-	const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
-	commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
-
-	commandList->SetGraphicsRootSignature(rootSignature);
-	commandList->RSSetViewports(1, &viewport);
-	commandList->RSSetScissorRects(1, &scissorRect);
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	commandList->IASetVertexBuffers(0, 1, vertexBufferViews[1]);
-	commandList->DrawInstanced(3, 1, 0, 0);
-	commandList->IASetVertexBuffers(0, 1, vertexBufferViews[2]);
-	commandList->DrawInstanced(3, 1, 0, 0);
-
-	CD3DX12_RESOURCE_BARRIER target_to_present_barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-	commandList->ResourceBarrier(1, &target_to_present_barrier);
-
-	TRYFUNC(commandList->Close());
+	PreparePostRenderCommandList();
 
 	return true;
 }
@@ -100,9 +83,15 @@ bool Module::Render::DirectX12::DirectX12::Render()
 {
 	UpdatePipeline();
 
-	ID3D12CommandList* ppCommandLists[] = { commandList };
+	ID3D12CommandList** ppCommandLists = new ID3D12CommandList*[2];
 
-	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+	//ppCommandLists[0] = resourcesRenderCommandList;
+	ppCommandLists[0] = preRenderCommandList;
+	/*for (std::pair<const int, struct ID3D12GraphicsCommandList*> object_command_list : objectCommandLists)
+		ppCommandLists.push_back(object_command_list.second);*/
+	ppCommandLists[1] = postRenderCommandList;
+
+	commandQueue->ExecuteCommandLists(2, ppCommandLists);
 
 	TRYFUNC(commandQueue->Signal(fence[frameIndex], fenceValue[frameIndex]));
 
@@ -113,8 +102,8 @@ bool Module::Render::DirectX12::DirectX12::Render()
 
 bool Module::Render::DirectX12::DirectX12::Cleanup()
 {
-	CloseHandle(fenceEvent);
 	WaitForPreviousFrame();
+	CloseHandle(fenceEvent);
 
 	BOOL fs = false;
 	if (swapChain->GetFullscreenState(&fs, nullptr))
@@ -123,7 +112,9 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 	SAFE_RELEASE(device);
 	SAFE_RELEASE(swapChain);
 	SAFE_RELEASE(commandQueue);
-	SAFE_RELEASE(commandList);
+	SAFE_RELEASE(preRenderCommandList);
+	SAFE_RELEASE(postRenderCommandList);
+	SAFE_RELEASE(resourcesRenderCommandList);
 
 	SAFE_RELEASE(pipelineStateObject);
 	SAFE_RELEASE(rootSignature);
@@ -143,8 +134,10 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 	return true;
 }
 
-bool Module::Render::DirectX12::DirectX12::MakeVertexBuffer(int _id, const Core::CoreType::Vertex* _vertex, UINT _size, LPCWSTR _name, bool _reset)
+bool Module::Render::DirectX12::DirectX12::MakeVertexBuffer(int _id, const Core::CoreType::Vertex* _vertex, UINT _size, LPCWSTR _name)
 {
+	TRYFUNC(resourcesRenderCommandList->Reset(commandAllocator[frameIndex], pipelineStateObject));
+
 	Core::CoreType::Vertex* vertex_list = new Core::CoreType::Vertex[_size];
 
 	for (UINT i = 0; i < _size; ++i)
@@ -169,16 +162,13 @@ bool Module::Render::DirectX12::DirectX12::MakeVertexBuffer(int _id, const Core:
 	vertexData.RowPitch               = buffer_size;
 	vertexData.SlicePitch             = buffer_size;
 
-	if (_reset)
-		commandList->Reset(commandAllocator[frameIndex], pipelineStateObject);
-
-	UpdateSubresources(commandList, vertex_buffer, vBufferUploadHeap, 0, 0, 1, &vertexData);
+	UpdateSubresources(resourcesRenderCommandList, vertex_buffer, vBufferUploadHeap, 0, 0, 1, &vertexData);
 
 	CD3DX12_RESOURCE_BARRIER transition_barrier = CD3DX12_RESOURCE_BARRIER::Transition(vertex_buffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
-	commandList->ResourceBarrier(1, &transition_barrier);
+	resourcesRenderCommandList->ResourceBarrier(1, &transition_barrier);
 
-	commandList->Close();
-	ID3D12CommandList* ppCommandLists[] = { commandList };
+	resourcesRenderCommandList->Close();
+	ID3D12CommandList* ppCommandLists[] = { resourcesRenderCommandList };
 	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
 	fenceValue[frameIndex]++;
@@ -210,6 +200,59 @@ bool Module::Render::DirectX12::DirectX12::WaitForPreviousFrame()
 	}
 
 	fenceValue[frameIndex]++;
+
+	return true;
+}
+
+bool Module::Render::DirectX12::DirectX12::PreparePreRenderCommandList()
+{
+	TRYFUNC(preRenderCommandList->Reset(commandAllocator[frameIndex], pipelineStateObject));
+
+	CD3DX12_RESOURCE_BARRIER present_to_target_barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	preRenderCommandList->ResourceBarrier(1, &present_to_target_barrier);
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
+
+	preRenderCommandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+
+	const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
+	preRenderCommandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+
+	TRYFUNC(preRenderCommandList->Close());
+
+	return true;
+}
+
+bool Module::Render::DirectX12::DirectX12::PreparePostRenderCommandList()
+{
+	TRYFUNC(postRenderCommandList->Reset(commandAllocator[frameIndex], pipelineStateObject));
+
+	CD3DX12_RESOURCE_BARRIER target_to_present_barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	postRenderCommandList->ResourceBarrier(1, &target_to_present_barrier);
+
+	TRYFUNC(postRenderCommandList->Close());
+
+	return true;
+}
+
+bool Module::Render::DirectX12::DirectX12::PrepareObjectCommandList(int _objectCommandListNumber)
+{
+	ID3D12GraphicsCommandList* command_list = objectCommandLists[_objectCommandListNumber];
+
+	TRYFUNC(command_list->Reset(commandAllocator[frameIndex], pipelineStateObject));
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
+
+	command_list->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+
+	command_list->SetGraphicsRootSignature(rootSignature);
+	command_list->RSSetViewports(1, &viewport);
+	command_list->RSSetScissorRects(1, &scissorRect);
+	command_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	command_list->IASetVertexBuffers(0, 1, vertexBufferViews[_objectCommandListNumber]);
+	command_list->DrawInstanced(3, 1, 0, 0);
+
+	TRYFUNC(command_list->Close());
 
 	return true;
 }

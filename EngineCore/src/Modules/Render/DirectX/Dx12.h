@@ -48,11 +48,14 @@ namespace Module
 				bool Render() override;
 				bool Cleanup() override;
 
-				bool MakeVertexBuffer(int _id, const Core::CoreType::Vertex* _vertex, UINT _size, LPCWSTR _name, bool _reset);
+				bool MakeVertexBuffer(int _id, const Core::CoreType::Vertex* _vertex, UINT _size, LPCWSTR _name);
 
 			private:
 				bool UpdatePipeline();
 				bool WaitForPreviousFrame();
+				bool PreparePreRenderCommandList();
+				bool PreparePostRenderCommandList();
+				bool PrepareObjectCommandList(int _objectCommandListNumber);
 
 				HRESULT hr = 0;
 
@@ -94,9 +97,11 @@ namespace Module
 
 				ID3D12CommandQueue* commandQueue = nullptr;
 				ID3D12CommandAllocator* commandAllocator[FRAME_BUFFER_COUNT];
-				ID3D12GraphicsCommandList* commandList = nullptr;
+				ID3D12GraphicsCommandList* preRenderCommandList = nullptr;
+				ID3D12GraphicsCommandList* postRenderCommandList = nullptr;
+				ID3D12GraphicsCommandList* resourcesRenderCommandList = nullptr;
 
-				std::unordered_map<int, ID3D12GraphicsCommandList*> commandLists;
+				std::unordered_map<int, ID3D12GraphicsCommandList*> objectCommandLists;
 				std::unordered_map<int, D3D12_VERTEX_BUFFER_VIEW*> vertexBufferViews;
 
 				int frameIndex = 0;
