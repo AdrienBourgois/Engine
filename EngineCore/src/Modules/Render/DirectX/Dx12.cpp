@@ -83,6 +83,8 @@ bool Module::Render::DirectX12::DirectX12::Render()
 
 	TRYFUNC(swapChain->Present(0, 0));
 
+	delete[] ppCommandLists;
+
 	return true;
 }
 
