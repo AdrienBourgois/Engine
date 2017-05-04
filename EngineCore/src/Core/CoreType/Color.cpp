@@ -11,6 +11,16 @@ Core::CoreType::Color::Color(int _r, int _g, int _b, int _a)
 	a = (1.f / 256.f) * _a;
 }
 
+const float* Core::CoreType::FillArrayColor(float* _array, Color _color)
+{
+	_array[0] = _color.r;
+	_array[1] = _color.g;
+	_array[2] = _color.b;
+	_array[3] = _color.a;
+
+	return _array;
+}
+
 ///@cond IGNORE_COLORS_IMPLEMENTATION
 
 Core::CoreType::Color Core::CoreType::Color::White = Color(1.f, 1.f, 1.f, 1.f);
@@ -111,7 +121,7 @@ Core::CoreType::Color Core::CoreType::Color::Mediumslateblue      = Color(0.4823
 Core::CoreType::Color Core::CoreType::Color::Mediumspringgreen    = Color(0.f      , 0.980392f,  0.603922f,  1.f);
 Core::CoreType::Color Core::CoreType::Color::Mediumturquoise      = Color(0.282353f, 0.819608f,  0.8f,       1.f);
 Core::CoreType::Color Core::CoreType::Color::Mediumvioletred      = Color(0.780392f, 0.0823529f, 0.521569f,  1.f);
-Core::CoreType::Color Core::CoreType::Color::Midnightblue         = Color(0.0980392, 0.0980392f, 0.439216f,  1.f);
+Core::CoreType::Color Core::CoreType::Color::Midnightblue         = Color(0.098039f, 0.0980392f, 0.439216f,  1.f);
 Core::CoreType::Color Core::CoreType::Color::Mintcream            = Color(0.960784f, 1.f,        0.980392f,  1.f);
 Core::CoreType::Color Core::CoreType::Color::Mistyrose            = Color(1.f      , 0.894118f,  0.882353f,  1.f);
 Core::CoreType::Color Core::CoreType::Color::Moccasin             = Color(1.f      , 0.894118f,  0.709804f,  1.f);

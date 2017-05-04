@@ -208,7 +208,8 @@ bool Module::Render::DirectX12::DirectX12::PreparePreRenderCommandList()
 
 	preRenderCommandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
 
-	const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
+	float clearColor[4];
+	FillArrayColor(clearColor, Core::CoreType::Color::Blueviolet);
 	preRenderCommandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
 
 	TRYFUNC(preRenderCommandList->Close());

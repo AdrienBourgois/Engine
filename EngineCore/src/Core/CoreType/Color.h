@@ -733,5 +733,14 @@ namespace Core
 
 			/** @} */
 		};
+
+		/**
+		 * \brief Fill an array with color components
+		 * \warning Array must be a 4 float array
+		 * \param _array Array to populate
+		 * \param _color Color to use
+		 * \return Pointer to array
+		 */
+		const float* FillArrayColor(float* _array, Color _color);
 	}
 }
