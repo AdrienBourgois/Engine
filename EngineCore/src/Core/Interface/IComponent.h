@@ -5,6 +5,7 @@
 /**
  * \brief Used to declare IComponent functions and set default component name
  * \param name Default name for component
+ * \param subtype Indicate the subtype of component (see Core::CoreType::EObjectSubtype)
  */
 #define DECLARE_COMPONENT(name, subtype) \
 		bool Initialize() override;\
