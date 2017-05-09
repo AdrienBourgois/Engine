@@ -30,7 +30,7 @@ bool Module::Display::Window::PrepareWindow(int _width, int _height)
 	if (fullscreen)
 	{
 		HMONITOR hmon = MonitorFromWindow(windowHandler, MONITOR_DEFAULTTONEAREST);
-		MONITORINFO mi = { sizeof(mi) };
+		MONITORINFO mi = { sizeof mi };
 		GetMonitorInfo(hmon, &mi);
 
 		width = mi.rcMonitor.right - mi.rcMonitor.left;

@@ -68,7 +68,7 @@ namespace UnitTests
 		TEST_METHOD(BoolOperatorEqual)
 		{
 			Math::Vec2 VecBool(1);
-			bool boolean = false;
+			bool boolean;
 			if (VecBool)
 				boolean = true;
 			else
@@ -80,7 +80,7 @@ namespace UnitTests
 		TEST_METHOD(BoolOperatorNotEqual)
 		{
 			Math::Vec2 VecBool(0);
-			bool boolean = false;
+			bool boolean;
 			if (VecBool)
 				boolean = true;
 			else

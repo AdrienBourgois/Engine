@@ -61,7 +61,7 @@ bool Module::Render::DirectX12::Dx12Factory::MakeCommandQueue(ID3D12CommandQueue
 	return true;
 }
 
-bool Module::Render::DirectX12::Dx12Factory::MakeSwapChain(IUnknown* _device ,UINT _frame_buffer_count, HWND _window, UINT _width, UINT _height, BOOL _fullscreen, ID3D12CommandQueue* _commandQueue, IDXGISwapChain3** _swap_chain)
+bool Module::Render::DirectX12::Dx12Factory::MakeSwapChain(IUnknown* _device, UINT _frame_buffer_count, HWND _window, UINT _width, UINT _height, BOOL _fullscreen, IDXGISwapChain3** _swap_chain)
 {
 	DXGI_SAMPLE_DESC sample_desc;
 	sample_desc.Count = 1;
@@ -193,7 +193,7 @@ bool Module::Render::DirectX12::Dx12Factory::MakePipelineStateObject(ID3D12RootS
 	};
 
 	D3D12_INPUT_LAYOUT_DESC input_layout_desc;
-	input_layout_desc.NumElements = sizeof(input_layout) / sizeof(D3D12_INPUT_ELEMENT_DESC);
+	input_layout_desc.NumElements = sizeof input_layout / sizeof(D3D12_INPUT_ELEMENT_DESC);
 	input_layout_desc.pInputElementDescs = input_layout;
 
 	DXGI_SAMPLE_DESC sample_desc;

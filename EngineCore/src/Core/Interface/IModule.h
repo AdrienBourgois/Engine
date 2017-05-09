@@ -57,7 +57,7 @@ namespace Core
 			 * \brief Set a new name for module
 			 * \param _new_name New name
 			 */
-			void SetModuleName(CoreType::String _new_name = S("")) { moduleName = _new_name; };
+			void SetModuleName(CoreType::String _new_name = S("")) { moduleName = _new_name; }
 			/**
 			 * \brief Return tha name of module
 			 * \return Module name

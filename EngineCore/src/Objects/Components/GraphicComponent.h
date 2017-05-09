@@ -9,20 +9,65 @@ namespace Object
 {
 	namespace Component
 	{
+		/**
+		 * \brief Component to handle graphics objects (vertices, indexs, ...)
+		 */
 		class GraphicComponent : public Core::Interface::IComponent
 		{
 		public:
 			DECLARE_COMPONENT(S("GraphicComponent"), Core::CoreType::EObjectSubtype::GraphicComponent)
 
-			explicit GraphicComponent(Core::CoreType::Vertex _points[], int _size);
+			/**
+			 * \brief Contructor
+			 * \param _vertexs_array Array of vertices
+			 * \param _vertexs_count Count of vertex in array / Array size
+			 * \param _indexs_array Array of indexs (if index buffer needed)
+			 * \param _indexs_count Count of indexs in array / Array size (if index buffer needed)
+			 */
+			explicit GraphicComponent(Core::CoreType::Vertex _vertexs_array[], unsigned int _vertexs_count, unsigned int _indexs_array[] = {}, unsigned int _indexs_count = 0);
+			/**
+			 * \brief Default destructor
+			 */
 			~GraphicComponent() = default;
 
-			Core::CoreType::Vertex* GetPoints();
-			int GetSize() const;
+			/**
+			 * \brief Specify if vertices are indexed or not
+			 * \return Is component indexed
+			 */
+			bool IsIndexed() const;
+
+			/**
+			 * \brief Return an array with vertices
+			 * \return Array of vertices
+			 */
+			Core::CoreType::Vertex* GetVertices();
+			/**
+			 * \brief Return an array with indexs
+			 * \return Array of indexs
+			 */
+			unsigned int* GetIndexs();
+			/**
+			 * \brief Return the number of vertices
+			 * \return Count of vertices
+			 */
+			int GetVertexCount() const;
+			/**
+			 * \brief Return the number of indexs
+			 * \return Count of indexs
+			 */
+			int GetIndexCount() const;
+
+			/**
+			 * \brief Return the Id of component
+			 * \return Id of component
+			 */
 			Core::CoreType::Id GetId() const;
 
 		private:
-			std::vector<Core::CoreType::Vertex> vertexs;
+			bool indexed = false;
+
+			std::vector<Core::CoreType::Vertex> vertices;
+			std::vector<unsigned int> indexs;
 			Core::CoreType::Id id = Core::CoreType::Id(Core::CoreType::EObjectSubtype::GraphicComponent);
 		};
 	}

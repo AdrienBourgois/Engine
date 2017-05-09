@@ -153,7 +153,7 @@ namespace Math
 		for (int i = 0; i < 4; ++i)
 			for (int j = 0; j < 4; ++j)
 				for (int k = 0; k < 4; ++k)
-					result.Values[(4 * i) + j] += Values[(4 * i) + k] * _matrix.Values[(4 * k) + j];
+					result.Values[4 * i + j] += Values[4 * i + k] * _matrix.Values[4 * k + j];
 
 		return result;
 	}

@@ -5,10 +5,10 @@ Core::CoreType::Color::Color(float _r, float _g, float _b, float _a): r(_r), g(_
 
 Core::CoreType::Color::Color(int _r, int _g, int _b, int _a)
 {
-	r = (1.f / 256.f) * _r;
-	g = (1.f / 256.f) * _g;
-	b = (1.f / 256.f) * _b;
-	a = (1.f / 256.f) * _a;
+	r = 1.f / 256.f * _r;
+	g = 1.f / 256.f * _g;
+	b = 1.f / 256.f * _b;
+	a = 1.f / 256.f * _a;
 }
 
 const float* Core::CoreType::FillArrayColor(float* _array, Color _color)

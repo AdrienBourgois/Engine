@@ -60,7 +60,7 @@ namespace Core
 			 * \brief Set a new name for component
 			 * \param _new_name New name
 			 */
-			void SetComponentName(CoreType::String _new_name = S("")) { componentName = _new_name; };
+			void SetComponentName(CoreType::String _new_name = S("")) { componentName = _new_name; }
 			/**
 			 * \brief Return tha name of component
 			 * \return Component name

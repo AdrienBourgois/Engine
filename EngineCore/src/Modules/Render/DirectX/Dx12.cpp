@@ -30,7 +30,7 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 
 	factory->MakeDevice(&device);
 	factory->MakeCommandQueue(&commandQueue);
-	factory->MakeSwapChain(commandQueue,FRAME_BUFFER_COUNT, *MODULE(Display::Window)->getHandle(), MODULE(Display::Window)->getWidth(), MODULE(Display::Window)->getHeight(), MODULE(Display::Window)->isFullscreen(), commandQueue, &swapChain);
+	factory->MakeSwapChain(commandQueue, FRAME_BUFFER_COUNT, *MODULE(Display::Window)->getHandle(), MODULE(Display::Window)->getWidth(), MODULE(Display::Window)->getHeight(), MODULE(Display::Window)->isFullscreen(), &swapChain);
 	factory->MakeDescriptorHeap(FRAME_BUFFER_COUNT, swapChain, &rtvDescriptorHeap, &rtvDescriptorSize, renderTargets);
 	factory->MakeCommandAllocator(FRAME_BUFFER_COUNT, commandAllocator);
 	factory->MakeCommandList(commandAllocator[0], &preRenderCommandList);
@@ -116,7 +116,7 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 		SAFE_RELEASE(renderTargets[i]);
 		SAFE_RELEASE(commandAllocator[i]);
 		SAFE_RELEASE(fence[i]);
-	};
+	}
 
 	if (factory)
 		delete factory;
@@ -124,19 +124,16 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 	return true;
 }
 
-bool Module::Render::DirectX12::DirectX12::CreateVertexBuffer(int _id, const Core::CoreType::Vertex* _vertex, int _size, Core::CoreType::String _name)
+bool Module::Render::DirectX12::DirectX12::CreateVertexBuffer(Core::CoreType::String _name, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, ID3D12GraphicsCommandList* _command_list, D3D12_VERTEX_BUFFER_VIEW** _vertex_buffer_view)
 {
-	ID3D12GraphicsCommandList* command_list = nullptr;
-	factory->MakeCommandList(commandAllocator[frameIndex], &command_list);
+	TRYFUNC(_command_list->Reset(commandAllocator[frameIndex], pipelineStateObject));
 
-	TRYFUNC(command_list->Reset(commandAllocator[frameIndex], pipelineStateObject));
+	Core::CoreType::Vertex* vertex_list = new Core::CoreType::Vertex[_vertices_count];
 
-	Core::CoreType::Vertex* vertex_list = new Core::CoreType::Vertex[_size];
+	for (unsigned int i = 0; i < _vertices_count; ++i)
+		vertex_list[i] = _vertices_array[i];
 
-	for (int i = 0; i < _size; ++i)
-		vertex_list[i] = _vertex[i];
-
-	int buffer_size = _size * sizeof(Core::CoreType::Vertex);
+	int buffer_size = _vertices_count * sizeof(Core::CoreType::Vertex);
 
 	CD3DX12_HEAP_PROPERTIES default_heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 	CD3DX12_HEAP_PROPERTIES upload_heap_properties  = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
@@ -144,24 +141,24 @@ bool Module::Render::DirectX12::DirectX12::CreateVertexBuffer(int _id, const Cor
 
 	ID3D12Resource* vertex_buffer = nullptr;
 	device->CreateCommittedResource(&default_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&vertex_buffer));
-	vertex_buffer->SetName((_name + S(" - Buffer")).ToWideString());
+	vertex_buffer->SetName((_name + S(" - Vertex Buffer")).ToWideString());
 
-	ID3D12Resource* vBufferUploadHeap;
-	device->CreateCommittedResource(&upload_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vBufferUploadHeap));
-	vBufferUploadHeap->SetName((_name + S(" - Upload")).ToWideString());
+	ID3D12Resource* vertex_buffer_upload_heap;
+	device->CreateCommittedResource(&upload_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertex_buffer_upload_heap));
+	vertex_buffer_upload_heap->SetName((_name + S(" - Vertex Upload")).ToWideString());
 
 	D3D12_SUBRESOURCE_DATA vertexData;
 	vertexData.pData                  = reinterpret_cast<BYTE*>(vertex_list);
 	vertexData.RowPitch               = buffer_size;
 	vertexData.SlicePitch             = buffer_size;
 
-	UpdateSubresources(command_list, vertex_buffer, vBufferUploadHeap, 0, 0, 1, &vertexData);
+	UpdateSubresources(_command_list, vertex_buffer, vertex_buffer_upload_heap, 0, 0, 1, &vertexData);
 
 	CD3DX12_RESOURCE_BARRIER transition_barrier = CD3DX12_RESOURCE_BARRIER::Transition(vertex_buffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
-	command_list->ResourceBarrier(1, &transition_barrier);
+	_command_list->ResourceBarrier(1, &transition_barrier);
 
-	command_list->Close();
-	ID3D12CommandList* ppCommandLists[] = { command_list };
+	_command_list->Close();
+	ID3D12CommandList* ppCommandLists[] = { _command_list };
 	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
 	fenceValue[frameIndex]++;
@@ -169,14 +166,81 @@ bool Module::Render::DirectX12::DirectX12::CreateVertexBuffer(int _id, const Cor
 	fence[frameIndex]->SetEventOnCompletion(fenceValue[frameIndex], fenceEvent);
 	WaitForSingleObject(fenceEvent, INFINITE);
 
-	D3D12_VERTEX_BUFFER_VIEW* buffer_view = new D3D12_VERTEX_BUFFER_VIEW;
-	buffer_view->BufferLocation = vertex_buffer->GetGPUVirtualAddress();
-	buffer_view->StrideInBytes  = sizeof(Core::CoreType::Vertex);
-	buffer_view->SizeInBytes    = buffer_size;
+	*_vertex_buffer_view = new D3D12_VERTEX_BUFFER_VIEW;
+	(*_vertex_buffer_view)->BufferLocation = vertex_buffer->GetGPUVirtualAddress();
+	(*_vertex_buffer_view)->StrideInBytes  = sizeof(Core::CoreType::Vertex);
+	(*_vertex_buffer_view)->SizeInBytes    = buffer_size;
 
 	delete[] vertex_list;
 
-	graphicsObjects[_id] = new Objects::Dx12GraphicObject(_id, _vertex, _name, command_list, buffer_view);
+	return true;
+}
+
+bool Module::Render::DirectX12::DirectX12::CreateIndexBuffer(Core::CoreType::String _name, unsigned int* _indexs_array, unsigned int _indexs_count, ID3D12GraphicsCommandList* _command_list, D3D12_INDEX_BUFFER_VIEW** _index_buffer_view)
+{
+	TRYFUNC(_command_list->Reset(commandAllocator[frameIndex], pipelineStateObject));
+
+	unsigned int* index_list = new unsigned int[_indexs_count];
+
+	for (unsigned int i = 0; i < _indexs_count; ++i)
+		index_list[i] = _indexs_array[i];
+
+	int buffer_size = _indexs_count * sizeof(unsigned int);
+
+	CD3DX12_HEAP_PROPERTIES default_heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+	CD3DX12_HEAP_PROPERTIES upload_heap_properties  = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	CD3DX12_RESOURCE_DESC buffer_size_desc          = CD3DX12_RESOURCE_DESC::Buffer(buffer_size);
+
+	ID3D12Resource* index_buffer = nullptr;
+	device->CreateCommittedResource(&default_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&index_buffer));
+	index_buffer->SetName((_name + S(" - Index Buffer")).ToWideString());
+
+	ID3D12Resource* index_buffer_upload_heap;
+	device->CreateCommittedResource(&upload_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&index_buffer_upload_heap));
+	index_buffer_upload_heap->SetName((_name + S(" - Index Upload")).ToWideString());
+
+	D3D12_SUBRESOURCE_DATA index_data;
+	index_data.pData                  = reinterpret_cast<BYTE*>(index_list);
+	index_data.RowPitch               = buffer_size;
+	index_data.SlicePitch             = buffer_size;
+
+	UpdateSubresources(_command_list, index_buffer, index_buffer_upload_heap, 0, 0, 1, &index_data);
+
+	CD3DX12_RESOURCE_BARRIER transition_barrier = CD3DX12_RESOURCE_BARRIER::Transition(index_buffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+	_command_list->ResourceBarrier(1, &transition_barrier);
+
+	_command_list->Close();
+	ID3D12CommandList* ppCommandLists[] = { _command_list };
+	commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+
+	fenceValue[frameIndex]++;
+	TRYFUNC(commandQueue->Signal(fence[frameIndex], fenceValue[frameIndex]));
+	fence[frameIndex]->SetEventOnCompletion(fenceValue[frameIndex], fenceEvent);
+	WaitForSingleObject(fenceEvent, INFINITE);
+
+	*_index_buffer_view = new D3D12_INDEX_BUFFER_VIEW;
+	(*_index_buffer_view)->BufferLocation = index_buffer->GetGPUVirtualAddress();
+	(*_index_buffer_view)->Format = DXGI_FORMAT_R32_UINT;
+	(*_index_buffer_view)->SizeInBytes    = buffer_size;
+
+	delete[] index_list;
+
+	return true;
+}
+
+bool Module::Render::DirectX12::DirectX12::CreateBuffers(unsigned int _id, Core::CoreType::String _name, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, unsigned int* _indexs_array, unsigned int _indexs_count)
+{
+	ID3D12GraphicsCommandList* command_list = nullptr;
+	factory->MakeCommandList(commandAllocator[frameIndex], &command_list);
+
+	D3D12_VERTEX_BUFFER_VIEW* buffer_view = nullptr;
+	CreateVertexBuffer(_name, _vertices_array, _vertices_count, command_list, &buffer_view);
+
+	D3D12_INDEX_BUFFER_VIEW* index_view = nullptr;
+	if (_indexs_array && _indexs_count)
+		CreateIndexBuffer(_name, _indexs_array, _indexs_count, command_list, &index_view);
+
+	graphicsObjects[_id] = new Objects::Dx12GraphicObject(_id, _name, command_list, _vertices_array, _vertices_count, buffer_view, _indexs_array, _indexs_count, index_view);
 
 	return true;
 }

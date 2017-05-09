@@ -23,7 +23,7 @@ bool Math::Vec3::operator==(Vec3 _other_vec) const
 
 bool Math::Vec3::operator!=(Vec3 _other_vec) const
 {
-	return !(operator==(_other_vec));
+	return !operator==(_other_vec);
 }
 
 Math::Vec3 Math::Vec3::operator+(Vec3 _other_vec) const

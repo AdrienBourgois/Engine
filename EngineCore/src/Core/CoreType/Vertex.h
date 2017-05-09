@@ -18,7 +18,7 @@ namespace Core
 			 */
 			Vertex() = default;
 			/**
-			 * \brief
+			 * \brief Contructor with 7 float
 			 * \param _x Location x
 			 * \param _y Location y
 			 * \param _z Location z
@@ -28,6 +28,23 @@ namespace Core
 			 * \param _a Color alpha
 			 */
 			Vertex(float _x, float _y, float _z, float _r, float _g, float _b, float _a);
+			/**
+			 * \brief Contructor whith location as float and Color as color
+			 * \param _x Location x
+			 * \param _y Location y
+			 * \param _z Location z
+			 * \param _color Color
+			 */
+			Vertex(float _x, float _y, float _z, Color _color);
+			/**
+			 * \brief Contructor with Vec3 as location and 4 float as color
+			 * \param _location Location vector
+			 * \param _r Color red
+			 * \param _g Color green
+			 * \param _b Color blue
+			 * \param _a Color alpha
+			 */
+			Vertex(Math::Vec3 _location, float _r, float _g, float _b, float _a);
 			/**
 			 * \brief Constructor with location and color components
 			 * \param _location Location vector
@@ -66,7 +83,7 @@ namespace Core
 			 * \brief Return size of datas
 			 * \return Size of datas in bytes
 			 */
-			static int GetSize() { return sizeof(datas); }
+			static int GetSize() { return sizeof datas; }
 
 		private:
 			/**

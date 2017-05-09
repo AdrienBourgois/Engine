@@ -11,6 +11,30 @@ Core::CoreType::Vertex::Vertex(float _x, float _y, float _z, float _r, float _g,
 	datas[6] = _a;
 }
 
+Core::CoreType::Vertex::Vertex(float _x, float _y, float _z, Color _color)
+{
+	datas[0] = _x;
+	datas[1] = _y;
+	datas[2] = _z;
+
+	datas[3] = _color.r;
+	datas[4] = _color.g;
+	datas[5] = _color.b;
+	datas[6] = _color.a;
+}
+
+Core::CoreType::Vertex::Vertex(Math::Vec3 _location, float _r, float _g, float _b, float _a)
+{
+	datas[0] = _location.x;
+	datas[1] = _location.y;
+	datas[2] = _location.z;
+
+	datas[3] = _r;
+	datas[4] = _g;
+	datas[5] = _b;
+	datas[6] = _a;
+}
+
 Core::CoreType::Vertex::Vertex(Math::Vec3 _location, Color _color)
 {
 	datas[0] = _location.x;

@@ -67,12 +67,11 @@ namespace Module
 				 * \param _width Width of render
 				 * \param _height Height of render
 				 * \param _fullscreen Is window fullscreen
-				 * \param _commandQueue Command queue to use with SwapChain
 				 * \param[out] _swap_chain Pointer to IDXGISwapChain3
 				 * \return Is function success
 				 * \note Must be called after Dx12Factory::MakeDevice
 				 */
-				bool MakeSwapChain(IUnknown* _device ,UINT _frame_buffer_count, HWND _window, UINT _width, UINT _height, BOOL _fullscreen, ID3D12CommandQueue* _commandQueue, IDXGISwapChain3** _swap_chain);
+				bool MakeSwapChain(IUnknown* _device, UINT _frame_buffer_count, HWND _window, UINT _width, UINT _height, BOOL _fullscreen, IDXGISwapChain3** _swap_chain);
 				/**
 				 * \brief Create Descriptor heap and renders targets
 				 * \param _frame_buffer_count Count of frames buffer used

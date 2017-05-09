@@ -40,14 +40,16 @@ namespace Core
 			 */
 			virtual bool CreatePipeline() = 0;
 			/**
-			 * \brief Create a buffer from object
+			 * \brief Create buffers from object
 			 * \param _id Id of object
-			 * \param _vertex Array of vertexs
-			 * \param _size Size of array
 			 * \param _name Name of buffer
+			 * \param _vertices_array Array of vertices
+			 * \param _vertices_count Size of vertices array
+			 * \param _indexs_array Array of indexs (If vertices are indexed)
+			 * \param _indexs_count Size of indexs array
 			 * \return Is function success
 			 */
-			virtual bool CreateVertexBuffer(int _id, const CoreType::Vertex* _vertex, int _size, CoreType::String _name) = 0;
+			virtual bool CreateBuffers(unsigned int _id, CoreType::String _name, CoreType::Vertex* _vertices_array, unsigned int _vertices_count, unsigned int* _indexs_array = nullptr, unsigned int _indexs_count = 0) = 0;
 			/**
 			 * \brief Start render of current frame
 			 * \return Is function success

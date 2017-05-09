@@ -12,21 +12,9 @@ bool Module::Render::RenderInterface::Start()
 {
 	renderer->CreatePipeline();
 
-	Core::CoreType::Vertex point1 = Core::CoreType::Vertex(Math::Vec3(0.f, .5f, .5f), Core::CoreType::Color::Red);
-	Core::CoreType::Vertex point2 = Core::CoreType::Vertex(Math::Vec3(.25f, .0f, .5f), Core::CoreType::Color::Blue);
-	Core::CoreType::Vertex point3 = Core::CoreType::Vertex(Math::Vec3(-.25f, .0f, .5f), Core::CoreType::Color::Green);
-
-	Core::CoreType::Vertex point4 = Core::CoreType::Vertex(Math::Vec3(-.25f, .0f, .5f), Core::CoreType::Color::White);
-	Core::CoreType::Vertex point5 = Core::CoreType::Vertex(Math::Vec3(.0f, -.5f, .5f), Core::CoreType::Color::Black);
-	Core::CoreType::Vertex point6 = Core::CoreType::Vertex(Math::Vec3(-.5f, -.5f, .5f), Core::CoreType::Color::Red);
-
-	Core::CoreType::Vertex point7 = Core::CoreType::Vertex(Math::Vec3(.25f, .0f, .5f), Core::CoreType::Color::Green);
-	Core::CoreType::Vertex point8 = Core::CoreType::Vertex(Math::Vec3(.5f, -.5f, .5f), Core::CoreType::Color::Blue);
-	Core::CoreType::Vertex point9 = Core::CoreType::Vertex(Math::Vec3(.0f, -.5f, .5f), Core::CoreType::Color::White);
-
-	Core::CoreType::Vertex triangle[] = { point1, point2, point3 };
-	Core::CoreType::Vertex triangle2[] = { point4, point5, point6 };
-	Core::CoreType::Vertex triangle3[] = { point7, point8, point9 };
+	Core::CoreType::Vertex triangle[] = {{0.f, .5f, .5f, Core::CoreType::Color::Red}, {.25f, .0f, .5f, Core::CoreType::Color::Blue}, {-.25f, .0f, .5f, Core::CoreType::Color::Green}};
+	Core::CoreType::Vertex triangle2[] = {{-.25f, .0f, .5f, Core::CoreType::Color::White}, {.0f, -.5f, .5f, Core::CoreType::Color::Black}, {-.5f, -.5f, .5f, Core::CoreType::Color::Red}};
+	Core::CoreType::Vertex triangle3[] = {{.25f, .0f, .5f, Core::CoreType::Color::Green}, {.5f, -.5f, .5f, Core::CoreType::Color::Blue}, {.0f, -.5f, .5f, Core::CoreType::Color::White}};
 
 	Object::Component::GraphicComponent object1(triangle, 3);
 	Object::Component::GraphicComponent object2(triangle2, 3);
@@ -35,6 +23,20 @@ bool Module::Render::RenderInterface::Start()
 	CreateBuffer(&object1);
 	CreateBuffer(&object2);
 	CreateBuffer(&object3);
+
+	Core::CoreType::Vertex square_vertex_list[] = {
+	{ -0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f },
+	{  0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f },
+	{ -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f },
+	{  0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 1.0f, 1.0f } };
+
+	unsigned int square_index_list[] = {
+	0, 1, 2,
+	0, 3, 1	};
+
+	Object::Component::GraphicComponent square(square_vertex_list, 4, square_index_list, 6);
+
+	CreateBuffer(&square);
 
 	return true;
 }
@@ -53,5 +55,5 @@ bool Module::Render::RenderInterface::Destruct()
 bool Module::Render::RenderInterface::CreateBuffer(Object::Component::GraphicComponent* _component)
 {
 	objects.insert_or_assign(_component->GetId().GetInstanceNumber(), _component);
-	return renderer->CreateVertexBuffer(_component->GetId().GetInstanceNumber(), _component->GetPoints(), _component->GetSize(), S("WIP : Need to retrieve object name"));
+	return renderer->CreateBuffers(_component->GetId().GetInstanceNumber(), S("WIP : Need to retrieve object name"), _component->GetVertices(), _component->GetVertexCount(), _component->GetIndexs(), _component->GetIndexCount());
 }
