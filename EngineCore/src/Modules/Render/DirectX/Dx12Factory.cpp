@@ -185,23 +185,23 @@ bool Module::Render::DirectX12::Dx12Factory::MakeDepthStencilBuffer(ID3D12Descri
 	heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	TRYFUNC(device->CreateDescriptorHeap(&heap_desc, IID_PPV_ARGS(_descriptor)));
 
-	D3D12_DEPTH_STENCIL_VIEW_DESC depthStencilDesc = {};
-	depthStencilDesc.Format = DXGI_FORMAT_D32_FLOAT;
-	depthStencilDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-	depthStencilDesc.Flags = D3D12_DSV_FLAG_NONE;
+	D3D12_DEPTH_STENCIL_VIEW_DESC depth_stencil_desc = {};
+	depth_stencil_desc.Format = DXGI_FORMAT_D32_FLOAT;
+	depth_stencil_desc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+	depth_stencil_desc.Flags = D3D12_DSV_FLAG_NONE;
 
-	D3D12_CLEAR_VALUE depthOptimizedClearValue;
-	depthOptimizedClearValue.Format = DXGI_FORMAT_D32_FLOAT;
-	depthOptimizedClearValue.DepthStencil.Depth = 1.0f;
-	depthOptimizedClearValue.DepthStencil.Stencil = 0;
+	D3D12_CLEAR_VALUE depth_optimized_clear_value;
+	depth_optimized_clear_value.Format = DXGI_FORMAT_D32_FLOAT;
+	depth_optimized_clear_value.DepthStencil.Depth = 1.0f;
+	depth_optimized_clear_value.DepthStencil.Stencil = 0;
 
 	CD3DX12_HEAP_PROPERTIES heap_properties(D3D12_HEAP_TYPE_DEFAULT);
 	CD3DX12_RESOURCE_DESC resource_descritor = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D32_FLOAT, _width, _weight, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
 
-	device->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_descritor, D3D12_RESOURCE_STATE_DEPTH_WRITE, &depthOptimizedClearValue, IID_PPV_ARGS(_buffer));
+	device->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_descritor, D3D12_RESOURCE_STATE_DEPTH_WRITE, &depth_optimized_clear_value, IID_PPV_ARGS(_buffer));
 	(*_descriptor)->SetName(L"Depth/Stencil Resource Heap");
 
-	device->CreateDepthStencilView(*_buffer, &depthStencilDesc, (*_descriptor)->GetCPUDescriptorHandleForHeapStart());
+	device->CreateDepthStencilView(*_buffer, &depth_stencil_desc, (*_descriptor)->GetCPUDescriptorHandleForHeapStart());
 
 	return true;
 }

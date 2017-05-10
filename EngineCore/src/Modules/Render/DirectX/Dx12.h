@@ -84,15 +84,15 @@ namespace Module
 
 				Dx12Factory* factory = nullptr;
 
-				Display::Window* window_reference = nullptr;
-				HWND* window_handle_reference = nullptr;
+				Display::Window* windowReference = nullptr;
+				HWND* windowHandleReference = nullptr;
 
-				DXGI_SAMPLE_DESC sampleDesc = {};
+				DXGI_SAMPLE_DESC sampleDescriptor = {};
 
-				D3D12_INPUT_LAYOUT_DESC inputLayoutDesc = {};
+				D3D12_INPUT_LAYOUT_DESC inputLayoutDescriptor = {};
 
-				ID3D12DescriptorHeap* rtvDescriptorHeap = nullptr;
-				UINT rtvDescriptorSize = 0;
+				ID3D12DescriptorHeap* renderTargetDescriptorHeap = nullptr;
+				UINT renderTargetDescriptorSize = 0;
 
 				ID3D12Device* device = nullptr;
 
@@ -120,7 +120,7 @@ namespace Module
 				ID3D12GraphicsCommandList* postRenderCommandList = nullptr;
 
 				ID3D12Resource* depthStencilBuffer = nullptr;
-				ID3D12DescriptorHeap* dsDescriptorHeap = nullptr;
+				ID3D12DescriptorHeap* depthStencilDescriptorHeap = nullptr;
 
 				std::unordered_map<int, Objects::Dx12GraphicObject*> graphicsObjects;
 
