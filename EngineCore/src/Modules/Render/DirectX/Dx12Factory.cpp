@@ -3,13 +3,6 @@
 #include <D3Dcompiler.h>
 #include "Modules/Render/DirectX/DX12Helper.h"
 
-bool Module::Render::DirectX12::Dx12Factory::CreateObjectCommandList(ID3D12CommandAllocator* _command_allocator, ID3D12GraphicsCommandList** _command_list)
-{
-	TRYFUNC(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _command_allocator, nullptr, IID_PPV_ARGS(_command_list)));
-
-	return true;
-}
-
 bool Module::Render::DirectX12::Dx12Factory::InitFactory()
 {
 	TRYFUNC(CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory)));
@@ -184,6 +177,35 @@ bool Module::Render::DirectX12::Dx12Factory::MakePixelShader(LPCWSTR _path, D3D1
 	return true;
 }
 
+bool Module::Render::DirectX12::Dx12Factory::MakeDepthStencilBuffer(ID3D12DescriptorHeap** _descriptor, ID3D12Resource** _buffer, UINT _width, UINT _weight)
+{
+	D3D12_DESCRIPTOR_HEAP_DESC heap_desc = {};
+	heap_desc.NumDescriptors = 1;
+	heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+	heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	TRYFUNC(device->CreateDescriptorHeap(&heap_desc, IID_PPV_ARGS(_descriptor)));
+
+	D3D12_DEPTH_STENCIL_VIEW_DESC depthStencilDesc = {};
+	depthStencilDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthStencilDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+	depthStencilDesc.Flags = D3D12_DSV_FLAG_NONE;
+
+	D3D12_CLEAR_VALUE depthOptimizedClearValue;
+	depthOptimizedClearValue.Format = DXGI_FORMAT_D32_FLOAT;
+	depthOptimizedClearValue.DepthStencil.Depth = 1.0f;
+	depthOptimizedClearValue.DepthStencil.Stencil = 0;
+
+	CD3DX12_HEAP_PROPERTIES heap_properties(D3D12_HEAP_TYPE_DEFAULT);
+	CD3DX12_RESOURCE_DESC resource_descritor = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D32_FLOAT, _width, _weight, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+
+	device->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_descritor, D3D12_RESOURCE_STATE_DEPTH_WRITE, &depthOptimizedClearValue, IID_PPV_ARGS(_buffer));
+	(*_descriptor)->SetName(L"Depth/Stencil Resource Heap");
+
+	device->CreateDepthStencilView(*_buffer, &depthStencilDesc, (*_descriptor)->GetCPUDescriptorHandleForHeapStart());
+
+	return true;
+}
+
 bool Module::Render::DirectX12::Dx12Factory::MakePipelineStateObject(ID3D12RootSignature* _root_signature, D3D12_SHADER_BYTECODE* _vertex_shader_bytecode, D3D12_SHADER_BYTECODE* _pixel_shader_bytecode, ID3D12PipelineState** _pipeline_state_object)
 {
 	D3D12_INPUT_ELEMENT_DESC input_layout[] =
@@ -212,6 +234,7 @@ bool Module::Render::DirectX12::Dx12Factory::MakePipelineStateObject(ID3D12RootS
 	pso_desc.RasterizerState                    = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	pso_desc.BlendState                         = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	pso_desc.NumRenderTargets                   = 1;
+	pso_desc.DepthStencilState                  = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 
 	TRYFUNC(device->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(_pipeline_state_object)));
 

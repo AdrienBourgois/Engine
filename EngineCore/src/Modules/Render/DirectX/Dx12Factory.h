@@ -39,7 +39,6 @@ namespace Module
 				 */
 				~Dx12Factory() = default;
 
-				bool CreateObjectCommandList(ID3D12CommandAllocator* _command_allocator, ID3D12GraphicsCommandList** _command_list);
 				/**
 				 * \brief Initialize DXGIFactory
 				 * \return Is function success
@@ -130,6 +129,16 @@ namespace Module
 				 * \return Is function success
 				 */
 				bool MakePixelShader(LPCWSTR _path, D3D12_SHADER_BYTECODE* _shader_bytecode);
+				/**
+				 * \brief Create a Depth/Stencil buffer with the descriptor
+				 * \param[out] _descriptor Pointer to a ID3D12DescriptorHeap
+				 * \param[out] _buffer Pointer to a ID3D12Resource
+				 * \param _width Width of the buffer
+				 * \param _weight Weight of the buffer
+				 * \return Is function success
+				 * \note Must be called after Dx12Factory::MakeDevice
+				 */
+				bool MakeDepthStencilBuffer(ID3D12DescriptorHeap** _descriptor, ID3D12Resource** _buffer, UINT _width, UINT _weight);
 				/**
 				 * \brief Create PSO
 				 * \param _root_signature Root Signature to use

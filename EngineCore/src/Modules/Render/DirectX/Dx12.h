@@ -39,8 +39,13 @@ namespace Module
 			class DirectX12 : public Core::Interface::IRender
 			{
 			public:
-
-				explicit DirectX12() = default;
+				/**
+				 * \brief Default constructor
+				 */
+				DirectX12() = default;
+				/**
+				 * \brief Default destructor
+				 */
 				~DirectX12() = default;
 
 				bool Initialize() override;
@@ -79,11 +84,9 @@ namespace Module
 
 				Dx12Factory* factory = nullptr;
 
-				//Reference Objects
 				Display::Window* window_reference = nullptr;
 				HWND* window_handle_reference = nullptr;
 
-				//Init Objects
 				DXGI_SAMPLE_DESC sampleDesc = {};
 
 				D3D12_INPUT_LAYOUT_DESC inputLayoutDesc = {};
@@ -91,7 +94,6 @@ namespace Module
 				ID3D12DescriptorHeap* rtvDescriptorHeap = nullptr;
 				UINT rtvDescriptorSize = 0;
 
-				//Handle Objects
 				ID3D12Device* device = nullptr;
 
 				ID3D12PipelineState* pipelineStateObject = nullptr;
@@ -108,7 +110,6 @@ namespace Module
 				D3D12_SHADER_BYTECODE vertexShaderBytecode = {};
 				D3D12_SHADER_BYTECODE pixelShaderBytecode  = {};
 
-				//Per-frame used Objects
 				IDXGISwapChain3* swapChain = nullptr;
 
 				ID3D12Resource* renderTargets[FRAME_BUFFER_COUNT];
@@ -117,6 +118,9 @@ namespace Module
 				ID3D12CommandAllocator* commandAllocator[FRAME_BUFFER_COUNT];
 				ID3D12GraphicsCommandList* preRenderCommandList = nullptr;
 				ID3D12GraphicsCommandList* postRenderCommandList = nullptr;
+
+				ID3D12Resource* depthStencilBuffer = nullptr;
+				ID3D12DescriptorHeap* dsDescriptorHeap = nullptr;
 
 				std::unordered_map<int, Objects::Dx12GraphicObject*> graphicsObjects;
 

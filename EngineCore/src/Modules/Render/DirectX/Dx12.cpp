@@ -12,6 +12,9 @@ bool Module::Render::DirectX12::DirectX12::Initialize()
 
 bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 {
+	unsigned int width = MODULE(Display::Window)->getWidth();
+	unsigned int height = MODULE(Display::Window)->getHeight();
+
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;
@@ -30,7 +33,7 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 
 	factory->MakeDevice(&device);
 	factory->MakeCommandQueue(&commandQueue);
-	factory->MakeSwapChain(commandQueue, FRAME_BUFFER_COUNT, *MODULE(Display::Window)->getHandle(), MODULE(Display::Window)->getWidth(), MODULE(Display::Window)->getHeight(), MODULE(Display::Window)->isFullscreen(), &swapChain);
+	factory->MakeSwapChain(commandQueue, FRAME_BUFFER_COUNT, *MODULE(Display::Window)->getHandle(), width, height, MODULE(Display::Window)->isFullscreen(), &swapChain);
 	factory->MakeDescriptorHeap(FRAME_BUFFER_COUNT, swapChain, &rtvDescriptorHeap, &rtvDescriptorSize, renderTargets);
 	factory->MakeCommandAllocator(FRAME_BUFFER_COUNT, commandAllocator);
 	factory->MakeCommandList(commandAllocator[0], &preRenderCommandList);
@@ -39,6 +42,7 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	factory->MakeRootSignature(&rootSignature);
 	factory->MakeVertexShader(L"Content\\Core\\Shaders\\VertexShader.hlsl", &vertexShaderBytecode);
 	factory->MakePixelShader(L"Content\\Core\\Shaders\\PixelShader.hlsl", &pixelShaderBytecode);
+	factory->MakeDepthStencilBuffer(&dsDescriptorHeap, &depthStencilBuffer, width, height);
 	factory->MakePipelineStateObject(rootSignature, &vertexShaderBytecode, &pixelShaderBytecode, &pipelineStateObject);
 
 	preRenderCommandList->SetName(L"Pre-Render Command List");
@@ -110,6 +114,9 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 	SAFE_RELEASE(rootSignature);
 
 	SAFE_RELEASE(rtvDescriptorHeap);
+
+	SAFE_RELEASE(depthStencilBuffer);
+	SAFE_RELEASE(dsDescriptorHeap);
 
 	for (int i = 0; i < FRAME_BUFFER_COUNT; ++i)
 	{
@@ -269,12 +276,14 @@ bool Module::Render::DirectX12::DirectX12::PreparePreRenderCommandList()
 	preRenderCommandList->ResourceBarrier(1, &present_to_target_barrier);
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(dsDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
 
-	preRenderCommandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+	preRenderCommandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
 
 	float clearColor[4];
 	FillArrayColor(clearColor, Core::CoreType::Color::Blueviolet);
 	preRenderCommandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+	preRenderCommandList->ClearDepthStencilView(dsDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	TRYFUNC(preRenderCommandList->Close());
 
@@ -300,8 +309,9 @@ bool Module::Render::DirectX12::DirectX12::PrepareObjectCommandList(Objects::Dx1
 	TRYFUNC(command_list->Reset(commandAllocator[frameIndex], pipelineStateObject));
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, rtvDescriptorSize);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(dsDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
 
-	command_list->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+	command_list->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
 
 	command_list->SetGraphicsRootSignature(rootSignature);
 	command_list->RSSetViewports(1, &viewport);

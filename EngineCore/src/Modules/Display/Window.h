@@ -22,8 +22,8 @@ namespace Module
 			void GetMessages() const;
 
 			bool isFullscreen() const { return fullscreen; }
-			int getWidth() const { return width; }
-			int getHeight() const { return height; }
+			unsigned int getWidth() const { return width; }
+			unsigned int getHeight() const { return height; }
 			HWND* getHandle() { return &windowHandler; }
 
 		private:
@@ -38,8 +38,8 @@ namespace Module
 
 			const wchar_t* windowTitle = L"Window Title";
 
-			int width  = 1440;
-			int height = 900;
+			unsigned int width  = 1440;
+			unsigned int height = 900;
 
 			bool fullscreen = false;
 			bool canReceiveMessage = true;
