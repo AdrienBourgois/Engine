@@ -63,20 +63,20 @@ bool Module::Render::DirectX12::Dx12Factory::MakeSwapChain(IUnknown* _device, UI
 	DXGI_SWAP_CHAIN_FULLSCREEN_DESC fullscreen_desc;
 	fullscreen_desc.Windowed = !_fullscreen;
 
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = _frame_buffer_count;
-	swapChainDesc.Width = _width;
-	swapChainDesc.Height = _height;
-	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-	swapChainDesc.SampleDesc = sample_desc;
+	DXGI_SWAP_CHAIN_DESC1 swap_chain_descriptor = {};
+	swap_chain_descriptor.BufferCount = _frame_buffer_count;
+	swap_chain_descriptor.Width = _width;
+	swap_chain_descriptor.Height = _height;
+	swap_chain_descriptor.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swap_chain_descriptor.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swap_chain_descriptor.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	swap_chain_descriptor.SampleDesc = sample_desc;
 
-	IDXGISwapChain1* swapChain = nullptr;
+	IDXGISwapChain1* swap_chain = nullptr;
 
-	TRYFUNC(dxgiFactory->CreateSwapChainForHwnd(_device, _window, &swapChainDesc, &fullscreen_desc, nullptr, &swapChain));
+	TRYFUNC(dxgiFactory->CreateSwapChainForHwnd(_device, _window, &swap_chain_descriptor, &fullscreen_desc, nullptr, &swap_chain));
 
-	*_swap_chain = static_cast<IDXGISwapChain3*>(swapChain);
+	*_swap_chain = static_cast<IDXGISwapChain3*>(swap_chain);
 
 	return true;
 }
@@ -138,15 +138,9 @@ bool Module::Render::DirectX12::Dx12Factory::MakeFence(UINT _frame_buffer_count,
 	return true;
 }
 
-bool Module::Render::DirectX12::Dx12Factory::MakeRootSignature(ID3D12RootSignature** _root_signature)
+bool Module::Render::DirectX12::Dx12Factory::MakeRootSignature(ID3DBlob* _signature, ID3D12RootSignature** _root_signature)
 {
-	CD3DX12_ROOT_SIGNATURE_DESC root_signature_desc;
-	root_signature_desc.Init(0, nullptr, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
-
-	ID3DBlob* signature;
-	TRYFUNC(D3D12SerializeRootSignature(&root_signature_desc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, nullptr));
-
-	TRYFUNC(device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(_root_signature)));
+	TRYFUNC(device->CreateRootSignature(0, _signature->GetBufferPointer(), _signature->GetBufferSize(), IID_PPV_ARGS(_root_signature)));
 
 	return true;
 }
@@ -235,6 +229,7 @@ bool Module::Render::DirectX12::Dx12Factory::MakePipelineStateObject(ID3D12RootS
 	pso_desc.BlendState                         = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	pso_desc.NumRenderTargets                   = 1;
 	pso_desc.DepthStencilState                  = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	pso_desc.DSVFormat                          = DXGI_FORMAT_D32_FLOAT;
 
 	TRYFUNC(device->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(_pipeline_state_object)));
 

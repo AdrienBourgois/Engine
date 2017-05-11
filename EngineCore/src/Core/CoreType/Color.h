@@ -38,7 +38,7 @@ namespace Core
 			 * \param _b Blue component
 			 * \param _a Alpha component (Default = 255 / Visible)
 			 */
-			Color(int _r, int _g, int _b, int _a = 255);
+			Color(unsigned char _r, unsigned char _g, unsigned char _b, unsigned char _a = 255);
 			/**
 			 * \brief Default destructor
 			 */

@@ -110,11 +110,12 @@ namespace Module
 				bool MakeFence(UINT _frame_buffer_count, ID3D12Fence** _fence, UINT64* _fence_value, HANDLE* fence_event);
 				/**
 				 * \brief Create Root Signature
+				 * \param _signature Serialized signature to use
 				 * \param[out] _root_signature Pointer to ID3D12RootSignature
 				 * \return Is function success
 				 * \note Must be called after Dx12Factory::MakeDevice
 				 */
-				bool MakeRootSignature(ID3D12RootSignature** _root_signature);
+				bool MakeRootSignature(ID3DBlob* _signature, ID3D12RootSignature** _root_signature);
 				/**
 				 * \brief Compile a Vertex shader
 				 * \param _path Path to shader file

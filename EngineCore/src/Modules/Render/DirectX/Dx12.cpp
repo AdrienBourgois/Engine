@@ -19,17 +19,19 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
-	viewport.Width    = static_cast<FLOAT>(MODULE(Display::Window)->getWidth());
-	viewport.Height   = static_cast<FLOAT>(MODULE(Display::Window)->getHeight());
+	viewport.Width    = static_cast<FLOAT>(width);
+	viewport.Height   = static_cast<FLOAT>(height);
 
 	scissorRect.left   = 0;
 	scissorRect.top    = 0;
-	scissorRect.right  = MODULE(Display::Window)->getWidth();
-	scissorRect.bottom = MODULE(Display::Window)->getHeight();
+	scissorRect.right  = width;
+	scissorRect.bottom = height;
 
 	factory = new Dx12Factory();
 	if (!factory->InitFactory())
 		return false;
+
+	rootSignatureSerializer = new Objects::Dx12RootSignatureDescritor();
 
 	factory->MakeDevice(&device);
 	factory->MakeCommandQueue(&commandQueue);
@@ -39,11 +41,13 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	factory->MakeCommandList(commandAllocator[0], &preRenderCommandList);
 	factory->MakeCommandList(commandAllocator[0], &postRenderCommandList);
 	factory->MakeFence(FRAME_BUFFER_COUNT, fence, fenceValue, &fenceEvent);
-	factory->MakeRootSignature(&rootSignature);
+	factory->MakeRootSignature(rootSignatureSerializer->GetSignature(), &rootSignature);
 	factory->MakeVertexShader(L"Content\\Core\\Shaders\\VertexShader.hlsl", &vertexShaderBytecode);
 	factory->MakePixelShader(L"Content\\Core\\Shaders\\PixelShader.hlsl", &pixelShaderBytecode);
 	factory->MakeDepthStencilBuffer(&depthStencilDescriptorHeap, &depthStencilBuffer, width, height);
 	factory->MakePipelineStateObject(rootSignature, &vertexShaderBytecode, &pixelShaderBytecode, &pipelineStateObject);
+
+	rootSignatureSerializer->SignatureUpdated();
 
 	preRenderCommandList->SetName(L"Pre-Render Command List");
 	postRenderCommandList->SetName(L"Post-Render Command List");
@@ -275,14 +279,14 @@ bool Module::Render::DirectX12::DirectX12::PreparePreRenderCommandList()
 	CD3DX12_RESOURCE_BARRIER present_to_target_barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargets[frameIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	preRenderCommandList->ResourceBarrier(1, &present_to_target_barrier);
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(renderTargetDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, renderTargetDescriptorSize);
-	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(depthStencilDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
+	CD3DX12_CPU_DESCRIPTOR_HANDLE render_target_view_handle(renderTargetDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, renderTargetDescriptorSize);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE depth_stencil_view_handle(depthStencilDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
 
-	preRenderCommandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
+	preRenderCommandList->OMSetRenderTargets(1, &render_target_view_handle, FALSE, &depth_stencil_view_handle);
 
-	float clearColor[4];
-	FillArrayColor(clearColor, Core::CoreType::Color::Blueviolet);
-	preRenderCommandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+	float clear_color[4];
+	FillArrayColor(clear_color, Core::CoreType::Color::Sgiolivedrab);
+	preRenderCommandList->ClearRenderTargetView(render_target_view_handle, clear_color, 0, nullptr);
 	preRenderCommandList->ClearDepthStencilView(depthStencilDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	TRYFUNC(preRenderCommandList->Close());
@@ -308,17 +312,16 @@ bool Module::Render::DirectX12::DirectX12::PrepareObjectCommandList(Objects::Dx1
 
 	TRYFUNC(command_list->Reset(commandAllocator[frameIndex], pipelineStateObject));
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(renderTargetDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, renderTargetDescriptorSize);
-	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(depthStencilDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
+	CD3DX12_CPU_DESCRIPTOR_HANDLE render_target_view_handle(renderTargetDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), frameIndex, renderTargetDescriptorSize);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE depth_stencil_view_handle(depthStencilDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
 
-	command_list->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
+	command_list->OMSetRenderTargets(1, &render_target_view_handle, FALSE, &depth_stencil_view_handle);
 
 	command_list->SetGraphicsRootSignature(rootSignature);
 	command_list->RSSetViewports(1, &viewport);
 	command_list->RSSetScissorRects(1, &scissorRect);
 
 	_graphic_object->PrepareCommandList();
-
 	TRYFUNC(command_list->Close());
 
 	return true;

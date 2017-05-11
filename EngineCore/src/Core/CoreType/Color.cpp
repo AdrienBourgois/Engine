@@ -3,7 +3,7 @@
 Core::CoreType::Color::Color(float _r, float _g, float _b, float _a): r(_r), g(_g), b(_b), a(_a)
 {}
 
-Core::CoreType::Color::Color(int _r, int _g, int _b, int _a)
+Core::CoreType::Color::Color(unsigned char _r, unsigned char _g, unsigned char _b, unsigned char _a)
 {
 	r = 1.f / 256.f * _r;
 	g = 1.f / 256.f * _g;

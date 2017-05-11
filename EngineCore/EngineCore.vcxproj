@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12RootSignatureDescritor.h" />
     <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.h" />
     <ClInclude Include="src\Core\Interface\IComponent.h" />
     <ClInclude Include="src\Maths\Constants.h" />
@@ -38,6 +39,7 @@
     <ClInclude Include="src\Core\CoreType\String.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12RootSignatureDescritor.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.cpp" />
     <ClCompile Include="src\Maths\Mat4.cpp" />
     <ClCompile Include="src\Objects\GameObject.cpp" />
@@ -62,8 +64,13 @@
     <FxCompile Include="Content\Core\Shaders\PixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Content\Core\Shaders\VertexShader.hlsl" />
+    <FxCompile Include="Content\Core\Shaders\VertexShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Config\config.ini" />
