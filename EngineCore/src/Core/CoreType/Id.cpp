@@ -102,6 +102,8 @@ Core::CoreType::EObjectType Core::CoreType::Id::GetMainType(EObjectSubtype _subt
 		type = GameObject;
 	else if (_subtype & GraphicComponent)
 		type = ObjectComponent;
+	else if (_subtype & SimpleScript)
+		type = Script;
 
 	return type;
 }

@@ -22,4 +22,6 @@
 
 #define MODULE(T) ENGINE->GetModule<T>()
 
-#define LOG(level, log) MODULE(Tools::Logger)->CreateEntry(S(log), ELog_level::level)
+#define LOG(log, level) MODULE(Module::Tools::Logger)->CreateEntry(S(log), ELog_level::level)
+
+#define ADD_SCRIPT(T) ENGINE->AddScript<T>()

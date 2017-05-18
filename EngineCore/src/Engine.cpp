@@ -27,13 +27,15 @@ void Engine::Initialize(HINSTANCE _hInstance)
 	state = EEngineStates::Initializing;
 
 	if(_hInstance)
-		h_instance = _hInstance;
+		hInstance = _hInstance;
 
 	parameters = new Utility::IniParser(".\\content\\Config\\config.ini");
 	parameters->Parse();
 
-	module_manager = new Core::Manager::ModuleManager();
-	module_manager->InitializeModules();
+	scriptManager = new Core::Manager::ScriptManager();
+
+	moduleManager = new Core::Manager::ModuleManager();
+	moduleManager->InitializeModules();
 
 	state = EEngineStates::Ready;
 }
@@ -42,7 +44,8 @@ void Engine::Start()
 {
 	if (state == EEngineStates::Ready)
 	{
-		module_manager->StartModules();
+		moduleManager->StartModules();
+		scriptManager->StartScripts();
 		state = EEngineStates::Starting;
 	}
 
@@ -57,7 +60,8 @@ void Engine::Update()
 {
 	while (state == EEngineStates::Running)
 	{
-		module_manager->UpdateModules();
+		scriptManager->UpdateScripts();
+		moduleManager->UpdateModules();
 	}
 	if (state == EEngineStates::AskToStop)
 	{
@@ -77,9 +81,13 @@ void Engine::Destruct()
 	delete parameters;
 	parameters = nullptr;
 
-	module_manager->Stop();
-	delete module_manager;
-	module_manager = nullptr;
+	scriptManager->Stop();
+	delete scriptManager;
+	scriptManager = nullptr;
+
+	moduleManager->Stop();
+	delete moduleManager;
+	moduleManager = nullptr;
 
 	state = EEngineStates::Stopped;
 }

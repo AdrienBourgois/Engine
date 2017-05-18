@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\Interface\IScript.h" />
+    <ClInclude Include="src\Core\Manager\ScriptManager.h" />
     <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.h" />
     <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12RootSignatureDescritor.h" />
     <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.h" />
@@ -40,11 +42,14 @@
     <ClInclude Include="src\Core\CoreType\String.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\Manager\ScriptManager.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12RootSignatureDescritor.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.cpp" />
     <ClCompile Include="src\Maths\Mat4.cpp" />
-    <ClCompile Include="src\Objects\GameObject.cpp" />
+    <ClCompile Include="src\Objects\GameObject.cpp">
+      <FileType>CppCode</FileType>
+    </ClCompile>
     <ClCompile Include="src\Objects\Components\GraphicComponent.cpp" />
     <ClCompile Include="src\Core\CoreType\Id.cpp" />
     <ClCompile Include="src\Core\CoreType\Color.cpp" />
@@ -76,6 +81,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Config\config.ini" />
+    <None Include="src\Core\Manager\ModuleManager.inl">
+      <FileType>CppCode</FileType>
+    </None>
+    <None Include="src\Core\Manager\ScriptManager.inl">
+      <FileType>CppCode</FileType>
+    </None>
+    <None Include="src\Objects\GameObject.inl">
+      <FileType>CppCode</FileType>
+    </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{291D2B5F-EF7F-4C55-B96D-87737397CA51}</ProjectGuid>

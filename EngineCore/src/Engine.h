@@ -6,6 +6,7 @@
 
 #include "Utility/Ini/IniParser.h"
 #include "Core/Manager/ModuleManager.h"
+#include "Core/Manager/ScriptManager.h"
 
 class ENGINEDLL_API Engine
 {
@@ -25,13 +26,16 @@ public:
 	void Stop();
 	void Destruct();
 
-	void SetHInstance(HINSTANCE _hInstance) { h_instance = _hInstance; }
-	HINSTANCE GetHInstance() const { return h_instance; }
+	void SetHInstance(HINSTANCE _hInstance) { hInstance = _hInstance; }
+	HINSTANCE GetHInstance() const { return hInstance; }
 
 	template<typename T>
 	T* GetModule() const;
 
 	const Utility::IniParser* GetParameters() const { return parameters; }
+
+	template <typename T = Core::Interface::IScript>
+	const void AddScript() const;
 
 	enum class EEngineStates : int
 	{
@@ -53,9 +57,10 @@ private:
 
 	Utility::IniParser* parameters = nullptr;
 
-	Core::Manager::ModuleManager* module_manager = nullptr;
+	Core::Manager::ModuleManager* moduleManager = nullptr;
+	Core::Manager::ScriptManager* scriptManager = nullptr;
 
-	HINSTANCE h_instance = nullptr;
+	HINSTANCE hInstance = nullptr;
 
 	EEngineStates state = EEngineStates::Off;
 };
@@ -63,5 +68,11 @@ private:
 template <typename T>
 T* Engine::GetModule() const
 {
-	return module_manager->GetModule<T>();
+	return moduleManager->GetModule<T>();
+}
+
+template <typename T>
+const void Engine::AddScript() const
+{
+	scriptManager->AddScript<T>();
 }

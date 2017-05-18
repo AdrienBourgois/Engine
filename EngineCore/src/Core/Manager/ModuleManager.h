@@ -31,7 +31,7 @@ namespace Core
 			bool InitializeModules();
 			/**
 			 * \brief Start all modules
-			 * \return Is all modules sucessfully stared
+			 * \return Is all modules sucessfully started
 			 */
 			bool StartModules();
 
@@ -58,7 +58,7 @@ namespace Core
 			 * \return Module founded (nullptr if any)
 			 */
 			template<typename T = Interface::IModule>
-			T* GetModuleByName(char* _name) const;
+			T* GetModuleByName(CoreType::String _name) const;
 
 			/**
 			 * \brief Return first module found by type as Core::Interface::IModule
@@ -72,7 +72,7 @@ namespace Core
 			 * \param _name Module name
 			 * \return Module founded (nullptr if any)
 			 */
-			Interface::IModule* GetIModuleByName(char* _name) const;
+			Interface::IModule* GetIModuleByName(CoreType::String _name) const;
 
 			/**
 			 * \brief Update all modules
@@ -93,59 +93,4 @@ namespace Core
 	}
 }
 
-template <typename T>
-bool Core::Manager::ModuleManager::CreateModule(CoreType::String _name)
-{
-	Interface::IModule * module = static_cast<Interface::IModule*>(new T);
-
-	if (module)
-	{
-		if (!_name)
-			module->SetDefaultModuleName();
-		else
-			module->SetModuleName(_name);
-
-		module->Initialize();
-
-		modules.push_back(module);
-		return true;
-	}
-
-	return false;
-}
-
-template<typename T>
-T* Core::Manager::ModuleManager::GetModule() const
-{
-	for (Interface::IModule* module : modules)
-	{
-		if (typeid(*module) == typeid(T))
-			return static_cast<T*>(module);
-	}
-
-	return nullptr;
-}
-
-template<typename T>
-T* Core::Manager::ModuleManager::GetModuleByName(char* _name) const
-{
-	for (Interface::IModule* module : modules)
-	{
-		if (module->GetModuleName() == _name)
-			return static_cast<T*>(module);
-	}
-
-	return nullptr;
-}
-
-template<typename T>
-Core::Interface::IModule* Core::Manager::ModuleManager::GetIModule() const
-{
-	for (Interface::IModule* module : modules)
-	{
-		if (typeid(*module) == typeid(T))
-			return module;
-	}
-
-	return nullptr;
-}
+#include "Core/Manager/ModuleManager.inl"

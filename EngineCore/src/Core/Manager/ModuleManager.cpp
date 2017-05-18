@@ -26,7 +26,7 @@ bool Core::Manager::ModuleManager::StartModules()
 	return true;
 }
 
-Core::Interface::IModule* Core::Manager::ModuleManager::GetIModuleByName(char* _name) const
+Core::Interface::IModule* Core::Manager::ModuleManager::GetIModuleByName(CoreType::String _name) const
 {
 	for (Interface::IModule* module : modules)
 	{

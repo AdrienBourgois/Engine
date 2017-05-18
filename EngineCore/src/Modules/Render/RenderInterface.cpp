@@ -53,5 +53,5 @@ bool Module::Render::RenderInterface::Destruct()
 bool Module::Render::RenderInterface::CreateBuffer(Object::Component::GraphicComponent* _component)
 {
 	objects.insert_or_assign(_component->GetId().GetInstanceNumber(), _component);
-	return renderer->CreateBuffers(_component->GetId().GetInstanceNumber(), S("WIP : Need to retrieve object name"), _component->GetVertices(), _component->GetVertexCount(), _component->GetIndexs(), _component->GetIndexCount());
+	return renderer->CreateBuffers(_component->GetId().GetInstanceNumber(), _component->GetComponentName(), _component->GetVertices(), _component->GetVertexCount(), _component->GetIndexs(), _component->GetIndexCount());
 }

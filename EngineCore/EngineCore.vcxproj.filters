@@ -82,6 +82,9 @@
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Manager\ScriptManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\macros.h">
@@ -168,10 +171,25 @@
     <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Manager\ScriptManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Interface\IScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Config\config.ini">
       <Filter>Content Files</Filter>
+    </None>
+    <None Include="src\Objects\GameObject.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="src\Core\Manager\ScriptManager.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="src\Core\Manager\ModuleManager.inl">
+      <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

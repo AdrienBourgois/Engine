@@ -16,6 +16,7 @@ namespace Core
 			Undefined = 1 << 0,
 			GameObject = 1 << 1,
 			ObjectComponent = 1 << 2,
+			Script = 1 << 3,
 		};
 
 		/**
@@ -31,6 +32,9 @@ namespace Core
 
 			/// EObjectType::ObjectComponent
 			GraphicComponent = 1 << 2,
+
+			/// EObjectType::Script
+			SimpleScript = 1 << 3,
 		};
 
 		/**

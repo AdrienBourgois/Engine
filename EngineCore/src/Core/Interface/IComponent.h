@@ -2,6 +2,11 @@
 
 #include "Macros.h"
 
+namespace Object
+{
+	class GameObject;
+}
+
 /**
  * \brief Used to declare IComponent functions and set default component name
  * \param name Default name for component
@@ -60,15 +65,21 @@ namespace Core
 			 * \brief Set a new name for component
 			 * \param _new_name New name
 			 */
-			void SetComponentName(CoreType::String _new_name = S("")) { componentName = _new_name; }
+			void SetComponentName(CoreType::String _new_name = S("Unnamed Component")) { componentName = _new_name; }
 			/**
 			 * \brief Return tha name of component
 			 * \return Component name
 			 */
-			const char* GetComponentName() const { return componentName.CStr(); }
+			CoreType::String GetComponentName() const { return componentName; }
+			/**
+			 * \brief Return a reference to GameObject
+			 * \return Pointer to Object::GameObject
+			 */
+			Object::GameObject* GameObject() const { return gameObjectReference; };
 
 		protected:
-			CoreType::String componentName = S("Unamed Component");
+			Object::GameObject* gameObjectReference = nullptr;
+			CoreType::String componentName = S("Unnamed Component");
 			CoreType::Id id = CoreType::Id(CoreType::ObjectComponent);
 		};
 	}

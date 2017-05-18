@@ -57,18 +57,18 @@ namespace Core
 			 * \brief Set a new name for module
 			 * \param _new_name New name
 			 */
-			void SetModuleName(CoreType::String _new_name = S("")) { moduleName = _new_name; }
+			void SetModuleName(CoreType::String _new_name = S("Unnamed Module")) { moduleName = _new_name; }
 			/**
 			 * \brief Return tha name of module
 			 * \return Module name
 			 */
-			const char* GetModuleName() const { return moduleName.CStr(); }
+			CoreType::String GetModuleName() const { return moduleName; }
 
 		protected:
 			/**
 			 * \brief Module name
 			 */
-			CoreType::String moduleName = S("Unamed Module");
+			CoreType::String moduleName = S("Unnamed Module");
 		};
 	}
 }
