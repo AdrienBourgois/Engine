@@ -13,12 +13,6 @@
    }
 #endif
 
-namespace Core {
-	namespace CoreType {
-		class Vertex;
-	}
-}
-
 namespace Module
 {
 	namespace Render

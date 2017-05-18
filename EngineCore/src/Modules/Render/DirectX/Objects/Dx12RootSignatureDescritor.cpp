@@ -1,11 +1,6 @@
 #include "Dx12RootSignatureDescritor.h"
 #include "Modules/Render/DirectX/DX12Helper.h"
 
-Module::Render::DirectX12::Objects::Dx12RootSignatureDescritor::Dx12RootSignatureDescritor()
-{
-	SerializeSignature();
-}
-
 ID3DBlob* Module::Render::DirectX12::Objects::Dx12RootSignatureDescritor::GetSignature()
 {
 	if (needToSerialize)
@@ -24,49 +19,28 @@ void Module::Render::DirectX12::Objects::Dx12RootSignatureDescritor::SignatureUp
 	needToSerialize = false;
 }
 
-char Module::Render::DirectX12::Objects::Dx12RootSignatureDescritor::CreateTable(unsigned int _size, D3D12_DESCRIPTOR_RANGE_TYPE _type)
+void Module::Render::DirectX12::Objects::Dx12RootSignatureDescritor::CreateTable()
 {
-	D3D12_DESCRIPTOR_RANGE descriptor_table_range;
-	descriptor_table_range.RangeType = _type;
-	descriptor_table_range.NumDescriptors = 1;
-	descriptor_table_range.BaseShaderRegister = 0;
-	descriptor_table_range.RegisterSpace = 0;
-	descriptor_table_range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	D3D12_DESCRIPTOR_RANGE* descriptor_table_range = new D3D12_DESCRIPTOR_RANGE();
+	descriptor_table_range->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+	descriptor_table_range->NumDescriptors = 1;
+	descriptor_table_range->BaseShaderRegister = 0;
+	descriptor_table_range->RegisterSpace = 0;
+	descriptor_table_range->OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	D3D12_ROOT_DESCRIPTOR_TABLE descriptor_table;
-	descriptor_table.NumDescriptorRanges = _size;
-	descriptor_table.pDescriptorRanges = &descriptor_table_range;
+	descriptor_table.NumDescriptorRanges = 1;
+	descriptor_table.pDescriptorRanges = descriptor_table_range;
 
 	D3D12_ROOT_PARAMETER  root_parameter;
 	root_parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	root_parameter.DescriptorTable = descriptor_table;
 	root_parameter.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
-	tables[_type] = descriptor_table;
+	tables[D3D12_DESCRIPTOR_RANGE_TYPE_CBV] = descriptor_table;
 	parameters.push_back(root_parameter);
 
-	char slot_to_return = currentSlot;
-
-	slotUsed[currentSlot] = true;
-	++currentSlot;
-
 	needToSerialize = true;
-
-	return slot_to_return;
-}
-
-char Module::Render::DirectX12::Objects::Dx12RootSignatureDescritor::GetNewConstantSlot(char _slot_required)
-{
-	char start_slot = currentSlot;
-
-	for (int i = currentSlot; i < _slot_required; ++i)
-		slotUsed[i] = true;
-
-	currentSlot += _slot_required;
-
-	needToSerialize = true;
-
-	return start_slot;
 }
 
 void Module::Render::DirectX12::Objects::Dx12RootSignatureDescritor::SerializeSignature()

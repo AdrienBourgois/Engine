@@ -56,24 +56,8 @@ namespace Module
 				bool Cleanup() override;
 
 			private:
-				/**
-				 * \brief Create a vertex buffer
-				 * \param _name Name of buffer
-				 * \param _vertices_array Array of vertices
-				 * \param _vertices_count Size of vertices array
-				 * \param[out] _vertex_buffer_view Pointer to a D3D12_VERTEX_BUFFER_VIEW
-				 * \return Is function success
-				 */
-				bool CreateVertexBuffer(Core::CoreType::String _name, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, ID3D12GraphicsCommandList* _command_list, D3D12_VERTEX_BUFFER_VIEW** _vertex_buffer_view);
-				/**
-				 * \brief Create an index buffer from object
-				 * \param _name Name of buffer
-				 * \param _indexs_array Array of indexs (If vertices are indexed)
-				 * \param _indexs_count Size of indexs array
-				 * \param[out] _index_buffer_view Pointer to a D3D12_INDEX_BUFFER_VIEW
-				 * \return Is function success
-				 */
-				bool CreateIndexBuffer(Core::CoreType::String _name, unsigned int* _indexs_array, unsigned int _indexs_count, ID3D12GraphicsCommandList* _command_list, D3D12_INDEX_BUFFER_VIEW** _index_buffer_view);
+				bool PreRender();
+				bool PostRender();
 
 				bool UpdatePipeline();
 				bool WaitForPreviousFrame();
@@ -127,6 +111,9 @@ namespace Module
 				std::unordered_map<int, Objects::Dx12GraphicObject*> graphicsObjects;
 
 				int frameIndex = 0;
+
+				Core::CoreType::Color colorMultiplier = Core::CoreType::Color::Black;
+				Objects::Dx12ConstantBuffer* colorConstantBuffer = nullptr;
 			};
 		}
 	}

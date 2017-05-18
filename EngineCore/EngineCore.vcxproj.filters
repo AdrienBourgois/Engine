@@ -79,6 +79,9 @@
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12RootSignatureDescritor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\macros.h">
@@ -160,6 +163,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12RootSignatureDescritor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

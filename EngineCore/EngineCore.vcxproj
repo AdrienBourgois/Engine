@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.h" />
     <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12RootSignatureDescritor.h" />
     <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.h" />
     <ClInclude Include="src\Core\Interface\IComponent.h" />
@@ -39,6 +40,7 @@
     <ClInclude Include="src\Core\CoreType\String.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12RootSignatureDescritor.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.cpp" />
     <ClCompile Include="src\Maths\Mat4.cpp" />

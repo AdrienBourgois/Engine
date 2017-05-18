@@ -2,6 +2,8 @@
 
 #include <D3Dcompiler.h>
 #include "Modules/Render/DirectX/DX12Helper.h"
+#include "Core/CoreType/String.h"
+#include "Core/CoreType/Vertex.h"
 
 bool Module::Render::DirectX12::Dx12Factory::InitFactory()
 {
@@ -232,6 +234,114 @@ bool Module::Render::DirectX12::Dx12Factory::MakePipelineStateObject(ID3D12RootS
 	pso_desc.DSVFormat                          = DXGI_FORMAT_D32_FLOAT;
 
 	TRYFUNC(device->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(_pipeline_state_object)));
+
+	return true;
+}
+
+bool Module::Render::DirectX12::Dx12Factory::CreateVertexBuffer(Dx12CommandExecutionPack _pack, Core::CoreType::String _name, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, ID3D12GraphicsCommandList* _command_list, D3D12_VERTEX_BUFFER_VIEW** _vertex_buffer_view)
+{
+	TRYFUNC(_command_list->Reset(_pack.commandAllocator, _pack.pipelineState));
+
+	Core::CoreType::Vertex* vertex_list = new Core::CoreType::Vertex[_vertices_count];
+
+	for (unsigned int i = 0; i < _vertices_count; ++i)
+		vertex_list[i] = _vertices_array[i];
+
+	int buffer_size = _vertices_count * sizeof(Core::CoreType::Vertex);
+
+	CD3DX12_HEAP_PROPERTIES default_heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+	CD3DX12_HEAP_PROPERTIES upload_heap_properties  = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	CD3DX12_RESOURCE_DESC buffer_size_desc          = CD3DX12_RESOURCE_DESC::Buffer(buffer_size);
+
+	ID3D12Resource* vertex_buffer = nullptr;
+	device->CreateCommittedResource(&default_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&vertex_buffer));
+	vertex_buffer->SetName((_name + S(" - Vertex Buffer")).ToWideString());
+
+	ID3D12Resource* vertex_buffer_upload_heap;
+	device->CreateCommittedResource(&upload_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertex_buffer_upload_heap));
+	vertex_buffer_upload_heap->SetName((_name + S(" - Vertex Upload")).ToWideString());
+
+	D3D12_SUBRESOURCE_DATA vertexData;
+	vertexData.pData                  = reinterpret_cast<BYTE*>(vertex_list);
+	vertexData.RowPitch               = buffer_size;
+	vertexData.SlicePitch             = buffer_size;
+
+	UpdateSubresources(_command_list, vertex_buffer, vertex_buffer_upload_heap, 0, 0, 1, &vertexData);
+
+	CD3DX12_RESOURCE_BARRIER transition_barrier = CD3DX12_RESOURCE_BARRIER::Transition(vertex_buffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+	_command_list->ResourceBarrier(1, &transition_barrier);
+
+	_command_list->Close();
+	ID3D12CommandList* ppCommandLists[] = { _command_list };
+	_pack.commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+
+	HANDLE fence_event = nullptr;
+
+	(*_pack.fenceValue)++;
+	TRYFUNC(_pack.commandQueue->Signal(_pack.fence, *_pack.fenceValue));
+	_pack.fence->SetEventOnCompletion(*_pack.fenceValue, fence_event);
+	WaitForSingleObject(fence_event, INFINITE);
+
+	*_vertex_buffer_view = new D3D12_VERTEX_BUFFER_VIEW;
+	(*_vertex_buffer_view)->BufferLocation = vertex_buffer->GetGPUVirtualAddress();
+	(*_vertex_buffer_view)->StrideInBytes  = sizeof(Core::CoreType::Vertex);
+	(*_vertex_buffer_view)->SizeInBytes    = buffer_size;
+
+	delete[] vertex_list;
+
+	return true;
+}
+
+bool Module::Render::DirectX12::Dx12Factory::CreateIndexBuffer(Dx12CommandExecutionPack _pack, Core::CoreType::String _name, unsigned int* _indexs_array, unsigned int _indexs_count, ID3D12GraphicsCommandList* _command_list, D3D12_INDEX_BUFFER_VIEW** _index_buffer_view)
+{
+	TRYFUNC(_command_list->Reset(_pack.commandAllocator, _pack.pipelineState));
+
+	unsigned int* index_list = new unsigned int[_indexs_count];
+
+	for (unsigned int i = 0; i < _indexs_count; ++i)
+		index_list[i] = _indexs_array[i];
+
+	int buffer_size = _indexs_count * sizeof(unsigned int);
+
+	CD3DX12_HEAP_PROPERTIES default_heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+	CD3DX12_HEAP_PROPERTIES upload_heap_properties  = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	CD3DX12_RESOURCE_DESC buffer_size_desc          = CD3DX12_RESOURCE_DESC::Buffer(buffer_size);
+
+	ID3D12Resource* index_buffer = nullptr;
+	device->CreateCommittedResource(&default_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&index_buffer));
+	index_buffer->SetName((_name + S(" - Index Buffer")).ToWideString());
+
+	ID3D12Resource* index_buffer_upload_heap;
+	device->CreateCommittedResource(&upload_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&index_buffer_upload_heap));
+	index_buffer_upload_heap->SetName((_name + S(" - Index Upload")).ToWideString());
+
+	D3D12_SUBRESOURCE_DATA index_data;
+	index_data.pData                  = reinterpret_cast<BYTE*>(index_list);
+	index_data.RowPitch               = buffer_size;
+	index_data.SlicePitch             = buffer_size;
+
+	UpdateSubresources(_command_list, index_buffer, index_buffer_upload_heap, 0, 0, 1, &index_data);
+
+	CD3DX12_RESOURCE_BARRIER transition_barrier = CD3DX12_RESOURCE_BARRIER::Transition(index_buffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+	_command_list->ResourceBarrier(1, &transition_barrier);
+
+	_command_list->Close();
+	ID3D12CommandList* ppCommandLists[] = { _command_list };
+	_pack.commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+
+	HANDLE fence_event = nullptr;
+
+	(*_pack.fenceValue)++;
+	TRYFUNC(_pack.commandQueue->Signal(_pack.fence, *_pack.fenceValue));
+	_pack.fence->SetEventOnCompletion(*_pack.fenceValue, fence_event);
+	WaitForSingleObject(fence_event, INFINITE);
+
+	*_index_buffer_view = new D3D12_INDEX_BUFFER_VIEW;
+	(*_index_buffer_view)->BufferLocation = index_buffer->GetGPUVirtualAddress();
+	(*_index_buffer_view)->Format = DXGI_FORMAT_R32_UINT;
+	(*_index_buffer_view)->SizeInBytes    = buffer_size;
+
+	delete[] index_list;
 
 	return true;
 }

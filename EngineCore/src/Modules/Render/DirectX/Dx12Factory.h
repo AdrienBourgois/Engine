@@ -2,6 +2,8 @@
 
 #include <d3d12.h>
 #include <dxgi1_4.h>
+#include "DX12Helper.h"
+#include "Modules/Render/DirectX/Objects/Dx12ConstantBuffer.h"
 
 /**
  * \brief Return false if function failed
@@ -18,12 +20,27 @@
 #define CHECK_BLOB(blob) if(FAILED(hr))\
 						 { OutputDebugStringA((char*)blob->GetBufferPointer()); return false; }
 
+namespace Core {namespace CoreType {
+	class Vertex;
+	class String;
+}
+}
+
 namespace Module
 {
 	namespace Render
 	{
 		namespace DirectX12
 		{
+			struct Dx12CommandExecutionPack
+			{
+				ID3D12PipelineState* pipelineState;
+				ID3D12CommandAllocator* commandAllocator;
+				ID3D12CommandQueue* commandQueue;
+				ID3D12Fence* fence;
+				UINT64* fenceValue;
+			};
+
 			/**
 			 * \brief Factory to create Dx12 elements
 			 */
@@ -149,12 +166,64 @@ namespace Module
 				 * \return Is function success
 				 */
 				bool MakePipelineStateObject(ID3D12RootSignature* _root_signature, D3D12_SHADER_BYTECODE* _vertex_shader_bytecode, D3D12_SHADER_BYTECODE* _pixel_shader_bytecode, ID3D12PipelineState** _pipeline_state_object);
+				/**
+				 * \brief Create a vertex buffer
+				 * \param _name Name of buffer
+				 * \param _vertices_array Array of vertices
+				 * \param _vertices_count Size of vertices array
+				 * \param[out] _vertex_buffer_view Pointer to a D3D12_VERTEX_BUFFER_VIEW
+				 * \return Is function success
+				 */
+				bool CreateVertexBuffer(Dx12CommandExecutionPack _pack, Core::CoreType::String _name, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, ID3D12GraphicsCommandList* _command_list, D3D12_VERTEX_BUFFER_VIEW** _vertex_buffer_view);
+				/**
+				 * \brief Create an index buffer from object
+				 * \param _name Name of buffer
+				 * \param _indexs_array Array of indexs (If vertices are indexed)
+				 * \param _indexs_count Size of indexs array
+				 * \param[out] _index_buffer_view Pointer to a D3D12_INDEX_BUFFER_VIEW
+				 * \return Is function success
+				 */
+				bool CreateIndexBuffer(Dx12CommandExecutionPack _pack, Core::CoreType::String _name, unsigned int* _indexs_array, unsigned int _indexs_count, ID3D12GraphicsCommandList* _command_list, D3D12_INDEX_BUFFER_VIEW** _index_buffer_view);
+				template <typename T>
+				bool CreateConstantBuffer(T* _datas, Objects::Dx12ConstantBuffer** _heap_descriptor);
 			private:
 				IDXGIFactory4* dxgiFactory = nullptr;
 				ID3D12Device* device = nullptr;
 
 				HRESULT hr = 0;
 			};
+
+			template <typename T>
+			bool Dx12Factory::CreateConstantBuffer(T* _datas, Objects::Dx12ConstantBuffer** _constant_buffer)
+			{
+				ID3D12DescriptorHeap* _heap_descriptor = nullptr;
+
+				D3D12_DESCRIPTOR_HEAP_DESC heap_desc = {};
+				heap_desc.NumDescriptors = 1;
+				heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+				heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+				TRYFUNC(device->CreateDescriptorHeap(&heap_desc, IID_PPV_ARGS(&_heap_descriptor)));
+
+				ID3D12Resource* constant_buffer_upload_heap = nullptr;
+
+				CD3DX12_HEAP_PROPERTIES upload_heap_properties  = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+				CD3DX12_RESOURCE_DESC resource_descriptor = CD3DX12_RESOURCE_DESC::Buffer(1024 * 64);
+				TRYFUNC(device->CreateCommittedResource(&upload_heap_properties, D3D12_HEAP_FLAG_NONE, &resource_descriptor, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&constant_buffer_upload_heap)));
+				constant_buffer_upload_heap->SetName(L"Constant Buffer Upload Resource Heap");
+
+				D3D12_CONSTANT_BUFFER_VIEW_DESC constant_buffer_view_desc;
+				constant_buffer_view_desc.BufferLocation = constant_buffer_upload_heap->GetGPUVirtualAddress();
+				constant_buffer_view_desc.SizeInBytes = (sizeof(_datas) + 255) & ~255;
+				device->CreateConstantBufferView(&constant_buffer_view_desc, _heap_descriptor->GetCPUDescriptorHandleForHeapStart());
+
+				*_constant_buffer = new Objects::Dx12ConstantBuffer(_heap_descriptor, constant_buffer_upload_heap);
+
+				memcpy((*_constant_buffer)->Map(), &_datas, sizeof(_datas));
+
+				(*_constant_buffer)->Unmap();
+
+				return true;
+			}
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace Module
 				class Dx12RootSignatureDescritor
 				{
 				public:
-					Dx12RootSignatureDescritor();
+					Dx12RootSignatureDescritor() = default;
 					~Dx12RootSignatureDescritor() = default;
 
 					ID3DBlob* GetSignature();
@@ -28,20 +28,15 @@ namespace Module
 					bool IsUpdateNeeded() const;
 					void SignatureUpdated();
 
-					char GetNewConstantSlot(char _slot_required);
+					void CreateTable();
 
 				private:
 					ID3DBlob* rootSignature = nullptr;
 
-					bool needToSerialize = false;
-
-					bool slotUsed[64] = { false };
-					char currentSlot = 0;
+					bool needToSerialize = true;
 
 					std::map<D3D12_DESCRIPTOR_RANGE_TYPE, D3D12_ROOT_DESCRIPTOR_TABLE> tables;
 					std::vector<D3D12_ROOT_PARAMETER> parameters;
-
-					char CreateTable(unsigned int _size, D3D12_DESCRIPTOR_RANGE_TYPE _type);
 
 					void SerializeSignature();
 				};
