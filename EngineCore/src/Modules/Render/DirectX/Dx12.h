@@ -9,7 +9,6 @@
 
 #include "Modules/Render/DirectX/Dx12Factory.h"
 #include "Modules/Render/DirectX/Objects/Dx12GraphicObject.h"
-#include "Modules/Render/DirectX/Objects/Dx12RootSignatureDescritor.h"
 
 #define FRAME_BUFFER_COUNT 3
 
@@ -84,7 +83,6 @@ namespace Module
 				ID3D12PipelineState* pipelineStateObject = nullptr;
 
 				ID3D12RootSignature* rootSignature = nullptr;
-				Objects::Dx12RootSignatureDescritor* rootSignatureSerializer = nullptr;
 
 				ID3D12Fence* fence[FRAME_BUFFER_COUNT];
 				HANDLE fenceEvent = nullptr;

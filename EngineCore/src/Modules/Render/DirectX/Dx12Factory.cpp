@@ -140,9 +140,38 @@ bool Module::Render::DirectX12::Dx12Factory::MakeFence(UINT _frame_buffer_count,
 	return true;
 }
 
-bool Module::Render::DirectX12::Dx12Factory::MakeRootSignature(ID3DBlob* _signature, ID3D12RootSignature** _root_signature)
+bool Module::Render::DirectX12::Dx12Factory::MakeRootSignature(ID3D12RootSignature** _root_signature)
 {
-	TRYFUNC(device->CreateRootSignature(0, _signature->GetBufferPointer(), _signature->GetBufferSize(), IID_PPV_ARGS(_root_signature)));
+	D3D12_DESCRIPTOR_RANGE* descriptor_table_range = new D3D12_DESCRIPTOR_RANGE();
+	descriptor_table_range->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+	descriptor_table_range->NumDescriptors = 1;
+	descriptor_table_range->BaseShaderRegister = 0;
+	descriptor_table_range->RegisterSpace = 0;
+	descriptor_table_range->OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	D3D12_ROOT_DESCRIPTOR_TABLE descriptor_table;
+	descriptor_table.NumDescriptorRanges = 1;
+	descriptor_table.pDescriptorRanges = descriptor_table_range;
+
+	D3D12_ROOT_PARAMETER root_parameter;
+	root_parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	root_parameter.DescriptorTable = descriptor_table;
+	root_parameter.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+
+	D3D12_ROOT_PARAMETER parameters[] = {root_parameter};
+
+	CD3DX12_ROOT_SIGNATURE_DESC root_signature_desc;
+	root_signature_desc.Init(_countof(parameters), parameters, 0, nullptr,
+	D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
+	D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
+	D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
+	D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
+	D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS);
+
+	ID3DBlob* serializedRootSignature = nullptr;
+	D3D12SerializeRootSignature(&root_signature_desc, D3D_ROOT_SIGNATURE_VERSION_1, &serializedRootSignature, nullptr);
+
+	TRYFUNC(device->CreateRootSignature(0, serializedRootSignature->GetBufferPointer(), serializedRootSignature->GetBufferSize(), IID_PPV_ARGS(_root_signature)));
 
 	return true;
 }

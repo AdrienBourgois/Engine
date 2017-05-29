@@ -127,12 +127,11 @@ namespace Module
 				bool MakeFence(UINT _frame_buffer_count, ID3D12Fence** _fence, UINT64* _fence_value, HANDLE* fence_event);
 				/**
 				 * \brief Create Root Signature
-				 * \param _signature Serialized signature to use
 				 * \param[out] _root_signature Pointer to ID3D12RootSignature
 				 * \return Is function success
 				 * \note Must be called after Dx12Factory::MakeDevice
 				 */
-				bool MakeRootSignature(ID3DBlob* _signature, ID3D12RootSignature** _root_signature);
+				bool MakeRootSignature(ID3D12RootSignature** _root_signature);
 				/**
 				 * \brief Compile a Vertex shader
 				 * \param _path Path to shader file
@@ -168,6 +167,7 @@ namespace Module
 				bool MakePipelineStateObject(ID3D12RootSignature* _root_signature, D3D12_SHADER_BYTECODE* _vertex_shader_bytecode, D3D12_SHADER_BYTECODE* _pixel_shader_bytecode, ID3D12PipelineState** _pipeline_state_object);
 				/**
 				 * \brief Create a vertex buffer
+				 * \param _pack Dx12CommandExecutionPack with objects needed to create buffer
 				 * \param _name Name of buffer
 				 * \param _vertices_array Array of vertices
 				 * \param _vertices_count Size of vertices array
@@ -177,6 +177,7 @@ namespace Module
 				bool CreateVertexBuffer(Dx12CommandExecutionPack _pack, Core::CoreType::String _name, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, ID3D12GraphicsCommandList* _command_list, D3D12_VERTEX_BUFFER_VIEW** _vertex_buffer_view);
 				/**
 				 * \brief Create an index buffer from object
+				 * \param _pack Dx12CommandExecutionPack with objects needed to create buffer
 				 * \param _name Name of buffer
 				 * \param _indexs_array Array of indexs (If vertices are indexed)
 				 * \param _indexs_count Size of indexs array

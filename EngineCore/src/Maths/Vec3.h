@@ -11,7 +11,7 @@
 namespace Math
 {
 	/**
-	 * \brief Vector 3D Float class
+	 * \brief Vector 3D Float
 	 */
 	class ENGINEDLL_API Vec3
 	{

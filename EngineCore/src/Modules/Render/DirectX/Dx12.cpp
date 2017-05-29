@@ -31,16 +31,10 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	if (!factory->InitFactory())
 		return false;
 
-	rootSignatureSerializer = new Objects::Dx12RootSignatureDescritor();
-
 	factory->MakeDevice(&device);
 
-	/* --------------------------------------- */
 
-	rootSignatureSerializer->CreateTable();
 	factory->CreateConstantBuffer(&colorMultiplier, &colorConstantBuffer);
-
-	/* --------------------------------------- */
 
 	factory->MakeCommandQueue(&commandQueue);
 	factory->MakeSwapChain(commandQueue, FRAME_BUFFER_COUNT, *MODULE(Display::Window)->getHandle(), width, height, MODULE(Display::Window)->isFullscreen(), &swapChain);
@@ -49,13 +43,11 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	factory->MakeCommandList(commandAllocator[0], &preRenderCommandList);
 	factory->MakeCommandList(commandAllocator[0], &postRenderCommandList);
 	factory->MakeFence(FRAME_BUFFER_COUNT, fence, fenceValue, &fenceEvent);
-	factory->MakeRootSignature(rootSignatureSerializer->GetSignature(), &rootSignature);
+	factory->MakeRootSignature(&rootSignature);
 	factory->MakeVertexShader(L"Content\\Core\\Shaders\\VertexShader.hlsl", &vertexShaderBytecode);
 	factory->MakePixelShader(L"Content\\Core\\Shaders\\PixelShader.hlsl", &pixelShaderBytecode);
 	factory->MakeDepthStencilBuffer(&depthStencilDescriptorHeap, &depthStencilBuffer, width, height);
 	factory->MakePipelineStateObject(rootSignature, &vertexShaderBytecode, &pixelShaderBytecode, &pipelineStateObject);
-
-	rootSignatureSerializer->SignatureUpdated();
 
 	preRenderCommandList->SetName(L"Pre-Render Command List");
 	postRenderCommandList->SetName(L"Post-Render Command List");
@@ -95,18 +87,6 @@ bool Module::Render::DirectX12::DirectX12::Render()
 
 bool Module::Render::DirectX12::DirectX12::UpdatePipeline()
 {
-	bool need_new_pso = false;
-
-	if(rootSignatureSerializer->IsUpdateNeeded())
-	{
-		factory->MakeRootSignature(rootSignatureSerializer->GetSignature(), &rootSignature);
-		rootSignatureSerializer->SignatureUpdated();
-		need_new_pso = true;
-	}
-
-	if(need_new_pso)
-		factory->MakePipelineStateObject(rootSignature, &vertexShaderBytecode, &pixelShaderBytecode, &pipelineStateObject);
-
 	return true;
 }
 

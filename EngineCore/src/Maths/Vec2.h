@@ -11,7 +11,7 @@
 namespace Math
 {
 	/**
-	 * \brief Vector 2D Float class
+	 * \brief Vector 2D Float
 	 */
 	class ENGINEDLL_API Vec2
 	{

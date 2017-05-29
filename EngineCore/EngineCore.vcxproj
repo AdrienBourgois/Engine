@@ -14,7 +14,6 @@
     <ClInclude Include="src\Core\Interface\IScript.h" />
     <ClInclude Include="src\Core\Manager\ScriptManager.h" />
     <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.h" />
-    <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12RootSignatureDescritor.h" />
     <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.h" />
     <ClInclude Include="src\Core\Interface\IComponent.h" />
     <ClInclude Include="src\Maths\Constants.h" />
@@ -44,7 +43,6 @@
   <ItemGroup>
     <ClCompile Include="src\Core\Manager\ScriptManager.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.cpp" />
-    <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12RootSignatureDescritor.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.cpp" />
     <ClCompile Include="src\Maths\Mat4.cpp" />
     <ClCompile Include="src\Objects\GameObject.cpp">
