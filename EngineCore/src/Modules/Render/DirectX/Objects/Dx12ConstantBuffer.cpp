@@ -37,6 +37,11 @@ void Module::Render::DirectX12::Objects::Dx12ConstantBuffer::Unmap()
 	isMap = false;
 }
 
+ID3D12Resource * Module::Render::DirectX12::Objects::Dx12ConstantBuffer::GetResource() const
+{
+	return bufferUploadHeap;
+}
+
 ID3D12DescriptorHeap* Module::Render::DirectX12::Objects::Dx12ConstantBuffer::GetDescriptorHeap() const
 {
 	return descriptorHeap;

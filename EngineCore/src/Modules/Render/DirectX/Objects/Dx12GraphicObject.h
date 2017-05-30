@@ -3,6 +3,7 @@
 #include <d3d12.h>
 #include "Core/CoreType/String.h"
 #include "Core/CoreType/Vertex.h"
+#include "Dx12ConstantBuffer.h"
 
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(x) \
@@ -39,7 +40,7 @@ namespace Module
 					 * \param _indexs_count Count of indexs in array (if object indexed)
 					 * \param _index_buffer_view Index buffer view of object (if object indexed)
 					 */
-					Dx12GraphicObject(unsigned int _id, Core::CoreType::String _name, ID3D12GraphicsCommandList* _command_list, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, D3D12_VERTEX_BUFFER_VIEW* _vertex_buffer_view, unsigned int* _indexs_array = nullptr, unsigned int _indexs_count = 0, D3D12_INDEX_BUFFER_VIEW* _index_buffer_view = nullptr);
+					Dx12GraphicObject(unsigned int _id, Core::CoreType::String _name, ID3D12GraphicsCommandList* _command_list, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, D3D12_VERTEX_BUFFER_VIEW* _vertex_buffer_view, unsigned int* _indexs_array = nullptr, unsigned int _indexs_count = 0, D3D12_INDEX_BUFFER_VIEW* _index_buffer_view = nullptr, Dx12ConstantBuffer* _constant_buffer = nullptr);
 					/**
 					 * \brief Destructor
 					 */
@@ -86,6 +87,11 @@ namespace Module
 					 * \return Count of indexs of object
 					 */
 					unsigned int GetIndexCount() const;
+					/**
+					 * \brief Return constant buffer of object
+					 * \return Object constant buffer
+					 */
+					Dx12ConstantBuffer* GetConstantBuffer() const;
 
 				private:
 					bool indexed = false;
@@ -94,6 +100,7 @@ namespace Module
 					ID3D12GraphicsCommandList* commandList = nullptr;
 					D3D12_VERTEX_BUFFER_VIEW* vertexBufferView = nullptr;
 					D3D12_INDEX_BUFFER_VIEW* indexBufferView = nullptr;
+					Dx12ConstantBuffer* constantBuffer = nullptr;
 					Core::CoreType::String name = S("Unnamed DX12 Graphic Object");
 
 					Core::CoreType::Vertex* vertices = nullptr;

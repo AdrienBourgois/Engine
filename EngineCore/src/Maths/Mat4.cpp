@@ -32,6 +32,37 @@ namespace Math
 			Values[i] = _values[i];
 	}
 
+	Mat4 const Mat4::PerspectiveMatrix(const float _angle_of_view, const float _aspect_ratio, const float _near, const float _far)
+	{
+		Mat4 matrix;
+
+		float h = 1.f / tanf(_angle_of_view * 0.5f);
+
+		matrix.Values[0] = h / _aspect_ratio;
+		matrix.Values[5] = h;
+		matrix.Values[10] = _far / (_far - _near);
+		matrix.Values[11] = 1;
+		matrix.Values[14] = -_near * _far / (_far - _near);
+
+		return matrix;
+	}
+
+	Mat4 const Mat4::LookAt(const Vec3 _eye, const Vec3 _target, const Vec3 _up)
+	{
+		Vec3 z_axis = Vec3(_target - _eye).Normalized();
+		Vec3 x_axis = Vec3(_up.Cross(z_axis)).Normalized();
+		Vec3 y_axis = Vec3(z_axis.Cross(x_axis));
+
+		Mat4 viewMatrix = {
+			x_axis.x, y_axis.x, z_axis.x, 0 ,
+			x_axis.y, y_axis.y, z_axis.y, 0 ,
+			x_axis.z, y_axis.z, z_axis.z, 0 ,
+			-Vec3(x_axis).Dot(_eye), -Vec3(y_axis).Dot(_eye), -Vec3(z_axis).Dot(_eye), 1
+		};
+
+		return viewMatrix;
+	}
+
 	Mat4 Mat4::Translate(float _x, float _y, float _z)
 	{
 		return Mat4({
@@ -45,10 +76,10 @@ namespace Math
 	Mat4 Mat4::Translate(Vec3 _translation)
 	{
 		return Mat4({
-			1.f, 0.f, 0.f, _translation.x,
-			0.f, 1.f, 0.f, _translation.y,
-			0.f, 0.f, 1.f, _translation.z,
-			0.f, 0.f, 0.f, 1.f
+			1.f, 0.f, 0.f, 0.f,
+			0.f, 1.f, 0.f, 0.f,
+			0.f, 0.f, 1.f, 0.f,
+			_translation.x, _translation.y, _translation.z, 1.f
 		});
 	}
 
@@ -175,116 +206,116 @@ namespace Math
 		Mat4 result;
 
 		result.Values[0] =   Values[5]  * Values[10] * Values[15] -
-				             Values[5]  * Values[11] * Values[14] -
-				             Values[9]  * Values[6]  * Values[15] +
-				             Values[9]  * Values[7]  * Values[14] +
-				             Values[13] * Values[6]  * Values[11] -
-				             Values[13] * Values[7]  * Values[10];
+							 Values[5]  * Values[11] * Values[14] -
+							 Values[9]  * Values[6]  * Values[15] +
+							 Values[9]  * Values[7]  * Values[14] +
+							 Values[13] * Values[6]  * Values[11] -
+							 Values[13] * Values[7]  * Values[10];
 
 		result.Values[4] =  -Values[4]  * Values[10] * Values[15] +
-				             Values[4]  * Values[11] * Values[14] +
-				             Values[8]  * Values[6]  * Values[15] -
-				             Values[8]  * Values[7]  * Values[14] -
-				             Values[12] * Values[6]  * Values[11] +
-				             Values[12] * Values[7]  * Values[10];
+							 Values[4]  * Values[11] * Values[14] +
+							 Values[8]  * Values[6]  * Values[15] -
+							 Values[8]  * Values[7]  * Values[14] -
+							 Values[12] * Values[6]  * Values[11] +
+							 Values[12] * Values[7]  * Values[10];
 
 		result.Values[8] =   Values[4]  * Values[9] * Values[15] -
-				             Values[4]  * Values[11] * Values[13] -
-				             Values[8]  * Values[5] * Values[15] +
-				             Values[8]  * Values[7] * Values[13] +
-				             Values[12] * Values[5] * Values[11] -
-				             Values[12] * Values[7] * Values[9];
+							 Values[4]  * Values[11] * Values[13] -
+							 Values[8]  * Values[5] * Values[15] +
+							 Values[8]  * Values[7] * Values[13] +
+							 Values[12] * Values[5] * Values[11] -
+							 Values[12] * Values[7] * Values[9];
 
 		result.Values[12] = -Values[4]  * Values[9] * Values[14] +
-				             Values[4]  * Values[10] * Values[13] +
-				             Values[8]  * Values[5] * Values[14] -
-				             Values[8]  * Values[6] * Values[13] -
-				             Values[12] * Values[5] * Values[10] +
-				             Values[12] * Values[6] * Values[9];
+							 Values[4]  * Values[10] * Values[13] +
+							 Values[8]  * Values[5] * Values[14] -
+							 Values[8]  * Values[6] * Values[13] -
+							 Values[12] * Values[5] * Values[10] +
+							 Values[12] * Values[6] * Values[9];
 
 		result.Values[1] =  -Values[1]  * Values[10] * Values[15] +
-				             Values[1]  * Values[11] * Values[14] +
-				             Values[9]  * Values[2] * Values[15] -
-				             Values[9]  * Values[3] * Values[14] -
-				             Values[13] * Values[2] * Values[11] +
-				             Values[13] * Values[3] * Values[10];
+							 Values[1]  * Values[11] * Values[14] +
+							 Values[9]  * Values[2] * Values[15] -
+							 Values[9]  * Values[3] * Values[14] -
+							 Values[13] * Values[2] * Values[11] +
+							 Values[13] * Values[3] * Values[10];
 
 		result.Values[5] =   Values[0]  * Values[10] * Values[15] -
-				             Values[0]  * Values[11] * Values[14] -
-				             Values[8]  * Values[2] * Values[15] +
-				             Values[8]  * Values[3] * Values[14] +
-				             Values[12] * Values[2] * Values[11] -
-				             Values[12] * Values[3] * Values[10];
+							 Values[0]  * Values[11] * Values[14] -
+							 Values[8]  * Values[2] * Values[15] +
+							 Values[8]  * Values[3] * Values[14] +
+							 Values[12] * Values[2] * Values[11] -
+							 Values[12] * Values[3] * Values[10];
 
 		result.Values[9] =  -Values[0]  * Values[9] * Values[15] +
-				             Values[0]  * Values[11] * Values[13] +
-				             Values[8]  * Values[1] * Values[15] -
-				             Values[8]  * Values[3] * Values[13] -
-				             Values[12] * Values[1] * Values[11] +
-				             Values[12] * Values[3] * Values[9];
+							 Values[0]  * Values[11] * Values[13] +
+							 Values[8]  * Values[1] * Values[15] -
+							 Values[8]  * Values[3] * Values[13] -
+							 Values[12] * Values[1] * Values[11] +
+							 Values[12] * Values[3] * Values[9];
 
 		result.Values[13] =  Values[0]  * Values[9] * Values[14] -
-				             Values[0]  * Values[10] * Values[13] -
-				             Values[8]  * Values[1] * Values[14] +
-				             Values[8]  * Values[2] * Values[13] +
-				             Values[12] * Values[1] * Values[10] -
-				             Values[12] * Values[2] * Values[9];
+							 Values[0]  * Values[10] * Values[13] -
+							 Values[8]  * Values[1] * Values[14] +
+							 Values[8]  * Values[2] * Values[13] +
+							 Values[12] * Values[1] * Values[10] -
+							 Values[12] * Values[2] * Values[9];
 
 		result.Values[2] =   Values[1]  * Values[6] * Values[15] -
-				             Values[1]  * Values[7] * Values[14] -
-				             Values[5]  * Values[2] * Values[15] +
-				             Values[5]  * Values[3] * Values[14] +
-				             Values[13] * Values[2] * Values[7] -
-				             Values[13] * Values[3] * Values[6];
+							 Values[1]  * Values[7] * Values[14] -
+							 Values[5]  * Values[2] * Values[15] +
+							 Values[5]  * Values[3] * Values[14] +
+							 Values[13] * Values[2] * Values[7] -
+							 Values[13] * Values[3] * Values[6];
 
 		result.Values[6] =  -Values[0]  * Values[6] * Values[15] +
-				             Values[0]  * Values[7] * Values[14] +
-				             Values[4]  * Values[2] * Values[15] -
-				             Values[4]  * Values[3] * Values[14] -
-				             Values[12] * Values[2] * Values[7] +
-				             Values[12] * Values[3] * Values[6];
+							 Values[0]  * Values[7] * Values[14] +
+							 Values[4]  * Values[2] * Values[15] -
+							 Values[4]  * Values[3] * Values[14] -
+							 Values[12] * Values[2] * Values[7] +
+							 Values[12] * Values[3] * Values[6];
 
 		result.Values[10] =  Values[0]  * Values[5] * Values[15] -
-				             Values[0]  * Values[7] * Values[13] -
-				             Values[4]  * Values[1] * Values[15] +
-				             Values[4]  * Values[3] * Values[13] +
-				             Values[12] * Values[1] * Values[7] -
-				             Values[12] * Values[3] * Values[5];
+							 Values[0]  * Values[7] * Values[13] -
+							 Values[4]  * Values[1] * Values[15] +
+							 Values[4]  * Values[3] * Values[13] +
+							 Values[12] * Values[1] * Values[7] -
+							 Values[12] * Values[3] * Values[5];
 
 		result.Values[14] = -Values[0]  * Values[5] * Values[14] +
-				             Values[0]  * Values[6] * Values[13] +
-				             Values[4]  * Values[1] * Values[14] -
-				             Values[4]  * Values[2] * Values[13] -
-				             Values[12] * Values[1] * Values[6] +
-				             Values[12] * Values[2] * Values[5];
+							 Values[0]  * Values[6] * Values[13] +
+							 Values[4]  * Values[1] * Values[14] -
+							 Values[4]  * Values[2] * Values[13] -
+							 Values[12] * Values[1] * Values[6] +
+							 Values[12] * Values[2] * Values[5];
 
 		result.Values[3] =  -Values[1] * Values[6] * Values[11] +
-				             Values[1] * Values[7] * Values[10] +
-				             Values[5] * Values[2] * Values[11] -
-				             Values[5] * Values[3] * Values[10] -
-				             Values[9] * Values[2] * Values[7] +
-				             Values[9] * Values[3] * Values[6];
+							 Values[1] * Values[7] * Values[10] +
+							 Values[5] * Values[2] * Values[11] -
+							 Values[5] * Values[3] * Values[10] -
+							 Values[9] * Values[2] * Values[7] +
+							 Values[9] * Values[3] * Values[6];
 
 		result.Values[7] =   Values[0] * Values[6] * Values[11] -
-				             Values[0] * Values[7] * Values[10] -
-				             Values[4] * Values[2] * Values[11] +
-				             Values[4] * Values[3] * Values[10] +
-				             Values[8] * Values[2] * Values[7] -
-				             Values[8] * Values[3] * Values[6];
+							 Values[0] * Values[7] * Values[10] -
+							 Values[4] * Values[2] * Values[11] +
+							 Values[4] * Values[3] * Values[10] +
+							 Values[8] * Values[2] * Values[7] -
+							 Values[8] * Values[3] * Values[6];
 
 		result.Values[11] = -Values[0] * Values[5] * Values[11] +
-				             Values[0] * Values[7] * Values[9] +
-				             Values[4] * Values[1] * Values[11] -
-				             Values[4] * Values[3] * Values[9] -
-				             Values[8] * Values[1] * Values[7] +
-				             Values[8] * Values[3] * Values[5];
+							 Values[0] * Values[7] * Values[9] +
+							 Values[4] * Values[1] * Values[11] -
+							 Values[4] * Values[3] * Values[9] -
+							 Values[8] * Values[1] * Values[7] +
+							 Values[8] * Values[3] * Values[5];
 
 		result.Values[15] =  Values[0] * Values[5] * Values[10] -
-				             Values[0] * Values[6] * Values[9] -
-				             Values[4] * Values[1] * Values[10] +
-				             Values[4] * Values[2] * Values[9] +
-				             Values[8] * Values[1] * Values[6] -
-				             Values[8] * Values[2] * Values[5];
+							 Values[0] * Values[6] * Values[9] -
+							 Values[4] * Values[1] * Values[10] +
+							 Values[4] * Values[2] * Values[9] +
+							 Values[8] * Values[1] * Values[6] -
+							 Values[8] * Values[2] * Values[5];
 
 		float determinant = Values[0] * result.Values[0] + Values[1] * result.Values[4] + Values[2] * result.Values[8] + Values[3] * result.Values[12];
 
@@ -302,8 +333,8 @@ namespace Math
 	Mat4 Mat4::GetTranspose() const
 	{
 		return Mat4(Values[0], Values[4], Values[8], Values[12],
-			        Values[1], Values[5], Values[9], Values[13],
-			        Values[2], Values[6], Values[10], Values[14],
-			        Values[3], Values[7], Values[11], Values[15]);
+					Values[1], Values[5], Values[9], Values[13],
+					Values[2], Values[6], Values[10], Values[14],
+					Values[3], Values[7], Values[11], Values[15]);
 	}
 }

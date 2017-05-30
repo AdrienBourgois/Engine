@@ -9,6 +9,8 @@
 
 #include "Modules/Render/DirectX/Dx12Factory.h"
 #include "Modules/Render/DirectX/Objects/Dx12GraphicObject.h"
+#include "Maths/Mat4.h"
+#include "Core/CoreType/Transform.h"
 
 #define FRAME_BUFFER_COUNT 3
 
@@ -110,8 +112,15 @@ namespace Module
 
 				int frameIndex = 0;
 
-				Core::CoreType::Color colorMultiplier = Core::CoreType::Color::Black;
-				Objects::Dx12ConstantBuffer* colorConstantBuffer = nullptr;
+				Math::Mat4 projection_matrix;
+				Math::Mat4 camera_view_matrix;
+
+				Math::Vec3 camera_position;
+				Math::Vec3 camera_target;
+				Math::Vec3 camera_up;
+
+				Core::CoreType::Transform cube1;
+				Core::CoreType::Transform cube2;
 			};
 		}
 	}

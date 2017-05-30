@@ -75,7 +75,7 @@ namespace Core
 			 * \brief Return a reference to GameObject
 			 * \return Pointer to Object::GameObject
 			 */
-			Object::GameObject* GameObject() const { return gameObjectReference; };
+			Object::GameObject* GameObject() const { return gameObjectReference; }
 
 		protected:
 			Object::GameObject* gameObjectReference = nullptr;

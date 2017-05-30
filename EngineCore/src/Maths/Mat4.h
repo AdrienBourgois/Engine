@@ -47,6 +47,24 @@ namespace Math
 		static Mat4 const Identity;
 
 		/**
+		 * \brief Create a perspective matrix
+		 * \param _angle_of_view FOV in degree
+		 * \param _aspect_ratio Aspect ratio of render
+		 * \param _near Near limit of render
+		 * \param _far Far limit of render
+		 * \return Perspective projection matrix
+		 */
+		static Mat4 const PerspectiveMatrix(const float _angle_of_view, const float _aspect_ratio, const float _near, const float _far);
+		/**
+		 * \brief Create a look at matrix
+		 * \param _eye Position of the eye
+		 * \param _target Position of target
+		 * \param _up Up vector
+		 * \return Look at matrix
+		 */
+		static Mat4 const LookAt(const Vec3 _eye, const Vec3 _target, const Vec3 _up);
+
+		/**
 		 * \brief Create a translation matrix
 		 * \param _x x value
 		 * \param _y y value

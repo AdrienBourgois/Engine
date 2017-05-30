@@ -4,9 +4,24 @@
 #include "Modules/Render/DirectX/DX12Helper.h"
 #include "Core/CoreType/Vertex.h"
 #include "Objects/Components/GraphicComponent.h"
+#include "Maths/Mat4.h"
 
 bool Module::Render::DirectX12::DirectX12::Initialize()
 {
+	float width = static_cast<FLOAT>(MODULE(Display::Window)->getWidth());
+	float height = static_cast<FLOAT>(MODULE(Display::Window)->getHeight());
+
+	projection_matrix = Math::Mat4::PerspectiveMatrix(45.0f, width / height, 0.1f, 1000.0f);
+
+	camera_position = {0.0f, 0.0f, -4.0f};
+	camera_target = {0.0f, 0.0f, 1.0f};
+	camera_up = {0.0f, 1.0f, 0.0f};
+
+	camera_view_matrix = Math::Mat4::LookAt(camera_position, camera_target, camera_up);
+
+	cube1.position = {0.f, 0.f, 0.f};
+	cube2.position = {1.5f, 0.f, 0.f};
+
 	return true;
 }
 
@@ -32,9 +47,6 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 		return false;
 
 	factory->MakeDevice(&device);
-
-
-	factory->CreateConstantBuffer(&colorMultiplier, &colorConstantBuffer);
 
 	factory->MakeCommandQueue(&commandQueue);
 	factory->MakeSwapChain(commandQueue, FRAME_BUFFER_COUNT, *MODULE(Display::Window)->getHandle(), width, height, MODULE(Display::Window)->isFullscreen(), &swapChain);
@@ -87,6 +99,17 @@ bool Module::Render::DirectX12::DirectX12::Render()
 
 bool Module::Render::DirectX12::DirectX12::UpdatePipeline()
 {
+	cube1.rotation.x += 0.01f;
+	Math::Mat4 cube1mat = (cube1.GetLocalMatrix() * camera_view_matrix * projection_matrix).GetTranspose();
+	memcpy(graphicsObjects[1]->GetConstantBuffer()->Map(), &cube1mat, sizeof cube1mat);
+	graphicsObjects[1]->GetConstantBuffer()->Unmap();
+
+	cube2.scale += 0.0001f;
+	cube2.rotation.z += 0.01f;
+	Math::Mat4 cube2mat = (cube2.GetLocalMatrix() * camera_view_matrix * projection_matrix).GetTranspose();
+	memcpy(graphicsObjects[2]->GetConstantBuffer()->Map(), &cube2mat, sizeof cube2mat);
+	graphicsObjects[2]->GetConstantBuffer()->Unmap();
+
 	return true;
 }
 
@@ -95,37 +118,6 @@ bool Module::Render::DirectX12::DirectX12::PreRender()
 	WaitForPreviousFrame();
 
 	TRYFUNC(commandAllocator[frameIndex]->Reset());
-
-	/* ---------------------------------------- */
-
-	static float rIncrement = 0.00002f;
-	static float gIncrement = 0.00006f;
-	static float bIncrement = 0.00009f;
-
-	colorMultiplier.r += rIncrement;
-	colorMultiplier.g += gIncrement;
-	colorMultiplier.b += bIncrement;
-
-	if (colorMultiplier.r >= 1.0f || colorMultiplier.r <= 0.0f)
-	{
-		colorMultiplier.r = colorMultiplier.r >= 1.0f ? 1.0f : 0.0f;
-		rIncrement = -rIncrement;
-	}
-	if (colorMultiplier.g >= 1.0f || colorMultiplier.g <= 0.0f)
-	{
-		colorMultiplier.g = colorMultiplier.g >= 1.0f ? 1.0f : 0.0f;
-		gIncrement = -gIncrement;
-	}
-	if (colorMultiplier.b >= 1.0f || colorMultiplier.b <= 0.0f)
-	{
-		colorMultiplier.b = colorMultiplier.b >= 1.0f ? 1.0f : 0.0f;
-		bIncrement = -bIncrement;
-	}
-
-	memcpy(reinterpret_cast<void**>(colorConstantBuffer->Map()), &colorMultiplier, sizeof colorMultiplier);
-	colorConstantBuffer->Unmap();
-
-	/* ---------------------------------------- */
 
 	PreparePreRenderCommandList();
 	for (std::pair<const int, Objects::Dx12GraphicObject*> object : graphicsObjects)
@@ -144,8 +136,6 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 {
 	WaitForPreviousFrame();
 	CloseHandle(fenceEvent);
-
-	delete colorConstantBuffer;
 
 	BOOL fs = false;
 	if (swapChain->GetFullscreenState(&fs, nullptr))
@@ -194,7 +184,10 @@ bool Module::Render::DirectX12::DirectX12::CreateBuffers(unsigned int _id, Core:
 	if (_indexs_array && _indexs_count)
 		factory->CreateIndexBuffer(pack, _name, _indexs_array, _indexs_count, command_list, &index_view);
 
-	graphicsObjects[_id] = new Objects::Dx12GraphicObject(_id, _name, command_list, _vertices_array, _vertices_count, buffer_view, _indexs_array, _indexs_count, index_view);
+	Objects::Dx12ConstantBuffer* constant_buffer;
+	factory->CreateConstantBuffer(&Math::Mat4::Identity, &constant_buffer);
+
+	graphicsObjects[_id] = new Objects::Dx12GraphicObject(_id, _name, command_list, _vertices_array, _vertices_count, buffer_view, _indexs_array, _indexs_count, index_view, constant_buffer);
 
 	return true;
 }
@@ -264,15 +257,6 @@ bool Module::Render::DirectX12::DirectX12::PrepareObjectCommandList(Objects::Dx1
 	command_list->SetGraphicsRootSignature(rootSignature);
 	command_list->RSSetViewports(1, &viewport);
 	command_list->RSSetScissorRects(1, &scissorRect);
-
-	/* ----------------------------------- */
-
-	ID3D12DescriptorHeap* descriptorHeaps[] = { colorConstantBuffer->GetDescriptorHeap() };
-	command_list->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-
-	command_list->SetGraphicsRootDescriptorTable(0, colorConstantBuffer->GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
-
-	/* ----------------------------------- */
 
 	_graphic_object->PrepareCommandList();
 	TRYFUNC(command_list->Close());

@@ -62,11 +62,28 @@ namespace Math
 		 */
 		Vec3 operator+(Vec3 _other_vec) const;
 		/**
+		 * \brief Add value to each member of vector
+		 * \param _value Value to add
+		 * \return Vector result
+		 */
+		Vec3 operator+(float _value) const;
+		/**
 		 * \brief Substract vector
 		 * \param _other_vec Vector to substract
 		 * \return Vector result
 		 */
 		Vec3 operator-(Vec3 _other_vec) const;
+		/**
+		 * \brief Substract value to each member of vector
+		 * \param _value Value to substract
+		 * \return Vector result
+		 */
+		Vec3 operator-(float _value) const;
+		/**
+		 * \brief Return the opposite vector
+		 * \return Opposite vector
+		 */
+		Vec3 operator-() const;
 		/**
 		 * \brief Add vector to this vector
 		 * \param _other_vec Vector to add
@@ -77,6 +94,16 @@ namespace Math
 		 * \param _other_vec Vector to substract
 		 */
 		void operator-=(Vec3 _other_vec);
+		/**
+		 * \brief Add value to this vector
+		 * \param _value value to add
+		 */
+		void operator+=(float _value);
+		/**
+		 * \brief Substract value to this vector
+		 * \param _value Value to substract
+		 */
+		void operator-=(float _value);
 		/**
 		 * \brief Is vector != 0
 		 */
@@ -102,6 +129,12 @@ namespace Math
 		 * \return Scalar result
 		 */
 		float Dot(Vec3 _other_vec) const;
+		/**
+		 * \brief Cross product of vectors
+		 * \param _other_vec Other vector to compute
+		 * \return Result vector
+		 */
+		Vec3 Cross(Vec3 const _other_vec) const;
 
 		/**
 		 * \brief x component

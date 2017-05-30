@@ -142,20 +142,13 @@ bool Module::Render::DirectX12::Dx12Factory::MakeFence(UINT _frame_buffer_count,
 
 bool Module::Render::DirectX12::Dx12Factory::MakeRootSignature(ID3D12RootSignature** _root_signature)
 {
-	D3D12_DESCRIPTOR_RANGE* descriptor_table_range = new D3D12_DESCRIPTOR_RANGE();
-	descriptor_table_range->RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-	descriptor_table_range->NumDescriptors = 1;
-	descriptor_table_range->BaseShaderRegister = 0;
-	descriptor_table_range->RegisterSpace = 0;
-	descriptor_table_range->OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	D3D12_ROOT_DESCRIPTOR_TABLE descriptor_table;
-	descriptor_table.NumDescriptorRanges = 1;
-	descriptor_table.pDescriptorRanges = descriptor_table_range;
+	D3D12_ROOT_DESCRIPTOR rootCBVDescriptor;
+	rootCBVDescriptor.RegisterSpace = 0;
+	rootCBVDescriptor.ShaderRegister = 0;
 
 	D3D12_ROOT_PARAMETER root_parameter;
-	root_parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	root_parameter.DescriptorTable = descriptor_table;
+	root_parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	root_parameter.Descriptor = rootCBVDescriptor;
 	root_parameter.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
 	D3D12_ROOT_PARAMETER parameters[] = {root_parameter};
@@ -225,6 +218,7 @@ bool Module::Render::DirectX12::Dx12Factory::MakeDepthStencilBuffer(ID3D12Descri
 
 	device->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_descritor, D3D12_RESOURCE_STATE_DEPTH_WRITE, &depth_optimized_clear_value, IID_PPV_ARGS(_buffer));
 	(*_descriptor)->SetName(L"Depth/Stencil Resource Heap");
+	(*_buffer)->SetName(L"Depth/Stencil Texture");
 
 	device->CreateDepthStencilView(*_buffer, &depth_stencil_desc, (*_descriptor)->GetCPUDescriptorHandleForHeapStart());
 

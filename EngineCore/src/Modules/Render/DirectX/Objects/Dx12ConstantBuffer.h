@@ -19,6 +19,7 @@ namespace Module
 					UINT8* Map();
 					void Unmap();
 
+					ID3D12Resource* GetResource() const;
 					ID3D12DescriptorHeap* GetDescriptorHeap() const;
 					UINT8* GetHeapGpuAdress() const;
 

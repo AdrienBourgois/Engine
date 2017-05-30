@@ -35,6 +35,11 @@ Math::Vec3 Math::Vec3::operator+(Vec3 _other_vec) const
 	return result_vec;
 }
 
+Math::Vec3 Math::Vec3::operator+(float _value) const
+{
+	return Vec3(x + _value, y + _value, z + _value);
+}
+
 Math::Vec3 Math::Vec3::operator-(Vec3 _other_vec) const
 {
 	Vec3 result_vec;
@@ -42,6 +47,16 @@ Math::Vec3 Math::Vec3::operator-(Vec3 _other_vec) const
 	result_vec.y = y - _other_vec.y;
 	result_vec.z = z - _other_vec.z;
 	return result_vec;
+}
+
+Math::Vec3 Math::Vec3::operator-(float _value) const
+{
+	return Vec3(x - _value, y - _value, z - _value);
+}
+
+Math::Vec3 Math::Vec3::operator-() const
+{
+	return { -x, -y, -z };
 }
 
 void Math::Vec3::operator+=(Vec3 _other_vec)
@@ -56,6 +71,20 @@ void Math::Vec3::operator-=(Vec3 _other_vec)
 	x -= _other_vec.x;
 	y -= _other_vec.y;
 	z -= _other_vec.z;
+}
+
+void Math::Vec3::operator+=(float _value)
+{
+	x += _value;
+	y += _value;
+	z += _value;
+}
+
+void Math::Vec3::operator-=(float _value)
+{
+	x -= _value;
+	y -= _value;
+	z -= _value;
 }
 
 Math::Vec3::operator bool() const
@@ -91,4 +120,9 @@ Math::Vec3 Math::Vec3::Normalized() const
 float Math::Vec3::Dot(Vec3 _other_vec) const
 {
 	return x*_other_vec.x + y*_other_vec.y + z*_other_vec.z;
+}
+
+Math::Vec3 Math::Vec3::Cross(Vec3 const _other_vec) const
+{
+	return{ (y * _other_vec.z - z * _other_vec.y), (z * _other_vec.x - x * _other_vec.z), (x * _other_vec.y - y * _other_vec.x) };
 }

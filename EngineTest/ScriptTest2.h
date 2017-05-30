@@ -11,6 +11,6 @@ public:
 	ScriptTest2() = default;
 	~ScriptTest2() = default;
 
-	void Initialize() override { LOG("Second Script", LOG_INFO); };
+	void Initialize() override { LOG("Second Script", LOG_INFO); }
 };
 
