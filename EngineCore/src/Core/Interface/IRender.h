@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Macros.h"
+#include "Core/CoreType/Transform.h"
 
 namespace Core {
 	namespace CoreType {
@@ -43,13 +44,14 @@ namespace Core
 			 * \brief Create buffers from object
 			 * \param _id Id of object
 			 * \param _name Name of buffer
+			 * \param _transform Pointer to GameObject Transform
 			 * \param _vertices_array Array of vertices
 			 * \param _vertices_count Size of vertices array
 			 * \param _indexs_array Array of indexs (If vertices are indexed)
 			 * \param _indexs_count Size of indexs array
 			 * \return Is function success
 			 */
-			virtual bool CreateBuffers(unsigned int _id, CoreType::String _name, CoreType::Vertex* _vertices_array, unsigned int _vertices_count, unsigned int* _indexs_array = nullptr, unsigned int _indexs_count = 0) = 0;
+			virtual bool CreateBuffers(unsigned int _id, CoreType::String _name, CoreType::Transform* _transform, CoreType::Vertex* _vertices_array, unsigned int _vertices_count, unsigned int* _indexs_array = nullptr, unsigned int _indexs_count = 0) = 0;
 			/**
 			 * \brief Start render of current frame
 			 * \return Is function success

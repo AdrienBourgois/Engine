@@ -19,6 +19,8 @@ namespace Core
 			const Math::Mat4 GetLocalMatrix() const;
 			const Math::Mat4 GetWorldMatrix() const;
 
+			void SetParent(Transform* _new_parent);
+
 		private:
 			Math::Mat4 localMatrix = Math::Mat4::Identity;
 			Transform* parent = nullptr;

@@ -3,17 +3,20 @@
 template <typename T,  typename... PARAMS>
 T* Object::GameObject::CreateComponent(PARAMS... params)
 {
-	Core::Interface::IComponent* component = static_cast<Core::Interface::IComponent*>(new T(params));
+	T* component = new T(params...);
+	Core::Interface::IComponent* component_cast = static_cast<Core::Interface::IComponent*>(component);
 
-	if (component)
+	if (component_cast)
 	{
-		component->SetDefaultComponentName();
+		component_cast->SetAttachedGameObject(this);
 
-		component->SetDefaultComponentType();
+		component_cast->SetDefaultComponentName();
 
-		component->Initialize();
+		component_cast->SetDefaultComponentType();
 
-		components.push_back(component);
+		component_cast->Initialize();
+
+		components->push_back(component_cast);
 		return component;
 	}
 
@@ -21,9 +24,9 @@ T* Object::GameObject::CreateComponent(PARAMS... params)
 }
 
 template <typename T>
-T* Object::GameObject::Get() const
+T* Object::GameObject::GetComponent() const
 {
-	for (Core::Interface::IComponent* component : components)
+	for (Core::Interface::IComponent* component : *components)
 	{
 		if (typeid(*component) == typeid(T))
 			return static_cast<T*>(component);
@@ -33,9 +36,9 @@ T* Object::GameObject::Get() const
 }
 
 template <typename T>
-bool Object::GameObject::Has() const
+bool Object::GameObject::HasComponentOfType() const
 {
-	for (Core::Interface::IComponent* component : components)
+	for (Core::Interface::IComponent* component : *components)
 	{
 		if (typeid(*component) == typeid(T))
 			return true;

@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Engine.h"
 #include "Core/Interface/IComponent.h"
-#include "Objects/GameObject.h"
 #include "Core/CoreType/Vertex.h"
+#include "Core/CoreType/Transform.h"
 
 namespace Object
 {
@@ -12,7 +11,7 @@ namespace Object
 		/**
 		 * \brief Component to handle graphics objects (vertices, indexs, ...)
 		 */
-		class GraphicComponent : public Core::Interface::IComponent
+		class ENGINEDLL_API GraphicComponent : public Core::Interface::IComponent
 		{
 		public:
 			DECLARE_COMPONENT(S("GraphicComponent"), Core::CoreType::EObjectSubtype::GraphicComponent)
@@ -36,16 +35,19 @@ namespace Object
 			 */
 			bool IsIndexed() const;
 
+			Core::CoreType::Transform GetTransform() const;
+			Core::CoreType::Transform* GetTransformReference() const;
+
 			/**
 			 * \brief Return an array with vertices
 			 * \return Array of vertices
 			 */
-			Core::CoreType::Vertex* GetVertices();
+			Core::CoreType::Vertex* GetVertices() const;
 			/**
 			 * \brief Return an array with indexs
 			 * \return Array of indexs
 			 */
-			unsigned int* GetIndexs();
+			unsigned int* GetIndexs() const;
 			/**
 			 * \brief Return the number of vertices
 			 * \return Count of vertices
@@ -66,8 +68,8 @@ namespace Object
 		private:
 			bool indexed = false;
 
-			std::vector<Core::CoreType::Vertex> vertices;
-			std::vector<unsigned int> indexs;
+			std::vector<Core::CoreType::Vertex>* vertices = new std::vector<Core::CoreType::Vertex>();
+			std::vector<unsigned int>* indexs = new std::vector<unsigned>();
 			Core::CoreType::Id id = Core::CoreType::Id(Core::CoreType::EObjectSubtype::GraphicComponent);
 		};
 	}

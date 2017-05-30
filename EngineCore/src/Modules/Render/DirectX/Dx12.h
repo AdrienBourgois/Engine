@@ -52,7 +52,7 @@ namespace Module
 
 				bool Initialize() override;
 				bool CreatePipeline() override;
-				bool CreateBuffers(unsigned int _id, Core::CoreType::String _name, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, unsigned int* _indexs_array = nullptr, unsigned int _indexs_count = 0) override;
+				bool CreateBuffers(unsigned int _id, Core::CoreType::String _name, Core::CoreType::Transform* _transform, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, unsigned int* _indexs_array = nullptr, unsigned int _indexs_count = 0) override;
 				bool Render() override;
 				bool Cleanup() override;
 
@@ -118,9 +118,6 @@ namespace Module
 				Math::Vec3 camera_position;
 				Math::Vec3 camera_target;
 				Math::Vec3 camera_up;
-
-				Core::CoreType::Transform cube1;
-				Core::CoreType::Transform cube2;
 			};
 		}
 	}

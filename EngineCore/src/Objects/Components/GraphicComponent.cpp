@@ -1,18 +1,19 @@
 #include "GraphicComponent.h"
+#include "Objects/GameObject.h"
 
 Object::Component::GraphicComponent::GraphicComponent(Core::CoreType::Vertex _vertexs_array[], unsigned int _vertexs_count, unsigned int _indexs_array[], unsigned int _indexs_count)
 {
-	vertices.reserve(_vertexs_count);
+	vertices->reserve(_vertexs_count);
 
 	for (unsigned int i = 0; i < _vertexs_count; ++i)
-		vertices.push_back(_vertexs_array[i]);
+		vertices->push_back(_vertexs_array[i]);
 
 	if(_indexs_array && _indexs_count)
 	{
-		indexs.reserve(_indexs_count);
+		indexs->reserve(_indexs_count);
 
 		for (unsigned int i = 0; i < _indexs_count; ++i)
-			indexs.push_back(_indexs_array[i]);
+			indexs->push_back(_indexs_array[i]);
 		indexed = true;
 	}
 }
@@ -42,24 +43,34 @@ bool Object::Component::GraphicComponent::IsIndexed() const
 	return indexed;
 }
 
-Core::CoreType::Vertex* Object::Component::GraphicComponent::GetVertices()
+Core::CoreType::Transform Object::Component::GraphicComponent::GetTransform() const
 {
-	return vertices.data();
+	return gameObjectReference->GetTransform();
 }
 
-unsigned int* Object::Component::GraphicComponent::GetIndexs()
+Core::CoreType::Transform* Object::Component::GraphicComponent::GetTransformReference() const
 {
-	return indexs.data();
+	return gameObjectReference->GetTransformReference();
+}
+
+Core::CoreType::Vertex* Object::Component::GraphicComponent::GetVertices() const
+{
+	return vertices->data();
+}
+
+unsigned int* Object::Component::GraphicComponent::GetIndexs() const
+{
+	return indexs->data();
 }
 
 int Object::Component::GraphicComponent::GetVertexCount() const
 {
-	return static_cast<int>(vertices.size());
+	return static_cast<int>(vertices->size());
 }
 
 int Object::Component::GraphicComponent::GetIndexCount() const
 {
-	return static_cast<int>(indexs.size());
+	return static_cast<int>(indexs->size());
 }
 
 Core::CoreType::Id Object::Component::GraphicComponent::GetId() const

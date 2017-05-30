@@ -17,6 +17,7 @@ namespace Object
 		bool Start() override;\
 		bool Update() override;\
 		bool Destruct() override;\
+		void SetAttachedGameObject(Object::GameObject* _game_object) override { gameObjectReference = _game_object; }\
 		void SetDefaultComponentName() override { componentName = name; }\
 		void SetDefaultComponentType() override { id = subtype; }
 
@@ -52,6 +53,11 @@ namespace Core
 			 * \return Is desctruction sucessfull
 			 */
 			virtual bool Destruct() = 0;
+			/**
+			 * \brief Set the owner GameObject
+			 * \param _game_object GameObject that own this component
+			 */
+			virtual void SetAttachedGameObject(Object::GameObject* _game_object) = 0;
 			/**
 			 * \brief Set a default name for component
 			 */

@@ -14,7 +14,7 @@ namespace Module
 			DirectX12Api,
 		};
 
-		class RenderInterface : public Core::Interface::IModule
+		class ENGINEDLL_API RenderInterface : public Core::Interface::IModule
 		{
 		public:
 			DECLARE_MODULE(S("Render Interface"))

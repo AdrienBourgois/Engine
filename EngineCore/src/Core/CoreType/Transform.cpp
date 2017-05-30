@@ -15,3 +15,8 @@ const Math::Mat4 Core::CoreType::Transform::GetWorldMatrix() const
 
 	return GetLocalMatrix();
 }
+
+void Core::CoreType::Transform::SetParent(Transform* _new_parent)
+{
+	parent = _new_parent;
+}

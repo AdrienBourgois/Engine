@@ -19,9 +19,6 @@ bool Module::Render::DirectX12::DirectX12::Initialize()
 
 	camera_view_matrix = Math::Mat4::LookAt(camera_position, camera_target, camera_up);
 
-	cube1.position = {0.f, 0.f, 0.f};
-	cube2.position = {1.5f, 0.f, 0.f};
-
 	return true;
 }
 
@@ -99,17 +96,6 @@ bool Module::Render::DirectX12::DirectX12::Render()
 
 bool Module::Render::DirectX12::DirectX12::UpdatePipeline()
 {
-	cube1.rotation.x += 0.01f;
-	Math::Mat4 cube1mat = (cube1.GetLocalMatrix() * camera_view_matrix * projection_matrix).GetTranspose();
-	memcpy(graphicsObjects[1]->GetConstantBuffer()->Map(), &cube1mat, sizeof cube1mat);
-	graphicsObjects[1]->GetConstantBuffer()->Unmap();
-
-	cube2.scale += 0.0001f;
-	cube2.rotation.z += 0.01f;
-	Math::Mat4 cube2mat = (cube2.GetLocalMatrix() * camera_view_matrix * projection_matrix).GetTranspose();
-	memcpy(graphicsObjects[2]->GetConstantBuffer()->Map(), &cube2mat, sizeof cube2mat);
-	graphicsObjects[2]->GetConstantBuffer()->Unmap();
-
 	return true;
 }
 
@@ -120,8 +106,14 @@ bool Module::Render::DirectX12::DirectX12::PreRender()
 	TRYFUNC(commandAllocator[frameIndex]->Reset());
 
 	PreparePreRenderCommandList();
-	for (std::pair<const int, Objects::Dx12GraphicObject*> object : graphicsObjects)
-		PrepareObjectCommandList(object.second);
+	for (std::pair<const int, Objects::Dx12GraphicObject*> pair : graphicsObjects)
+	{
+		Objects::Dx12GraphicObject* graphic_object = pair.second;
+		Math::Mat4 wvs_matrix = (graphic_object->GetTransform()->GetWorldMatrix() * camera_view_matrix * projection_matrix).GetTranspose();
+		memcpy(graphic_object->GetConstantBuffer()->Map(), &wvs_matrix, sizeof wvs_matrix);
+		graphic_object->GetConstantBuffer()->Unmap();
+		PrepareObjectCommandList(graphic_object);
+	}
 	PreparePostRenderCommandList();
 
 	return true;
@@ -171,7 +163,7 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 	return true;
 }
 
-bool Module::Render::DirectX12::DirectX12::CreateBuffers(unsigned int _id, Core::CoreType::String _name, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, unsigned int* _indexs_array, unsigned int _indexs_count)
+bool Module::Render::DirectX12::DirectX12::CreateBuffers(unsigned int _id, Core::CoreType::String _name, Core::CoreType::Transform* _transform, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, unsigned int* _indexs_array, unsigned int _indexs_count)
 {
 	ID3D12GraphicsCommandList* command_list = nullptr;
 	factory->MakeCommandList(commandAllocator[frameIndex], &command_list);
@@ -187,7 +179,7 @@ bool Module::Render::DirectX12::DirectX12::CreateBuffers(unsigned int _id, Core:
 	Objects::Dx12ConstantBuffer* constant_buffer;
 	factory->CreateConstantBuffer(&Math::Mat4::Identity, &constant_buffer);
 
-	graphicsObjects[_id] = new Objects::Dx12GraphicObject(_id, _name, command_list, _vertices_array, _vertices_count, buffer_view, _indexs_array, _indexs_count, index_view, constant_buffer);
+	graphicsObjects[_id] = new Objects::Dx12GraphicObject(_id, _name, _transform, command_list, _vertices_array, _vertices_count, buffer_view, _indexs_array, _indexs_count, index_view, constant_buffer);
 
 	return true;
 }
@@ -221,7 +213,7 @@ bool Module::Render::DirectX12::DirectX12::PreparePreRenderCommandList()
 	preRenderCommandList->OMSetRenderTargets(1, &render_target_view_handle, FALSE, &depth_stencil_view_handle);
 
 	float clear_color[4];
-	FillArrayColor(clear_color, Core::CoreType::Color::Sgiolivedrab);
+	FillArrayColor(clear_color, Core::CoreType::Color::Turquoise);
 	preRenderCommandList->ClearRenderTargetView(render_target_view_handle, clear_color, 0, nullptr);
 	preRenderCommandList->ClearDepthStencilView(depthStencilDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	preRenderCommandList->SetGraphicsRootSignature(rootSignature);
