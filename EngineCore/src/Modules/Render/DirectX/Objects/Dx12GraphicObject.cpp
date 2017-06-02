@@ -37,7 +37,7 @@ namespace Module
 				commandList->DrawIndexedInstanced(indexsCount, 1, 0, 0, 0);
 			}
 			else
-				commandList->DrawInstanced(3, 1, 0, 0);
+				commandList->DrawInstanced(verticesCount / 3, 1, 0, 0);
 		}
 
 		bool DirectX12::Objects::Dx12GraphicObject::IsIndexed() const

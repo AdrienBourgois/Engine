@@ -3,7 +3,6 @@
 #include <D3Dcompiler.h>
 #include "Modules/Render/DirectX/DX12Helper.h"
 #include "Core/CoreType/Vertex.h"
-#include "Objects/Components/GraphicComponent.h"
 #include "Maths/Mat4.h"
 
 bool Module::Render::DirectX12::DirectX12::Initialize()

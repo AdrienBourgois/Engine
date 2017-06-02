@@ -13,7 +13,7 @@ namespace Module
 		class ENGINEDLL_API Window : public Core::Interface::IModule
 		{
 		public:
-			Window();
+			Window() = default;
 			~Window();
 
 			DECLARE_MODULE(S("Window"))

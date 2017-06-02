@@ -7,7 +7,7 @@ int WINAPI wWinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, PWSTR _pCmdL
 {
 	HINSTANCE hinstLib = LoadLibrary(L"EngineCore.dll");
 
-	ENGINE->AddScript<ScriptTest>();
+	ADD_SCRIPT(ScriptTest);
 
 	Engine::GetInstance()->Start();
 

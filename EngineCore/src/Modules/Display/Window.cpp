@@ -1,9 +1,5 @@
 #include "Modules/Display/Window.h"
 
-Module::Display::Window::Window()
-{
-}
-
 Module::Display::Window::~Window()
 {
 	PostQuitMessage(0);

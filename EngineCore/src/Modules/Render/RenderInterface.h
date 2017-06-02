@@ -19,13 +19,13 @@ namespace Module
 		public:
 			DECLARE_MODULE(S("Render Interface"))
 
-			bool CreateBuffer(Object::Component::GraphicComponent* _component);
+			bool CreateBuffer(Object::Component::GraphicComponent* _component) const;
 
 		private:
 			RenderAPI api = DirectX12Api;
 			Core::Interface::IRender* renderer = nullptr;
 
-			std::unordered_map<unsigned int, Object::Component::GraphicComponent*> objects;
+			std::unordered_map<unsigned int, Object::Component::GraphicComponent*>* objects = new std::unordered_map<unsigned, Object::Component::GraphicComponent*>();
 		};
 	}
 }

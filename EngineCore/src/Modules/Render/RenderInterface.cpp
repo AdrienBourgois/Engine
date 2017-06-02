@@ -25,8 +25,8 @@ bool Module::Render::RenderInterface::Destruct()
 	return renderer->Cleanup();
 }
 
-bool Module::Render::RenderInterface::CreateBuffer(Object::Component::GraphicComponent* _component)
+bool Module::Render::RenderInterface::CreateBuffer(Object::Component::GraphicComponent* _component) const
 {
-	objects.insert_or_assign(_component->GetId().GetInstanceNumber(), _component);
-	return renderer->CreateBuffers(_component->GetId().GetInstanceNumber(), _component->GetComponentName(), _component->GetTransformReference(), _component->GetVertices(), _component->GetVertexCount(), _component->GetIndexs(), _component->GetIndexCount());
+	objects->insert_or_assign(_component->GetId().GetInstanceNumber(), _component);
+	return renderer->CreateBuffers(_component->GetId().GetInstanceNumber(), _component->GetComponentName(), _component->GetTransformReference(), _component->GetMesh()->GetVertices(), _component->GetMesh()->GetVertexCount(), _component->GetMesh()->GetIndexs(), _component->GetMesh()->GetIndexCount());
 }

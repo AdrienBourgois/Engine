@@ -3,19 +3,12 @@
 
 Object::Component::GraphicComponent::GraphicComponent(Core::CoreType::Vertex _vertexs_array[], unsigned int _vertexs_count, unsigned int _indexs_array[], unsigned int _indexs_count)
 {
-	vertices->reserve(_vertexs_count);
+	mesh = new Core::CoreType::Mesh(_vertexs_array, _vertexs_count, _indexs_array, _indexs_count);
+}
 
-	for (unsigned int i = 0; i < _vertexs_count; ++i)
-		vertices->push_back(_vertexs_array[i]);
-
-	if(_indexs_array && _indexs_count)
-	{
-		indexs->reserve(_indexs_count);
-
-		for (unsigned int i = 0; i < _indexs_count; ++i)
-			indexs->push_back(_indexs_array[i]);
-		indexed = true;
-	}
+Object::Component::GraphicComponent::GraphicComponent(Core::CoreType::PrimitiveMesh::PrimitivesMeshType _mesh_type)
+{
+	mesh = new Core::CoreType::Mesh(_mesh_type);
 }
 
 bool Object::Component::GraphicComponent::Initialize()
@@ -38,11 +31,6 @@ bool Object::Component::GraphicComponent::Destruct()
 	return true;
 }
 
-bool Object::Component::GraphicComponent::IsIndexed() const
-{
-	return indexed;
-}
-
 Core::CoreType::Transform Object::Component::GraphicComponent::GetTransform() const
 {
 	return gameObjectReference->GetTransform();
@@ -53,24 +41,9 @@ Core::CoreType::Transform* Object::Component::GraphicComponent::GetTransformRefe
 	return gameObjectReference->GetTransformReference();
 }
 
-Core::CoreType::Vertex* Object::Component::GraphicComponent::GetVertices() const
+Core::CoreType::Mesh* Object::Component::GraphicComponent::GetMesh() const
 {
-	return vertices->data();
-}
-
-unsigned int* Object::Component::GraphicComponent::GetIndexs() const
-{
-	return indexs->data();
-}
-
-int Object::Component::GraphicComponent::GetVertexCount() const
-{
-	return static_cast<int>(vertices->size());
-}
-
-int Object::Component::GraphicComponent::GetIndexCount() const
-{
-	return static_cast<int>(indexs->size());
+	return mesh;
 }
 
 Core::CoreType::Id Object::Component::GraphicComponent::GetId() const

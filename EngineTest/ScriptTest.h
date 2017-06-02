@@ -14,89 +14,42 @@ public:
 	ScriptTest() = default;
 	~ScriptTest() = default;
 
-	Object::GameObject* go = new Object::GameObject(S("GameObject"));
+	Object::GameObject* go[9];
 
 	void Start() override
 	{
-		Core::CoreType::Vertex quad_vertices_list[] = {
-		// front face
-		{ -0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f },
-		{  0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f, 1.0f },
-		{ -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f },
-		{  0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f },
-
-		// right side face
-		{  0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f },
-		{  0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 1.0f, 1.0f },
-		{  0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f },
-		{  0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f },
-
-		// left side face
-		{ -0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 1.0f },
-		{ -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f, 1.0f },
-		{ -0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f },
-		{ -0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f },
-
-		// back face
-		{  0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 1.0f },
-		{ -0.5f, -0.5f,  0.5f, 1.0f, 0.0f, 1.0f, 1.0f },
-		{  0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f },
-		{ -0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f },
-
-		// top face
-		{ -0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f },
-		{ 0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 1.0f, 1.0f },
-		{ 0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f },
-		{ -0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f },
-
-		// bottom face
-		{  0.5f, -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 1.0f },
-		{ -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f, 1.0f },
-		{  0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f },
-		{ -0.5f, -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f },
-		};
-
-		unsigned int quad_index_list[] = {
-			// front face
-			0, 1, 2, // first triangle
-			0, 3, 1, // second triangle
-
-			// left face
-			4, 5, 6, // first triangle
-			4, 7, 5, // second triangle
-
-			// right face
-			8, 9, 10, // first triangle
-			8, 11, 9, // second triangle
-
-			// back face
-			12, 13, 14, // first triangle
-			12, 15, 13, // second triangle
-
-			// top face
-			16, 17, 18, // first triangle
-			16, 19, 17, // second triangle
-
-			// bottom face
-			20, 21, 22, // first triangle
-			20, 23, 21, // second triangle
-		};
-
-		Object::Component::GraphicComponent* graphics = go->CreateComponent<Object::Component::GraphicComponent>(quad_vertices_list, _countof(quad_vertices_list), quad_index_list, _countof(quad_index_list));
-		MODULE(Module::Render::RenderInterface)->CreateBuffer(graphics);
+		for (unsigned int i = 0; i < 9; ++i)
+		{
+			go[i] = new Object::GameObject(S("GameObject"));
+			Object::Component::GraphicComponent* graphics = go[i]->CreateComponent<Object::Component::GraphicComponent>(Core::CoreType::PrimitiveMesh::PrimitivesMeshType::Cube);
+			MODULE(Module::Render::RenderInterface)->CreateBuffer(graphics);
+		}
 	}
 
 	void Update() override
 	{
-		Core::CoreType::Transform transform = go->GetTransform();
-		transform.position.x += 0.0001f;
-		transform.rotation.x += 0.01f;
-		go->SetTransform(transform);
+		for (unsigned int i = 0; i < 3; ++i)
+		{
+			for (unsigned int j = 0; j < 3; ++j)
+			{
+				float x = static_cast<float>(i);
+				float y = static_cast<float>(j);
+				Core::CoreType::Transform transform = go[j + 3 * i]->GetTransform();
+				transform.position.x = x - 1;
+				transform.position.y = y - 1;
+				transform.scale = { 0.3f, 0.3f, 0.3f };
+				transform.rotation.x += (i + j) / 100.f;
+				go[j + 3 * i]->SetTransform(transform);
+			}
+		}
 	}
 
 	void Destruct() override
 	{
-		delete go;
+		for (int i = 0; i < 9; ++i)
+		{
+			delete go[i];
+		}
 	}
 };
 
