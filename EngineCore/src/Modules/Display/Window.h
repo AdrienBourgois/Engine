@@ -5,6 +5,7 @@
 #include "Engine.h"
 
 #include "Core/Interface/IModule.h"
+#include "Modules/Inputs/WindowsKeyboard.h"
 
 namespace Module
 {
@@ -43,6 +44,8 @@ namespace Module
 
 			bool fullscreen = false;
 			bool canReceiveMessage = true;
+
+			static WindowsKeyboard* windowInputsInstance;
 		};
 	}
 }

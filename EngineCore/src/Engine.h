@@ -33,8 +33,7 @@ public:
 	T* GetModule() const;
 
 	const Utility::IniParser* GetParameters() const { return parameters; }
-
-	template <typename T = Core::Interface::IScript>
+	template <typename T, class U = typename std::enable_if<std::is_base_of<Core::Interface::IScript, T>::value, T>::type>
 	const void AddScript() const;
 
 	enum class EEngineStates : int
@@ -71,8 +70,8 @@ T* Engine::GetModule() const
 	return moduleManager->GetModule<T>();
 }
 
-template <typename T>
+template <typename T, class U>
 const void Engine::AddScript() const
 {
-	scriptManager->AddScript<T>();
+	scriptManager->AddScript<U>();
 }

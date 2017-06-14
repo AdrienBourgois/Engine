@@ -2,10 +2,10 @@
 
 #include "Core/Interface/IScript.h"
 
-template <typename T>
+template <typename T, class U>
 bool Core::Manager::ScriptManager::AddScript()
 {
-	Interface::IScript * script = static_cast<Interface::IScript*>(new T);
+	Interface::IScript * script = static_cast<Interface::IScript*>(new U);
 
 	script->Initialize();
 

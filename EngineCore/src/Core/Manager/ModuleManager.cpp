@@ -2,6 +2,8 @@
 
 #include "Modules/Display/Window.h"
 #include "Modules/Render/RenderInterface.h"
+#include "Modules/Inputs/Inputs.h"
+#include "Modules/Time/Clock.h"
 
 bool Core::Manager::ModuleManager::InitializeModules()
 {
@@ -9,7 +11,11 @@ bool Core::Manager::ModuleManager::InitializeModules()
 		return false;
 	if (!CreateModule<Module::Render::RenderInterface>(S("RenderInterface")))
 		return false;
+	if (!CreateModule<Module::Inputs>(S("Inputs")))
+		return false;
 	if (!CreateModule<Module::Tools::Logger>(S("Logger")))
+		return false;
+	if (!CreateModule<Module::Clock>(S("Clock")))
 		return false;
 
 	return true;

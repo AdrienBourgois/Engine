@@ -1,16 +1,27 @@
 #pragma once
-#include <Windows.h>
-#include <map>
-#include "KeyList.h"
 
-class WindowsKeyboard
+#include <Windows.h>
+#include <unordered_map>
+
+#
+
+#include "KeyList.h"
+#include "Core/Interface/IKeyboardInputs.h"
+
+class WindowsKeyboard : public Core::CoreType::Interface::IKeyboardInputs
 {
 public:
 	WindowsKeyboard();
-	~WindowsKeyboard();
+	~WindowsKeyboard() = default;
+
+	bool IsKeyDown(Key _key) override;
+	void KeyUp(unsigned _key) override;
+	void KeyDown(unsigned _key) override;
+
+	std::unordered_map<unsigned, bool> keyStates;
 
 private:
-	std::map<int, Key> windowsToKeyMap
+	std::unordered_map<unsigned, Key> windowsToKeyMap
 	{
 		{'A', Key::A},
 		{'B', Key::B},
@@ -111,7 +122,7 @@ private:
 		{VK_PAUSE, Key::Pause}
 	};
 
-	std::map<Key, int> keyToWindowsMap
+	std::unordered_map<Key, unsigned> keyToWindowsMap
 	{
 		{Key::A, 'A'},
 		{Key::B, 'B'},

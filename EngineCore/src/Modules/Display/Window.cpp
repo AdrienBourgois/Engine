@@ -1,4 +1,7 @@
 #include "Modules/Display/Window.h"
+#include "Modules/Inputs/Inputs.h"
+
+WindowsKeyboard* Module::Display::Window::windowInputsInstance = nullptr;
 
 Module::Display::Window::~Window()
 {
@@ -18,6 +21,8 @@ bool Module::Display::Window::Initialize()
 
 bool Module::Display::Window::Start()
 {
+	windowInputsInstance = static_cast<WindowsKeyboard*>(MODULE(Module::Inputs)->CreateKeyboardInputsWrapper(KeyboardInputsApi::Windows));
+
 	return MakeWindow(1);
 }
 
@@ -86,9 +91,12 @@ LRESULT CALLBACK Module::Display::Window::WndProc(HWND hWnd, UINT msg, WPARAM wP
 		switch (msg)
 		{
 		case WM_KEYDOWN:
-			if (wParam == VK_ESCAPE)
-				if (MessageBox(nullptr, L"Are you sure you want to exit?", L"Really?", MB_YESNO | MB_ICONHAND) == IDYES)
-					ENGINE->Stop();
+			if(windowInputsInstance)
+				windowInputsInstance->KeyDown(static_cast<unsigned>(wParam));
+			return 0;
+		case WM_KEYUP:
+			if(windowInputsInstance)
+				windowInputsInstance->KeyUp(static_cast<unsigned>(wParam));
 			return 0;
 
 		case WM_DESTROY:
