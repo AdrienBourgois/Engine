@@ -58,7 +58,6 @@ namespace Core
 			 * \brief Update all scripts
 			 */
 			void UpdateScripts();
-			//void StopScript(char _script_type);
 			/**
 			 * \brief Stop all scripts
 			 */

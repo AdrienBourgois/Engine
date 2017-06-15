@@ -6,6 +6,15 @@
 #include "Core/Interface/IComponent.h"
 #include "Core/CoreType/Transform.h"
 
+namespace Core {
+	namespace CoreType {
+		namespace PrimitiveMesh {
+			enum class PrimitivesMeshType;
+		}
+		class Color;
+	}
+}
+
 namespace Object
 {
 	/**
@@ -62,7 +71,7 @@ namespace Object
 		 * \tparam PARAMS Parameters for component constructor
 		 * \return Pointer to the component
 		 */
-		template <typename T = Core::Interface::IComponent, typename... PARAMS>
+		template <typename T,  typename... PARAMS, class U = typename std::enable_if<std::is_base_of<Core::Interface::IComponent, T>::value, T>::type>
 		T* CreateComponent(PARAMS...);
 		/**
 		 * \brief Search the first component of the object by type
@@ -79,7 +88,37 @@ namespace Object
 		template <typename T = Core::Interface::IComponent>
 		bool HasComponentOfType() const;
 
+		/**
+		 * \brief Set a new parent to this object
+		 * \param _parent New parent for object
+		 */
+		void SetParent(GameObject* _parent);
+
+		/**
+		 * \brief Create a mesh for attached game object
+		 * \param _mesh Mesh type
+		 */
+		void MakeMesh(Core::CoreType::PrimitiveMesh::PrimitivesMeshType _mesh);
+
+		/**
+		 * \brief Create a mesh for attached game object
+		 * \param _mesh Mesh type
+		 * \param _color Color of mesh
+		 */
+		void MakeMesh(Core::CoreType::PrimitiveMesh::PrimitivesMeshType _mesh, Core::CoreType::Color _color);
+
 	private:
+		/**
+		 * \brief Add a new child to this object
+		 * \param _child New child
+		 */
+		void AddChild(GameObject* _child) const;
+		/**
+		 * \brief Remove a child to this object
+		 * \param _child Child to remove
+		 */
+		void RemoveChild(GameObject* _child) const;
+
 		/**
 		 * \brief Store name of object
 		 */

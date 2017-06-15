@@ -34,6 +34,11 @@ namespace Object
 			 */
 			explicit GraphicComponent(Core::CoreType::PrimitiveMesh::PrimitivesMeshType _mesh_type);
 			/**
+			 * \brief Constructor form existent mesh
+			 * \param _mesh Mesh to use
+			 */
+			explicit GraphicComponent(Core::CoreType::Mesh _mesh);
+			/**
 			 * \brief Default destructor
 			 */
 			~GraphicComponent() = default;

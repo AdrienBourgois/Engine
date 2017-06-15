@@ -21,12 +21,6 @@ namespace Scripts
 
 	protected:
 		/**
-		 * \brief Create a mesh for attached game object
-		 * \param _mesh Mesh type
-		 */
-		void MakeMesh(PrimitiveMesh::PrimitivesMeshType _mesh);
-
-		/**
 		 * \brief GameObject attached to this script
 		 */
 		Object::GameObject object = Object::GameObject(GetScriptName() + S(" GameObject"));

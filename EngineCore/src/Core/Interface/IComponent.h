@@ -98,7 +98,7 @@ namespace Core
 			/**
 			 * \brief Store component id
 			 */
-			CoreType::Id id = CoreType::Id(CoreType::ObjectComponent);
+			CoreType::Id id = CoreType::Id(CoreType::EObjectType::ObjectComponent);
 		};
 	}
 }

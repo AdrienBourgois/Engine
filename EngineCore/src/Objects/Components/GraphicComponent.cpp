@@ -11,6 +11,11 @@ Object::Component::GraphicComponent::GraphicComponent(Core::CoreType::PrimitiveM
 	mesh = new Core::CoreType::Mesh(_mesh_type);
 }
 
+Object::Component::GraphicComponent::GraphicComponent(Core::CoreType::Mesh _mesh)
+{
+	mesh = new Core::CoreType::Mesh(_mesh);
+}
+
 bool Object::Component::GraphicComponent::Initialize()
 {
 	return true;

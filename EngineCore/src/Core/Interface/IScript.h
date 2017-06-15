@@ -81,7 +81,7 @@ namespace Core
 			/**
 			 * \brief Store script id
 			 */
-			CoreType::Id id = CoreType::Id(CoreType::Script);
+			CoreType::Id id = CoreType::Id(CoreType::EObjectType::Script);
 		};
 	}
 }

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Core/CoreType/String.h"
+#include "Core/CoreType/TimePoint.h"
 
 /**
 * \brief Define the level of log
@@ -64,6 +65,10 @@ namespace Module
 				 * \brief Level of log
 				 */
 				ELog_level level = ELog_level::LOG_VERBOSE;
+				/**
+				 * \brief Time of log
+				 */
+				Core::CoreType::TimePoint time;
 			};
 		}
 	}

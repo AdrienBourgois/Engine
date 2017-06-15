@@ -57,9 +57,42 @@ float Module::Time::Clock::GetFpsAverage() const
 	return fps_average;
 }
 
+Core::CoreType::TimePoint Module::Time::Clock::Now()
+{
+	time_t currentTime;
+	time(&currentTime);
+	tm *localTime = nullptr;
+	localtime_s(localTime ,&currentTime);
+	return Core::CoreType::TimePoint(localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
+}
+
 void Module::Time::Clock::ComputeDeltaTime()
 {
 	currentTimePoint = clock.now();
 	currentDeltaTime = currentTimePoint - previousTimePoint;
 	previousTimePoint = currentTimePoint;
 }
+
+/*#include <iostream>
+#include <ctime>
+
+int main()
+{
+  time_t currentTime;
+  struct tm *localTime;
+
+  time( &currentTime );                   // Get the current time
+  localTime = localtime( &currentTime );  // Convert the current time to the local time
+
+  int Day    = localTime->tm_mday;
+  int Month  = localTime->tm_mon + 1;
+  int Year   = localTime->tm_year + 1900;
+  int Hour   = localTime->tm_hour;
+  int Min    = localTime->tm_min;
+  int Sec    = localTime->tm_sec;
+
+  std::cout << "This program was exectued at: " << Hour << ":" << Min << ":" << Sec << std::endl;
+  std::cout << "And the current date is: " << Day << "/" << Month << "/" << Year << std::endl;
+  return 0;
+}
+ */

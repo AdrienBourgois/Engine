@@ -3,10 +3,20 @@
 std::unordered_map<Core::CoreType::EObjectSubtype, unsigned int> Core::CoreType::InstanceCountHandle::currentInstanceCount;
 std::unordered_map<Core::CoreType::EObjectSubtype, unsigned int> Core::CoreType::InstanceCountHandle::nextInstanceCount;
 
+bool operator&(const Core::CoreType::EObjectSubtype& _lhs, const Core::CoreType::EObjectSubtype& _rhs)
+{
+	return static_cast<int>(_lhs) == static_cast<int>(_rhs);
+}
+
+bool operator&(const Core::CoreType::EObjectType& _lhs, const Core::CoreType::EObjectType& _rhs)
+{
+	return static_cast<int>(_lhs) == static_cast<int>(_rhs);
+}
+
 Core::CoreType::Id::Id(EObjectType _type)
 {
 	EObjectType type = _type;
-	EObjectSubtype subtype = UndefinedSubtype;
+	EObjectSubtype subtype = EObjectSubtype::UndefinedSubtype;
 
 	SetType(type);
 	SetSubtype(subtype);
@@ -33,7 +43,7 @@ void Core::CoreType::Id::operator=(EObjectSubtype _subtype)
 void Core::CoreType::Id::operator=(EObjectType _type)
 {
 	Unregister();
-	SetSubtype(UndefinedSubtype);
+	SetSubtype(EObjectSubtype::UndefinedSubtype);
 	SetType(_type);
 	Register();
 }
@@ -94,16 +104,18 @@ uint16_t Core::CoreType::Id::GetInstanceNumber()
 
 Core::CoreType::EObjectType Core::CoreType::Id::GetMainType(EObjectSubtype _subtype) const
 {
-	EObjectType type = Undefined;
+	EObjectType type = EObjectType::Undefined;
 
-	if (_subtype & UndefinedSubtype)
-		type = Undefined;
-	else if (_subtype & DefaultGameObject)
-		type = GameObject;
-	else if (_subtype & GraphicComponent)
-		type = ObjectComponent;
-	else if (_subtype & SimpleScript)
-		type = Script;
+	if (_subtype & EObjectSubtype::UndefinedSubtype)
+		type = EObjectType::Undefined;
+	else if (_subtype & EObjectSubtype::DefaultGameObject)
+		type = EObjectType::GameObject;
+	else if (_subtype & EObjectSubtype::GraphicComponent)
+		type = EObjectType::ObjectComponent;
+	else if (_subtype & EObjectSubtype::SimpleScript)
+		type = EObjectType::Script;
+	else if (_subtype & EObjectSubtype::GameScript)
+		type = EObjectType::Script;
 
 	return type;
 }
@@ -128,16 +140,16 @@ uint16_t* Core::CoreType::Id::GetInstanceNumberPointer()
 	return reinterpret_cast<uint16_t*>(GetTypePointer() + 6);
 }
 
-void Core::CoreType::Id::SetType(uint8_t _new_type)
+void Core::CoreType::Id::SetType(EObjectType _new_type)
 {
 	uint8_t* pointer = GetTypePointer();
-	*pointer = _new_type;
+	*pointer = static_cast<uint8_t>(_new_type);
 }
 
-void Core::CoreType::Id::SetSubtype(uint32_t _new_subtype)
+void Core::CoreType::Id::SetSubtype(EObjectSubtype _new_subtype)
 {
 	uint32_t* pointer = GetSubtypePointer();
-	*pointer = _new_subtype;
+	*pointer = static_cast<uint32_t>(_new_subtype);
 }
 
 void Core::CoreType::Id::SetFlag(uint8_t _new_flag)

@@ -21,6 +21,14 @@ Core::CoreType::Mesh::Mesh(PrimitiveMesh::PrimitivesMeshType _mesh_type)
 	}
 }
 
+void Core::CoreType::Mesh::SetColor(Color _color) const
+{
+	for (int i = 0; i < GetVertexCount(); ++i)
+	{
+		vertices->at(i).SetColor(_color);
+	}
+}
+
 bool Core::CoreType::Mesh::IsIndexed() const
 {
 	return indexed;

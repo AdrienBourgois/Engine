@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-template <typename T,  typename... PARAMS>
+template <typename T,  typename... PARAMS, class U>
 T* Object::GameObject::CreateComponent(PARAMS... params)
 {
-	T* component = new T(params...);
+	U* component = new U(params...);
 	Core::Interface::IComponent* component_cast = static_cast<Core::Interface::IComponent*>(component);
 
 	if (component_cast)

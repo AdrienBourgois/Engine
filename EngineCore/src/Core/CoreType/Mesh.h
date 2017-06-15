@@ -33,6 +33,12 @@ namespace Core
 			~Mesh() = default;
 
 			/**
+			 * \brief Change color of mesh
+			 * \param _color Mew color
+			 */
+			void SetColor(Color _color) const;
+
+			/**
 			 * \brief Specify if vertices are indexed or not
 			 * \return Is component indexed
 			 */

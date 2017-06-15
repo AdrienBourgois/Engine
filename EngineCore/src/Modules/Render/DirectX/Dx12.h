@@ -83,13 +83,13 @@ namespace Module
 				 * \brief Make post render operations
 				 * \return Is function success
 				 */
-				bool PostRender();
+				bool PostRender() const;
 
 				/**
 				 * \brief Update the pipeline
 				 * \return Is function success
 				 */
-				bool UpdatePipeline();
+				bool UpdatePipeline() const;
 				/**
 				 * \brief Block until the GPU had finished rendering previous frame
 				 * \return Is function success

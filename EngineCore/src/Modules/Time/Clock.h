@@ -51,6 +51,11 @@ namespace Module
 			 * \return Average FPS
 			 */
 			ENGINEDLL_API float GetFpsAverage() const;
+			/**
+			 * \brief Return the current time
+			 * \return Current time point
+			 */
+			ENGINEDLL_API static Core::CoreType::TimePoint Now();
 
 		private:
 			/**

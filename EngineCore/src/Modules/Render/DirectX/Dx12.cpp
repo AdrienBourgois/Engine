@@ -93,7 +93,7 @@ bool Module::Render::DirectX12::DirectX12::Render()
 	return true;
 }
 
-bool Module::Render::DirectX12::DirectX12::UpdatePipeline()
+bool Module::Render::DirectX12::DirectX12::UpdatePipeline() const
 {
 	return true;
 }
@@ -118,7 +118,7 @@ bool Module::Render::DirectX12::DirectX12::PreRender()
 	return true;
 }
 
-bool Module::Render::DirectX12::DirectX12::PostRender()
+bool Module::Render::DirectX12::DirectX12::PostRender() const
 {
 	return true;
 }

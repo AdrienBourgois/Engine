@@ -11,7 +11,7 @@ namespace Core
 		/**
 		 * \brief Main type of an object : 8 values max with Undefined
 		 */
-		enum ENGINEDLL_API EObjectType : uint8_t
+		enum class ENGINEDLL_API EObjectType : uint8_t
 		{
 			/**
 			 * \brief Generic main type
@@ -34,7 +34,7 @@ namespace Core
 		/**
 		 * \brief Secondary type of an object (directly implies the main type) : 32 values max with Undefined
 		 */
-		enum ENGINEDLL_API EObjectSubtype : uint32_t
+		enum class ENGINEDLL_API EObjectSubtype : uint32_t
 		{
 			/// EObjectType::Undefined
 			UndefinedSubtype = 1 << 0,
@@ -49,7 +49,7 @@ namespace Core
 			SimpleScript = 1 << 3,
 
 			/// EObjectType::Script
-			GameObjectScript = 1 << 4,
+			GameScript = 1 << 4,
 		};
 
 		/**
@@ -172,12 +172,12 @@ namespace Core
 			 * \brief Set a new main type
 			 * \param _new_type New main type
 			 */
-			void SetType(uint8_t _new_type);
+			void SetType(EObjectType _new_type);
 			/**
 			 * \brief Set a new subtype
 			 * \param _new_subtype New subtype
 			 */
-			void SetSubtype(uint32_t _new_subtype);
+			void SetSubtype(EObjectSubtype _new_subtype);
 			/**
 			 * \brief Set a new flag
 			 * \param _new_flag New flag
