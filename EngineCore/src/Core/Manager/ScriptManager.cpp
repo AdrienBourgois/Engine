@@ -1,4 +1,5 @@
 #include "Core/Manager/ScriptManager.h"
+#include "Modules/Time/Clock.h"
 
 bool Core::Manager::ScriptManager::StartScripts()
 {
@@ -29,6 +30,7 @@ void Core::Manager::ScriptManager::UpdateScripts()
 	for (Interface::IScript* script : scripts)
 	{
 		script->Update();
+		script->Update(MODULE(Module::Time::Clock)->GetDeltaTime());
 	}
 }
 

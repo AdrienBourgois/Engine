@@ -1,62 +1,37 @@
 #pragma once
 
 #include "Engine.h"
-#include "Core/Interface/IScript.h"
-#include "Objects/GameObject.h"
-#include "Objects/Components/GraphicComponent.h"
-#include "Modules/Render/RenderInterface.h"
-#include "Modules/Inputs/Inputs.h"
-#include "Modules/Time/Clock.h"
+#include "Scripts/GameObjectScript.h"
 
-class ScriptTest : public Core::Interface::IScript
+class ScriptTest : public Scripts::GameObjectScript
 {
 public:
-	DECLARE_SCRIPT(S("Script Test"), Core::CoreType::SimpleScript)
-
-	ScriptTest() = default;
-	~ScriptTest() = default;
-
-	Object::GameObject* go[9];
+	DECLARE_SCRIPT(S("Script Test"), SimpleScript)
 
 	void Start() override
 	{
-		for (unsigned int i = 0; i < 9; ++i)
-		{
-			go[i] = new Object::GameObject(S("GameObject"));
-			Object::Component::GraphicComponent* graphics = go[i]->CreateComponent<Object::Component::GraphicComponent>(Core::CoreType::PrimitiveMesh::PrimitivesMeshType::Cube);
-			MODULE(Module::Render::RenderInterface)->CreateBuffer(graphics);
-		}
+		MakeMesh(PrimitiveMesh::PrimitivesMeshType::Cube);
 	}
 
-	void Update() override
+	void Update(float _delta) override
 	{
-		float delta = MODULE(Module::Clock)->GetDeltaTime();
-		Core::CoreType::Time time = MODULE(Module::Clock)->GetTotalTime();
-
-		if (MODULE(Module::Inputs)->Keyboard()->IsKeyDown(Key::Escape))
+		if (Keyboard->IsKeyDown(Key::Escape))
 			ENGINE->Stop();
 
-		for (unsigned int i = 0; i < 3; ++i)
-		{
-			for (unsigned int j = 0; j < 3; ++j)
-			{
-				float x = static_cast<float>(i);
-				float y = static_cast<float>(j);
-				Core::CoreType::Transform transform = go[j + 3 * i]->GetTransform();
-				transform.position.x = x - 1;
-				transform.position.y = y - 1;
-				transform.scale = { 0.3f, 0.3f, 0.3f };
-				transform.rotation.x += (i + j) * delta / 5.f;
-				go[j + 3 * i]->SetTransform(transform);
-			}
-		}
-	}
+		Transform transform = object.GetTransform();
 
-	void Destruct() override
-	{
-		for (int i = 0; i < 9; ++i)
-		{
-			delete go[i];
-		}
+		if (Keyboard->IsKeyDown(Key::Up))
+			transform.position.y += _delta * 0.01f;
+		if (Keyboard->IsKeyDown(Key::Down))
+			transform.position.y -= _delta * 0.01f;
+
+		if (Keyboard->IsKeyDown(Key::Right))
+			transform.position.x += _delta * 0.01f;
+		if (Keyboard->IsKeyDown(Key::Left))
+			transform.position.x -= _delta * 0.01f;
+
+		transform.scale = { 0.3f, 0.3f, 0.3f };
+		transform.rotation.x += _delta / 5.f;
+		object.SetTransform(transform);
 	}
 };

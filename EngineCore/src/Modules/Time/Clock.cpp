@@ -1,21 +1,21 @@
-#include "Clock.h"
 #include <chrono>
-#include "Core/CoreType/Time.h"
+#include "Core/CoreType/TimePoint.h"
+#include "Clock.h"
 
 
-bool Module::Clock::Initialize()
+bool Module::Time::Clock::Initialize()
 {
 	ComputeDeltaTime();
 	return true;
 }
 
-bool Module::Clock::Start()
+bool Module::Time::Clock::Start()
 {
 	ComputeDeltaTime();
 	return true;
 }
 
-bool Module::Clock::Update()
+bool Module::Time::Clock::Update()
 {
 	ComputeDeltaTime();
 	deltaAverage = (deltaAverage * currentFrame + GetDeltaTime()) / ++currentFrame;
@@ -23,27 +23,27 @@ bool Module::Clock::Update()
 	return true;
 }
 
-bool Module::Clock::Destruct()
+bool Module::Time::Clock::Destruct()
 {
 	return true;
 }
 
-float Module::Clock::GetDeltaTime() const
+float Module::Time::Clock::GetDeltaTime() const
 {
 	return static_cast<float>(std::chrono::duration_cast<std::chrono::microseconds>(currentDeltaTime).count() / 1000.f);
 }
 
-Core::CoreType::Time Module::Clock::GetTotalTime() const
+Core::CoreType::TimePoint Module::Time::Clock::GetTotalTime() const
 {
-	return Core::CoreType::Time(static_cast<int>(std::chrono::duration_cast<std::chrono::milliseconds>(clock.now() - startProgramPoint).count()));
+	return Core::CoreType::TimePoint(static_cast<int>(std::chrono::duration_cast<std::chrono::milliseconds>(clock.now() - startProgramPoint).count()));
 }
 
-float Module::Clock::GetDeltaAverage() const
+float Module::Time::Clock::GetDeltaAverage() const
 {
 	return deltaAverage;
 }
 
-float Module::Clock::GetFpsAverage() const
+float Module::Time::Clock::GetFpsAverage() const
 {
 	float fps_average = 0.f;
 
@@ -57,7 +57,7 @@ float Module::Clock::GetFpsAverage() const
 	return fps_average;
 }
 
-void Module::Clock::ComputeDeltaTime()
+void Module::Time::Clock::ComputeDeltaTime()
 {
 	currentTimePoint = clock.now();
 	currentDeltaTime = currentTimePoint - previousTimePoint;

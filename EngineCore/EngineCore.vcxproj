@@ -11,8 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scripts\GameObjectScript.h" />
+    <ClInclude Include="src\Scripts\Script.h" />
     <ClInclude Include="src\Core\Interface\IKeyboardInputs.h" />
-    <ClInclude Include="src\Modules\Inputs\Inputs.h" />
+    <ClInclude Include="src\Modules\Inputs\Input.h" />
     <ClInclude Include="src\Core\CoreType\Mesh.h" />
     <ClInclude Include="src\Core\Interface\IScript.h" />
     <ClInclude Include="src\Core\Manager\ScriptManager.h" />
@@ -41,16 +43,18 @@
     <ClInclude Include="Src\Macros.h" />
     <ClInclude Include="src\Modules\Render\RenderInterface.h" />
     <ClInclude Include="src\Utility\Ini\IniParser.h" />
-    <ClInclude Include="src\Modules\Tools\Logger\Log.h" />
-    <ClInclude Include="src\Modules\Tools\Logger\Logger.h" />
+    <ClInclude Include="src\Modules\Tools\Logs\Log.h" />
+    <ClInclude Include="src\Modules\Tools\Logs\Logger.h" />
     <ClInclude Include="src\Core\CoreType\String.h" />
     <ClInclude Include="src\Core\CoreType\Transform.h" />
     <ClInclude Include="src\Modules\Inputs\WindowsKeyboard.h" />
     <ClInclude Include="src\Modules\Time\Clock.h" />
-    <ClInclude Include="src\Core\CoreType\Time.h" />
+    <ClInclude Include="src\Core\CoreType\TimePoint.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Modules\Inputs\Inputs.cpp" />
+    <ClCompile Include="src\Scripts\GameObjectScript.cpp" />
+    <ClCompile Include="src\Scripts\Script.cpp" />
+    <ClCompile Include="src\Modules\Inputs\Input.cpp" />
     <ClCompile Include="src\Core\CoreType\Mesh.cpp" />
     <ClCompile Include="src\Core\Manager\ScriptManager.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.cpp" />
@@ -72,13 +76,13 @@
     <ClCompile Include="src\Modules\Render\DirectX\Dx12Factory.cpp" />
     <ClCompile Include="src\Modules\Render\RenderInterface.cpp" />
     <ClCompile Include="src\Utility\Ini\IniParser.cpp" />
-    <ClCompile Include="src\Modules\Tools\Logger\Log.cpp" />
-    <ClCompile Include="src\Modules\Tools\Logger\Logger.cpp" />
+    <ClCompile Include="src\Modules\Tools\Logs\Log.cpp" />
+    <ClCompile Include="src\Modules\Tools\Logs\Logger.cpp" />
     <ClCompile Include="src\Core\CoreType\String.cpp" />
     <ClCompile Include="src\Core\CoreType\Transform.cpp" />
     <ClCompile Include="src\Modules\Inputs\WindowsKeyboard.cpp" />
     <ClCompile Include="src\Modules\Time\Clock.cpp" />
-    <ClCompile Include="src\Core\CoreType\Time.cpp" />
+    <ClCompile Include="src\Core\CoreType\TimePoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Core\Shaders\PixelShader.hlsl">
@@ -103,9 +107,6 @@
     <None Include="src\Objects\GameObject.inl">
       <FileType>CppCode</FileType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="src\NatvisFile.natvis" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{291D2B5F-EF7F-4C55-B96D-87737397CA51}</ProjectGuid>

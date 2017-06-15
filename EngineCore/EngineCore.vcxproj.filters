@@ -61,12 +61,6 @@
     <ClCompile Include="src\Objects\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Tools\Logger\Log.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Modules\Tools\Logger\Logger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Utility\Ini\IniParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -91,13 +85,25 @@
     <ClCompile Include="src\Modules\Inputs\WindowsKeyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Inputs\Inputs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Modules\Time\Clock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\CoreType\Time.cpp">
+    <ClCompile Include="src\Scripts\Script.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts\GameObjectScript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Modules\Inputs\Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\CoreType\TimePoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Modules\Tools\Logs\Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Modules\Tools\Logs\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -162,12 +168,6 @@
     <ClInclude Include="src\Core\Interface\IComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Tools\Logger\Log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Modules\Tools\Logger\Logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Utility\Ini\IniParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -204,16 +204,28 @@
     <ClInclude Include="src\Modules\Inputs\WindowsKeyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Inputs\Inputs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\Interface\IKeyboardInputs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Modules\Time\Clock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\CoreType\Time.h">
+    <ClInclude Include="src\Scripts\Script.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripts\GameObjectScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Modules\Inputs\Input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\CoreType\TimePoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Modules\Tools\Logs\Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Modules\Tools\Logs\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -238,8 +250,5 @@
     <FxCompile Include="Content\Core\Shaders\PixelShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="src\NatvisFile.natvis" />
   </ItemGroup>
 </Project>

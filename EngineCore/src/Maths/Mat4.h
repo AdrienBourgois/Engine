@@ -170,14 +170,5 @@ namespace Math
 		 * \return Transpose matrix
 		 */
 		Mat4 GetTranspose() const;
-
-		/*void SetPosition(Vec3 _vec);
-		Vec3 GetPosition() const;
-
-		void SetRotation(Vec3 _rotation);
-		Vec3 GetRotation() const;
-
-		void SetScale(Vec3 _scale);
-		Vec3 GetScale() const;*/
 	};
 }

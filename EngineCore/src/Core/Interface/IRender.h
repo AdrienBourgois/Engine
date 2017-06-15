@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "Macros.h"
 #include "Core/CoreType/Transform.h"
 
 namespace Core {

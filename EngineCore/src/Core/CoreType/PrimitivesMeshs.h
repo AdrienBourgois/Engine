@@ -6,13 +6,25 @@ namespace Core
 {
 	namespace CoreType
 	{
+		/**
+		 * \brief Static list of primitives meshes (cube, plane, ...)
+		 */
 		namespace PrimitiveMesh
 		{
+			/**
+			 * \brief Type of mesh
+			 */
 			enum class PrimitivesMeshType
 			{
+				/**
+				 * \brief Simple cube
+				 */
 				Cube,
 			};
 
+			/**
+			 * \brief Static vertices datas for cube
+			 */
 			static const Vertex CubeVertices[] =
 			{
 				// front face
@@ -52,6 +64,9 @@ namespace Core
 				{ -0.5f, -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f },
 			};
 
+			/**
+			 * \brief Static indexs datas for cube
+			 */
 			static unsigned int CubeIndexs[] =
 			{
 				// front face

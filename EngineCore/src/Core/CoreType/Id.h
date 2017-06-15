@@ -13,9 +13,21 @@ namespace Core
 		 */
 		enum ENGINEDLL_API EObjectType : uint8_t
 		{
+			/**
+			 * \brief Generic main type
+			 */
 			Undefined = 1 << 0,
+			/**
+			 * \brief For GameObjects
+			 */
 			GameObject = 1 << 1,
+			/**
+			 * \brief For component of objects
+			 */
 			ObjectComponent = 1 << 2,
+			/**
+			 * \brief For scripts
+			 */
 			Script = 1 << 3,
 		};
 
@@ -35,6 +47,9 @@ namespace Core
 
 			/// EObjectType::Script
 			SimpleScript = 1 << 3,
+
+			/// EObjectType::Script
+			GameObjectScript = 1 << 4,
 		};
 
 		/**
@@ -115,19 +130,63 @@ namespace Core
 			 */
 			uint64_t id = 0;
 
+			/**
+			 * \brief Register the id in list
+			 * \return Instance count of the registered id
+			 */
 			uint16_t Register();
+			/**
+			 * \brief Remove id from list
+			 */
 			void Unregister();
 
+			/**
+			 * \brief Return a main type for a subtype
+			 * \param _subtype Subtype to test
+			 * \return Main type of the subtype
+			 */
 			EObjectType GetMainType(EObjectSubtype _subtype) const;
 
+			/**
+			 * \brief Return pointer to type data
+			 * \return Pointer to type data
+			 */
 			uint8_t* GetTypePointer();
+			/**
+			 * \brief Return pointer to subtype data
+			 * \return Pointer to subtype data
+			 */
 			uint32_t* GetSubtypePointer();
+			/**
+			 * \brief Return pointer to flag data
+			 * \return Pointer to flag data
+			 */
 			uint8_t* GetFlagPointer();
+			/**
+			 * \brief Return pointer to instance number data
+			 * \return Pointer to instance number data
+			 */
 			uint16_t* GetInstanceNumberPointer();
 
+			/**
+			 * \brief Set a new main type
+			 * \param _new_type New main type
+			 */
 			void SetType(uint8_t _new_type);
+			/**
+			 * \brief Set a new subtype
+			 * \param _new_subtype New subtype
+			 */
 			void SetSubtype(uint32_t _new_subtype);
+			/**
+			 * \brief Set a new flag
+			 * \param _new_flag New flag
+			 */
 			void SetFlag(uint8_t _new_flag);
+			/**
+			 * \brief Set a new main type
+			 * \param _new_number New instance number
+			 */
 			void SetInstanceNumber(uint16_t _new_number);
 		};
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Macros.h"
+#include "Engine.h"
 
 namespace Object
 {
@@ -25,6 +25,9 @@ namespace Core
 {
 	namespace Interface
 	{
+		/**
+		 * \brief Interface for GameObject components
+		 */
 		class ENGINEDLL_API IComponent
 		{
 		public:
@@ -84,8 +87,17 @@ namespace Core
 			Object::GameObject* GameObject() const { return gameObjectReference; }
 
 		protected:
+			/**
+			 * \brief Store reference to the GameObject that this component is attached
+			 */
 			Object::GameObject* gameObjectReference = nullptr;
+			/**
+			 * \brief Store component name
+			 */
 			CoreType::String componentName = S("Unnamed Component");
+			/**
+			 * \brief Store component id
+			 */
 			CoreType::Id id = CoreType::Id(CoreType::ObjectComponent);
 		};
 	}

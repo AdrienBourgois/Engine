@@ -30,7 +30,7 @@ namespace Core
 			 * \tparam T Script class
 			 * \return Is script sucessfully created
 			 */
-			template <typename T, class U = typename std::enable_if<std::is_base_of<Core::Interface::IScript, T>::value, T>::type>
+			template <typename T, class U = typename std::enable_if<std::is_base_of<Interface::IScript, T>::value, T>::type>
 			bool AddScript();
 			/**
 			 * \brief Start all scripts

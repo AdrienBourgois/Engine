@@ -20,10 +20,13 @@
 #define CHECK_BLOB(blob) if(FAILED(hr))\
 						 { OutputDebugStringA((char*)blob->GetBufferPointer()); return false; }
 
-namespace Core {namespace CoreType {
-	class Vertex;
-	class String;
-}
+namespace Core
+{
+	namespace CoreType
+	{
+		class Vertex;
+		class String;
+	}
 }
 
 namespace Module
@@ -32,12 +35,30 @@ namespace Module
 	{
 		namespace DirectX12
 		{
+			/**
+			 * \brief Pack of pointer to element to execute command list functions
+			 */
 			struct Dx12CommandExecutionPack
 			{
+				/**
+				 * \brief Pointer to the PSO
+				 */
 				ID3D12PipelineState* pipelineState;
+				/**
+				 * \brief Pointer to the command allocator
+				 */
 				ID3D12CommandAllocator* commandAllocator;
+				/**
+				 * \brief Pointer to the command queue
+				 */
 				ID3D12CommandQueue* commandQueue;
+				/**
+				 * \brief Pointer to the current fence
+				 */
 				ID3D12Fence* fence;
+				/**
+				 * \brief Pointer to the current fence value
+				 */
 				UINT64* fenceValue;
 			};
 
@@ -171,6 +192,7 @@ namespace Module
 				 * \param _name Name of buffer
 				 * \param _vertices_array Array of vertices
 				 * \param _vertices_count Size of vertices array
+				 * \param _command_list Command list used to create buffer
 				 * \param[out] _vertex_buffer_view Pointer to a D3D12_VERTEX_BUFFER_VIEW
 				 * \return Is function success
 				 */
@@ -181,6 +203,7 @@ namespace Module
 				 * \param _name Name of buffer
 				 * \param _indexs_array Array of indexs (If vertices are indexed)
 				 * \param _indexs_count Size of indexs array
+				 * \param _command_list Command list used to create buffer
 				 * \param[out] _index_buffer_view Pointer to a D3D12_INDEX_BUFFER_VIEW
 				 * \return Is function success
 				 */
@@ -189,16 +212,25 @@ namespace Module
 				 * \brief Create a constabnt buffer
 				 * \tparam T Type of datas to pass
 				 * \param _datas Default datas for buffer
-				 * \param[out] _heap_descriptor Pointer to a Module::Render::DirectX12::Objects::Dx12ConstantBuffer
+				 * \param[out] _constant_buffer Pointer to a Module::Render::DirectX12::Objects::Dx12ConstantBuffer
 				 * \return Is function success
 				 */
 				template <typename T>
-				bool CreateConstantBuffer(T* _datas, Objects::Dx12ConstantBuffer** _heap_descriptor);
+				bool CreateConstantBuffer(T* _datas, Objects::Dx12ConstantBuffer** _constant_buffer);
 
 			private:
+				/**
+				 * \brief Pointer to the DirectX Factory kept to create objects
+				 */
 				IDXGIFactory4* dxgiFactory = nullptr;
+				/**
+				 * \brief Pointer to the device kept for DirectX factory
+				 */
 				ID3D12Device* device = nullptr;
 
+				/**
+				 * \brief Store result of DirectX functions
+				 */
 				HRESULT hr = 0;
 			};
 

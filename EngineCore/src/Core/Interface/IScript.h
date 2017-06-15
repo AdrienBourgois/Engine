@@ -16,7 +16,10 @@ namespace Core
 {
 	namespace Interface
 	{
-		class IScript
+		/**
+		 * \brief Interface to create scripts
+		 */
+		class ENGINEDLL_API IScript
 		{
 			public:
 			/**
@@ -39,6 +42,12 @@ namespace Core
 			 * \return Is update sucessfull
 			 */
 			virtual void Update() {}
+			/**
+			 * \brief Update script with delta time
+			 * \param _delta Delta time
+			 * \return Is update sucessfull
+			 */
+			virtual void Update(float _delta) {}
 			/**
 			 * \brief Stop and destruct script
 			 * \return Is desctruction sucessfull
@@ -65,7 +74,13 @@ namespace Core
 			CoreType::String GetScriptName() const { return scriptName; }
 
 		protected:
+			/**
+			 * \brief Store script name
+			 */
 			CoreType::String scriptName = S("Unnamed Script");
+			/**
+			 * \brief Store script id
+			 */
 			CoreType::Id id = CoreType::Id(CoreType::Script);
 		};
 	}

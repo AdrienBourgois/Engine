@@ -60,12 +60,31 @@ namespace Core
 			int GetIndexCount() const;
 
 		private:
+			/**
+			 * \brief Is mesh indexed
+			 */
 			bool indexed = false;
 
+			/**
+			 * \brief Copy list of vertices in this mesh
+			 * \param _vertexs_array List of vertices
+			 * \param _vertexs_count Count of vertices
+			 */
 			void CopyVerticesArray(const Vertex _vertexs_array[], unsigned int _vertexs_count) const;
+			/**
+			 * \brief Copy list of indexs in this mesh
+			 * \param _indexs_array List of indexs
+			 * \param _indexs_count Count of indexs
+			 */
 			void CopyIndexsArray(unsigned int _indexs_array[], unsigned int _indexs_count) const;
 
+			/**
+			 * \brief Store vertices
+			 */
 			std::vector<Vertex>* vertices = new std::vector<Vertex>();
+			/**
+			 * \brief Store indexs
+			 */
 			std::vector<unsigned int>* indexs = new std::vector<unsigned>();
 		};
 	}

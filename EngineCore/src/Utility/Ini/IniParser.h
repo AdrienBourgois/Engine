@@ -17,6 +17,9 @@ namespace Utility
 		 * \param _filePath Path of the file to parse
 		 */
 		ENGINEDLL_API explicit IniParser(char * _filePath);
+		/**
+		 * \brief Destructor
+		 */
 		ENGINEDLL_API ~IniParser();
 
 		/**
@@ -74,18 +77,54 @@ namespace Utility
 		ENGINEDLL_API void Set(const char* _section, const char* _key, const char* _new_value);
 
 	private:
+		/**
+		 * \brief Check if line has to be parsed
+		 * \return Is current line has to be parsed
+		 */
 		bool IsLineToParse(const std::string) const;
+		/**
+		 * \brief Create new section
+		 */
 		void NewSection();
+		/**
+		 * \brief Inster section in database
+		 */
 		void InsertSection();
+		/**
+		 * \brief Get the name of the section
+		 */
 		void ExtractSectionName(const std::string);
+		/**
+		 * \brief Get key of the current element
+		 * \return Key of the element
+		 */
 		std::string ExtractKey(const std::string) const;
+		/**
+		 * \brief Get value of the current element
+		 * \return Value of the element
+		 */
 		std::string ExtractValue(const std::string) const;
 
+		/**
+		 * \brief Path of the file
+		 */
 		std::string filePath;
+		/**
+		 * \brief Stream to file
+		 */
 		std::ifstream file;
+		/**
+		 * \brief Store keys and values by sections
+		 */
 		std::unordered_map<std::string, std::unordered_map<std::string, std::string>*> content;
 
+		/**
+		 * \brief Handle current section
+		 */
 		std::unordered_map<std::string, std::string>* current_section = nullptr;
+		/**
+		 * \brief Store current section name
+		 */
 		std::string current_section_name = "";
 	};
 } // namespace Tools

@@ -1,7 +1,7 @@
 #include "Modules/Display/Window.h"
-#include "Modules/Inputs/Inputs.h"
+#include "Modules/Inputs/Input.h"
 
-WindowsKeyboard* Module::Display::Window::windowInputsInstance = nullptr;
+Module::Inputs::WindowsKeyboard* Module::Display::Window::windowInputsInstance = nullptr;
 
 Module::Display::Window::~Window()
 {
@@ -13,15 +13,15 @@ bool Module::Display::Window::Initialize()
 	hInstance = ENGINE->GetHInstance();
 	fullscreen = GET_BOOL_PARAMETER("Display", "fullscreen");
 
-	int p_width = GET_INT_PARAMETER("Display", "width");
-	int p_height = GET_INT_PARAMETER("Display", "height");
+	int width_parameter = GET_INT_PARAMETER("Display", "width");
+	int height_parameter = GET_INT_PARAMETER("Display", "height");
 
-	return PrepareWindow(p_width, p_height);
+	return PrepareWindow(width_parameter, height_parameter);
 }
 
 bool Module::Display::Window::Start()
 {
-	windowInputsInstance = static_cast<WindowsKeyboard*>(MODULE(Module::Inputs)->CreateKeyboardInputsWrapper(KeyboardInputsApi::Windows));
+	windowInputsInstance = static_cast<Inputs::WindowsKeyboard*>(MODULE(Module::Inputs::Input)->CreateKeyboardInputsWrapper(Inputs::KeyboardInputsApi::Windows));
 
 	return MakeWindow(1);
 }
@@ -84,19 +84,19 @@ bool Module::Display::Window::MakeWindow(int _showWindow)
 	return true;
 }
 
-LRESULT CALLBACK Module::Display::Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK Module::Display::Window::WndProc(HWND _windowHandle, UINT _message, WPARAM _windowParameter, LPARAM _longParameter)
 {
 	if (ENGINE->GetState() == Engine::EEngineStates::Running)
 	{
-		switch (msg)
+		switch (_message)
 		{
 		case WM_KEYDOWN:
 			if(windowInputsInstance)
-				windowInputsInstance->KeyDown(static_cast<unsigned>(wParam));
+				windowInputsInstance->KeyDown(static_cast<unsigned>(_windowParameter));
 			return 0;
 		case WM_KEYUP:
 			if(windowInputsInstance)
-				windowInputsInstance->KeyUp(static_cast<unsigned>(wParam));
+				windowInputsInstance->KeyUp(static_cast<unsigned>(_windowParameter));
 			return 0;
 
 		case WM_DESTROY:
@@ -104,25 +104,25 @@ LRESULT CALLBACK Module::Display::Window::WndProc(HWND hWnd, UINT msg, WPARAM wP
 			return 0;
 
 		default:
-			return DefWindowProc(hWnd, msg, wParam, lParam);
+			return DefWindowProc(_windowHandle, _message, _windowParameter, _longParameter);
 		}
 	}
 
-	return DefWindowProc(hWnd, msg, wParam, lParam);
+	return DefWindowProc(_windowHandle, _message, _windowParameter, _longParameter);
 }
 
 void Module::Display::Window::GetMessages() const
 {
-	MSG msg;
-	ZeroMemory(&msg, sizeof(MSG));
+	MSG _message;
+	ZeroMemory(&_message, sizeof(MSG));
 
-	if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+	if (PeekMessage(&_message, nullptr, 0, 0, PM_REMOVE))
 	{
-		if (msg.message == WM_QUIT)
+		if (_message.message == WM_QUIT)
 			ENGINE->Stop();
 
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		TranslateMessage(&_message);
+		DispatchMessage(&_message);
 	}
 }
 
@@ -137,7 +137,7 @@ bool Module::Display::Window::Destruct()
 {
 	if (windowHandler)
 	{
-		bool result = DestroyWindow(windowHandler)!=0;
+		bool result = DestroyWindow(windowHandler) != 0;
 		windowHandler = nullptr;
 		return result;
 	}

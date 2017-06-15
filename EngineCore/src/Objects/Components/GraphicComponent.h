@@ -7,6 +7,9 @@
 
 namespace Object
 {
+	/**
+	 * \brief Components for GameObject
+	 */
 	namespace Component
 	{
 		/**
@@ -30,10 +33,6 @@ namespace Object
 			 * \param _mesh_type Type of the primitive mesh
 			 */
 			explicit GraphicComponent(Core::CoreType::PrimitiveMesh::PrimitivesMeshType _mesh_type);
-			/**
-			 * \brief Default constructor;
-			 */
-			//GraphicComponent() = default;
 			/**
 			 * \brief Default destructor
 			 */
@@ -63,7 +62,13 @@ namespace Object
 			Core::CoreType::Id GetId() const;
 
 		private:
+			/**
+			 * \brief Pointer to mesh
+			 */
 			Core::CoreType::Mesh* mesh = nullptr;
+			/**
+			 * \brief Store id of component
+			 */
 			Core::CoreType::Id id = Core::CoreType::Id(Core::CoreType::EObjectSubtype::GraphicComponent);
 		};
 	}

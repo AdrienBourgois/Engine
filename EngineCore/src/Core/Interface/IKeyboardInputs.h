@@ -6,20 +6,36 @@
 
 namespace Core
 {
-	namespace CoreType
+	namespace Interface
 	{
-		namespace Interface
+		/**
+			* \brief Interface for keyboards inputs wrappers
+			*/
+		class ENGINEDLL_API IKeyboardInputs
 		{
-			class ENGINEDLL_API IKeyboardInputs
-			{
-			public:
-				virtual ~IKeyboardInputs() = default;
+		public:
+			/**
+				* \brief Virtual default desctructor
+				*/
+			virtual ~IKeyboardInputs() = default;
 
-				virtual bool IsKeyDown(Key _key) = 0;
+			/**
+				* \brief Test if a key is pressed
+				* \param _key Key to test
+				* \return Is key pressed
+				*/
+			virtual bool IsKeyDown(Key _key) = 0;
 
-				virtual void KeyUp(unsigned _key) = 0;
-				virtual void KeyDown(unsigned _key) = 0;
-			};
-		}
+			/**
+				* \brief Notify that a key has been pressed
+				* \param _key Id of key
+				*/
+			virtual void KeyUp(unsigned _key) = 0;
+			/**
+				* \brief Notify that a key has been released
+				* \param _key Id of key
+				*/
+			virtual void KeyDown(unsigned _key) = 0;
+		};
 	}
 }

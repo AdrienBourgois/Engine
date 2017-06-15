@@ -1,5 +1,8 @@
 #pragma once
 
+/**
+ * \brief List of keys for keyboard
+ */
 enum class Key
 {
 	Unknown = -1,
