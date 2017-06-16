@@ -28,6 +28,11 @@ char (& StringSizeHelper(T (&array)[N]))[N]{return N;}
  * \param _text Input string
  */
 #define S(_text) Core::CoreType::String(_text, stringsize(_text))
+/**
+ * \brief Create String with number (float / int)
+ * \param _value Value to stringify
+ */
+#define SN(_value) Core::CoreType::String(_value)
 
 /**
  * \brief Return C Str with plain text input (Used with MTOS macro)
@@ -54,6 +59,16 @@ namespace Core
 			 * \brief Default constructor
 			 */
 			String() = default;
+			/**
+			 * \brief Interger constructor
+			 * \param _value Value to convert in string
+			 */
+			explicit String(int _value);
+			/**
+			 * \brief Float constructor
+			 * \param _value Value to convert in string
+			 */
+			explicit String(float _value);
 			/**
 			 * \brief Constructor from C String and her size
 			 * \param _text Pointer to a C String
@@ -86,6 +101,11 @@ namespace Core
 			 * \param _other_string String to add
 			 */
 			void operator+=(String _other_string);
+			/**
+			 * \brief Add a single character to the string
+			 * \param _character Character to add
+			 */
+			void operator+=(char _character);
 			/**
 			 * \brief Compare content of Strings
 			 * \param _other_string String to compare

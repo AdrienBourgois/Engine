@@ -54,6 +54,9 @@ void Core::Manager::ModuleManager::UpdateModules()
 
 void Core::Manager::ModuleManager::Stop()
 {
+	auto clock = MODULE(Module::Time::Clock);
+	LOG(S("Average FPS : ") + SN(clock->GetFpsAverage()) + S(" - Total time : ") + clock->GetTotalTime().ToString(), LOG_INFO);
+
 	for (Interface::IModule* module : modules)
 	{
 		module->Destruct();

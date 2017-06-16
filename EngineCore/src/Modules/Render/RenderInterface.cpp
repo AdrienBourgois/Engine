@@ -12,8 +12,6 @@ bool Module::Render::RenderInterface::Start()
 {
 	renderer->CreatePipeline();
 
-	activeCamera->SetTransform(Core::CoreType::Transform(Math::Vec3(0.f, 0.f, 4.f), Math::Vec3(0.f), Math::Vec3(1.f)));
-
 	return true;
 }
 

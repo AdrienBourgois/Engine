@@ -10,16 +10,22 @@ public:
 
 	void Start() override
 	{
-
+		Transform transform = Camera->GetTransform();
+		transform.position.z = 4.f;
+		Camera->SetTransform(transform);
 	}
 
 	void Update(float _delta) override
 	{
+		Transform transform = Camera->GetTransform();
 		if (Keyboard->IsKeyDown(Key::A))
-		{
-			Transform transform = Camera->GetTransform();
 			transform.rotation.y += 0.1f * _delta;
-			Camera->SetTransform(transform);
-		}
+		if (Keyboard->IsKeyDown(Key::D))
+			transform.rotation.y -= 0.1f * _delta;
+		if (Keyboard->IsKeyDown(Key::W))
+			transform.rotation.x += 0.1f * _delta;
+		if (Keyboard->IsKeyDown(Key::S))
+			transform.rotation.x -= 0.1f * _delta;
+		Camera->SetTransform(transform);
 	}
 };

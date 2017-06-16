@@ -55,6 +55,11 @@ namespace Module
 				 * \return Level of log
 				 */
 				ELog_level GetLevel() const { return level; }
+				/**
+				 * \brief Return time entry has been created
+				 * \return Time of entry
+				 */
+				Core::CoreType::TimePoint GetTime() const { return time; }
 
 			private:
 				/**

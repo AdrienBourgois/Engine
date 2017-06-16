@@ -58,6 +58,9 @@ bool Module::Tools::Logs::Logger::WriteLogs()
 	{
 		for (Log* log : logs)
 		{
+			Core::CoreType::String time_string = log->GetTime().ToString();
+			outputFile.write(time_string.CStr(), time_string.Length());
+			outputFile.write(" = ", 3);
 			outputFile.write(log->GetCMessage(), log->GetStringMessage().SafeLength());
 			outputFile.put('\n');
 		}

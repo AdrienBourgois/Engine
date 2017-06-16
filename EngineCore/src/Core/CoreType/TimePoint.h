@@ -1,5 +1,7 @@
 #pragma once
 
+#include "String.h"
+
 namespace Core
 {
 	namespace CoreType
@@ -122,6 +124,12 @@ namespace Core
 			 * \brief Is period different from 0
 			 */
 			explicit operator bool() const;
+
+			/**
+			 * \brief Stringify this time point
+			 * \return String of this time point
+			 */
+			String ToString();
 
 		private:
 			/**

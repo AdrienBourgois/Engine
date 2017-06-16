@@ -99,6 +99,13 @@ Core::CoreType::TimePoint::operator bool() const
 	return false;
 }
 
+Core::CoreType::String Core::CoreType::TimePoint::ToString()
+{
+	Normalize();
+
+	return SN(hour) + S(":") + SN(minute) + S(":") + SN(second);
+}
+
 void Core::CoreType::TimePoint::Normalize()
 {
 	int carry = millisecond / 1000;

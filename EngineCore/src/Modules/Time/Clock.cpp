@@ -1,4 +1,7 @@
 #include <chrono>
+
+#include "Engine.h"
+
 #include "Core/CoreType/TimePoint.h"
 #include "Clock.h"
 
@@ -61,9 +64,9 @@ Core::CoreType::TimePoint Module::Time::Clock::Now()
 {
 	time_t currentTime;
 	time(&currentTime);
-	tm *localTime = nullptr;
-	localtime_s(localTime ,&currentTime);
-	return Core::CoreType::TimePoint(localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
+	tm localTime;
+	localtime_s(&localTime, &currentTime);
+	return Core::CoreType::TimePoint(localTime.tm_hour, localTime.tm_min, localTime.tm_sec, 0);
 }
 
 void Module::Time::Clock::ComputeDeltaTime()

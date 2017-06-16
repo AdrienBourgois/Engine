@@ -1,6 +1,25 @@
 #include "Core/CoreType/String.h"
 #include <cstring>
 #include <stdlib.h>
+#include <string>
+
+Core::CoreType::String::String(int _value)
+{
+	std::string string = std::to_string(_value);
+	size = static_cast<unsigned>(string.size());
+	pointer = new char[size + 1];
+	memcpy(pointer, string.c_str(), size);
+	pointer[size] = '\0';
+}
+
+Core::CoreType::String::String(float _value)
+{
+	std::string string = std::to_string(_value);
+	size = static_cast<unsigned>(string.size());
+	pointer = new char[size + 1];
+	memcpy(pointer, string.c_str(), size);
+	pointer[size] = '\0';
+}
 
 Core::CoreType::String::String(const char* _text, unsigned int _size)
 {
@@ -44,6 +63,11 @@ Core::CoreType::String Core::CoreType::String::operator+(String _other_string) c
 void Core::CoreType::String::operator+=(String _other_string)
 {
 	Append(_other_string);
+}
+
+void Core::CoreType::String::operator+=(char _character)
+{
+	Append(String(&_character, 1));
 }
 
 bool Core::CoreType::String::operator==(String _other_string) const
