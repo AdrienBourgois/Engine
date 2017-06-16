@@ -12,16 +12,21 @@ bool Module::Render::RenderInterface::Start()
 {
 	renderer->CreatePipeline();
 
+	activeCamera->SetTransform(Core::CoreType::Transform(Math::Vec3(0.f, 0.f, 4.f), Math::Vec3(0.f), Math::Vec3(1.f)));
+
 	return true;
 }
 
 bool Module::Render::RenderInterface::Update()
 {
+	renderer->SetCameraProjectionMatrix(activeCamera->GetProjectionMatrix());
+	renderer->SetCameraViewMatrix(activeCamera->GetViewMatrix());
 	return renderer->Render();
 }
 
 bool Module::Render::RenderInterface::Destruct()
 {
+	delete activeCamera;
 	return renderer->Cleanup();
 }
 
@@ -29,4 +34,9 @@ bool Module::Render::RenderInterface::CreateBuffer(Object::Component::GraphicCom
 {
 	objects->insert_or_assign(_component->GetId().GetInstanceNumber(), _component);
 	return renderer->CreateBuffers(_component->GetId().GetInstanceNumber(), _component->GetComponentName(), _component->GetTransformReference(), _component->GetMesh()->GetVertices(), _component->GetMesh()->GetVertexCount(), _component->GetMesh()->GetIndexs(), _component->GetMesh()->GetIndexCount());
+}
+
+Module::Render::Camera* Module::Render::RenderInterface::GetActiveCamera() const
+{
+	return activeCamera;
 }

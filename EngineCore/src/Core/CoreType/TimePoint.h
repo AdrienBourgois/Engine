@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Engine.h"
-
 namespace Core
 {
 	namespace CoreType
@@ -9,7 +7,7 @@ namespace Core
 		/**
 		 * \brief Store time point or duration
 		 */
-		class ENGINEDLL_API TimePoint
+		class TimePoint
 		{
 		public:
 			/**

@@ -1,3 +1,5 @@
+#include "Engine.h"
+
 #include "Core/Manager/ScriptManager.h"
 #include "Modules/Time/Clock.h"
 

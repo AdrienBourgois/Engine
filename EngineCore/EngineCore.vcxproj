@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Modules\Render\Camera.h" />
     <ClInclude Include="src\Scripts\GameObjectScript.h" />
     <ClInclude Include="src\Scripts\Script.h" />
     <ClInclude Include="src\Core\Interface\IKeyboardInputs.h" />
@@ -52,6 +53,7 @@
     <ClInclude Include="src\Core\CoreType\TimePoint.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Modules\Render\Camera.cpp" />
     <ClCompile Include="src\Scripts\GameObjectScript.cpp" />
     <ClCompile Include="src\Scripts\Script.cpp" />
     <ClCompile Include="src\Modules\Inputs\Input.cpp" />

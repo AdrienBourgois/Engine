@@ -4,6 +4,8 @@
 
 #include "Core/Interface/IScript.h"
 #include "Core/CoreType/String.h"
+#include "Macros.h"
+
 #include <queue>
 
 namespace Core

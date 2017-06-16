@@ -18,6 +18,13 @@ namespace Core
 			 */
 			explicit Transform(Transform* _parent = nullptr);
 			/**
+			 * \brief Constructor
+			 * \param _position Position
+			 * \param _rotation Rotation
+			 * \param _scale Scale
+			 */
+			explicit Transform(Math::Vec3 _position, Math::Vec3 _rotation, Math::Vec3 _scale);
+			/**
 			 * \brief Default destructor
 			 */
 			~Transform() = default;

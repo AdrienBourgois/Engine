@@ -4,6 +4,7 @@
 #include "Core/Interface/IModule.h"
 #include "Core/Interface/IRender.h"
 #include "Objects/Components/GraphicComponent.h"
+#include "Camera.h"
 
 namespace Module
 {
@@ -35,6 +36,11 @@ namespace Module
 			 */
 			bool CreateBuffer(Object::Component::GraphicComponent* _component) const;
 
+			/**
+			 * \brief Return a pointer to the current active camera
+			 * \return Current active camera
+			 */
+			Camera* GetActiveCamera() const;
 		private:
 			/**
 			 * \brief Current render API used
@@ -49,6 +55,11 @@ namespace Module
 			 * \brief Store list of object send to renderer, with the id
 			 */
 			std::unordered_map<unsigned int, Object::Component::GraphicComponent*>* objects = new std::unordered_map<unsigned, Object::Component::GraphicComponent*>();
+
+			/**
+			 * \brief Current active camera
+			 */
+			Camera* activeCamera = new Camera();
 		};
 	}
 }

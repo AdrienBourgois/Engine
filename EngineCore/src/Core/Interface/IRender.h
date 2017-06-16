@@ -52,6 +52,18 @@ namespace Core
 			 */
 			virtual bool CreateBuffers(unsigned int _id, CoreType::String _name, CoreType::Transform* _transform, CoreType::Vertex* _vertices_array, unsigned int _vertices_count, unsigned int* _indexs_array = nullptr, unsigned int _indexs_count = 0) = 0;
 			/**
+			 * \brief Set the camera view matrix
+			 * \param _camera_view Camera view matrix
+			 * \return Is function success
+			 */
+			virtual void SetCameraViewMatrix(Math::Mat4 _camera_view) = 0;
+			/**
+			 * \brief Set the camera projection matrix
+			 * \param _camera_projection Camera projection matrix
+			 * \return Is function success
+			 */
+			virtual void SetCameraProjectionMatrix(Math::Mat4 _camera_projection) = 0;
+			/**
 			 * \brief Start render of current frame
 			 * \return Is function success
 			 */

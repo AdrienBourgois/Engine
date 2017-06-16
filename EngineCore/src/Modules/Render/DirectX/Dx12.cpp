@@ -7,17 +7,6 @@
 
 bool Module::Render::DirectX12::DirectX12::Initialize()
 {
-	float width = static_cast<FLOAT>(MODULE(Display::Window)->getWidth());
-	float height = static_cast<FLOAT>(MODULE(Display::Window)->getHeight());
-
-	projection_matrix = Math::Mat4::PerspectiveMatrix(45.0f, width / height, 0.1f, 1000.0f);
-
-	camera_position = {0.0f, 0.0f, -4.0f};
-	camera_target = {0.0f, 0.0f, 1.0f};
-	camera_up = {0.0f, 1.0f, 0.0f};
-
-	camera_view_matrix = Math::Mat4::LookAt(camera_position, camera_target, camera_up);
-
 	return true;
 }
 
@@ -107,11 +96,7 @@ bool Module::Render::DirectX12::DirectX12::PreRender()
 	PreparePreRenderCommandList();
 	for (std::pair<const int, Objects::Dx12GraphicObject*> pair : graphicsObjects)
 	{
-		Objects::Dx12GraphicObject* graphic_object = pair.second;
-		Math::Mat4 wvs_matrix = (graphic_object->GetTransform()->GetWorldMatrix() * camera_view_matrix * projection_matrix).GetTranspose();
-		memcpy(graphic_object->GetConstantBuffer()->Map(), &wvs_matrix, sizeof wvs_matrix);
-		graphic_object->GetConstantBuffer()->Unmap();
-		PrepareObjectCommandList(graphic_object);
+		PrepareObjectCommandList(pair.second);
 	}
 	PreparePostRenderCommandList();
 
@@ -183,6 +168,16 @@ bool Module::Render::DirectX12::DirectX12::CreateBuffers(unsigned int _id, Core:
 	return true;
 }
 
+void Module::Render::DirectX12::DirectX12::SetCameraViewMatrix(Math::Mat4 _camera_view)
+{
+	cameraViewMatrix = _camera_view;
+}
+
+void Module::Render::DirectX12::DirectX12::SetCameraProjectionMatrix(Math::Mat4 _camera_projection)
+{
+	cameraProjectionMatrix = _camera_projection;
+}
+
 bool Module::Render::DirectX12::DirectX12::WaitForPreviousFrame()
 {
 	frameIndex = swapChain->GetCurrentBackBufferIndex();
@@ -236,6 +231,10 @@ bool Module::Render::DirectX12::DirectX12::PreparePostRenderCommandList()
 
 bool Module::Render::DirectX12::DirectX12::PrepareObjectCommandList(Objects::Dx12GraphicObject* _graphic_object)
 {
+	Math::Mat4 wvs_matrix = (_graphic_object->GetTransform()->GetWorldMatrix() * cameraViewMatrix * cameraProjectionMatrix).GetTranspose();
+	memcpy(_graphic_object->GetConstantBuffer()->Map(), &wvs_matrix, sizeof wvs_matrix);
+	_graphic_object->GetConstantBuffer()->Unmap();
+
 	ID3D12GraphicsCommandList* command_list = _graphic_object->GetCommandList();
 
 	TRYFUNC(command_list->Reset(commandAllocator[frameIndex], pipelineStateObject));

@@ -70,6 +70,8 @@ namespace Module
 				bool Initialize() override;
 				bool CreatePipeline() override;
 				bool CreateBuffers(unsigned int _id, Core::CoreType::String _name, Core::CoreType::Transform* _transform, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, unsigned int* _indexs_array = nullptr, unsigned int _indexs_count = 0) override;
+				void SetCameraViewMatrix(Math::Mat4 _camera_view) override;
+				void SetCameraProjectionMatrix(Math::Mat4 _camera_projection) override;
 				bool Render() override;
 				bool Cleanup() override;
 
@@ -240,24 +242,11 @@ namespace Module
 				/**
 				 * \brief Current project matrix
 				 */
-				Math::Mat4 projection_matrix;
+				Math::Mat4 cameraProjectionMatrix;
 				/**
 				 * \brief Current camera view matrix
 				 */
-				Math::Mat4 camera_view_matrix;
-
-				/**
-				 * \brief Current position of the camera
-				 */
-				Math::Vec3 camera_position;
-				/**
-				 * \brief Target position of camera
-				 */
-				Math::Vec3 camera_target;
-				/**
-				 * \brief Current up vector of camera
-				 */
-				Math::Vec3 camera_up;
+				Math::Mat4 cameraViewMatrix;
 			};
 		}
 	}

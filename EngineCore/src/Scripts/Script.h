@@ -17,6 +17,10 @@ using namespace CoreType;
  * \brief Get keyboard inputs
  */
 #define Keyboard getInputs()->GetKeyboardInputsWrapper()
+/**
+ * \brief Get active camera
+ */
+#define Camera getRenderInterface()->GetActiveCamera()
 
 namespace Scripts
 {
