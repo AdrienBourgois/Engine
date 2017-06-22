@@ -1,7 +1,10 @@
 #include "Modules/Display/Window.h"
 #include "Modules/Inputs/Input.h"
 
-Module::Inputs::WindowsKeyboard* Module::Display::Window::windowInputsInstance = nullptr;
+#include <Windowsx.h>
+
+Module::Inputs::WindowsKeyboard* Module::Display::Window::windowKeyboardInputsInstance = nullptr;
+Module::Inputs::WindowsMouse* Module::Display::Window::windowMouseInputsInstance = nullptr;
 
 Module::Display::Window::~Window()
 {
@@ -21,7 +24,8 @@ bool Module::Display::Window::Initialize()
 
 bool Module::Display::Window::Start()
 {
-	windowInputsInstance = static_cast<Inputs::WindowsKeyboard*>(MODULE(Module::Inputs::Input)->CreateKeyboardInputsWrapper(Inputs::KeyboardInputsApi::Windows));
+	windowKeyboardInputsInstance = static_cast<Inputs::WindowsKeyboard*>(MODULE(Module::Inputs::Input)->CreateKeyboardInputsWrapper(Inputs::KeyboardInputsApi::Windows));
+	windowMouseInputsInstance = static_cast<Inputs::WindowsMouse*>(MODULE(Module::Inputs::Input)->CreateMouseInputsWrapper(Inputs::MouseInputsApi::Windows));
 
 	return MakeWindow(1);
 }
@@ -91,17 +95,49 @@ LRESULT CALLBACK Module::Display::Window::WndProc(HWND _windowHandle, UINT _mess
 		switch (_message)
 		{
 		case WM_KEYDOWN:
-			if(windowInputsInstance)
-				windowInputsInstance->KeyDown(static_cast<unsigned>(_windowParameter));
+			if(windowKeyboardInputsInstance)
+				windowKeyboardInputsInstance->KeyDown(static_cast<unsigned>(_windowParameter));
 			return 0;
 		case WM_KEYUP:
-			if(windowInputsInstance)
-				windowInputsInstance->KeyUp(static_cast<unsigned>(_windowParameter));
+			if(windowKeyboardInputsInstance)
+				windowKeyboardInputsInstance->KeyUp(static_cast<unsigned>(_windowParameter));
+			return 0;
+
+		case WM_LBUTTONDOWN:
+			if (windowMouseInputsInstance)
+				windowMouseInputsInstance->LeftMouseButtonDown();
+			return 0;
+		case WM_RBUTTONDOWN:
+			if (windowMouseInputsInstance)
+				windowMouseInputsInstance->RightMouseButtonDown();
+			return 0;
+		case WM_MBUTTONDOWN:
+			if (windowMouseInputsInstance)
+				windowMouseInputsInstance->MiddleMouseButtonDown();
+			return 0;
+		case WM_LBUTTONUP:
+			if (windowMouseInputsInstance)
+				windowMouseInputsInstance->LeftMouseButtonUp();
+			return 0;
+		case WM_RBUTTONUP:
+			if (windowMouseInputsInstance)
+				windowMouseInputsInstance->RightMouseButtonUp();
+			return 0;
+		case WM_MBUTTONUP:
+			if (windowMouseInputsInstance)
+				windowMouseInputsInstance->MiddleMouseButtonUp();
+			return 0;
+
+		case WM_MOUSEMOVE:
+			if (windowMouseInputsInstance)
+				windowMouseInputsInstance->SetMousePosition(GET_X_LPARAM(_longParameter), GET_Y_LPARAM(_longParameter));
 			return 0;
 
 		case WM_DESTROY:
 			ENGINE->Stop();
 			return 0;
+
+
 
 		default:
 			return DefWindowProc(_windowHandle, _message, _windowParameter, _longParameter);

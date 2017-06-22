@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\Interface\IMouseInputs.h" />
     <ClInclude Include="src\Modules\Render\Camera.h" />
     <ClInclude Include="src\Scripts\GameObjectScript.h" />
     <ClInclude Include="src\Scripts\Script.h" />
@@ -51,6 +52,7 @@
     <ClInclude Include="src\Modules\Inputs\WindowsKeyboard.h" />
     <ClInclude Include="src\Modules\Time\Clock.h" />
     <ClInclude Include="src\Core\CoreType\TimePoint.h" />
+    <ClInclude Include="src\Modules\Inputs\WindowsMouse.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Modules\Render\Camera.cpp" />
@@ -85,6 +87,7 @@
     <ClCompile Include="src\Modules\Inputs\WindowsKeyboard.cpp" />
     <ClCompile Include="src\Modules\Time\Clock.cpp" />
     <ClCompile Include="src\Core\CoreType\TimePoint.cpp" />
+    <ClCompile Include="src\Modules\Inputs\WindowsMouse.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Core\Shaders\PixelShader.hlsl">

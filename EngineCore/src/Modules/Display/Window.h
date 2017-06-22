@@ -6,6 +6,7 @@
 
 #include "Core/Interface/IModule.h"
 #include "Modules/Inputs/WindowsKeyboard.h"
+#include "Modules/Inputs/WindowsMouse.h"
 
 namespace Module
 {
@@ -125,7 +126,11 @@ namespace Module
 			/**
 			 * \brief Pointer to the keyboard input wrapper to send messages
 			 */
-			static Inputs::WindowsKeyboard* windowInputsInstance;
+			static Inputs::WindowsKeyboard* windowKeyboardInputsInstance;
+			/**
+			 * \brief Pointer to the mouse input wrapper to send messages
+			 */
+			static Inputs::WindowsMouse* windowMouseInputsInstance;
 		};
 	}
 }

@@ -1,9 +1,13 @@
 #include "Input.h"
 #include "WindowsKeyboard.h"
+#include "WindowsMouse.h"
 
 Module::Inputs::Input::~Input()
 {
 	delete keyboardInputsWrapper;
+	keyboardInputsWrapper = nullptr;
+	delete mouseInputsWrapper;
+	mouseInputsWrapper = nullptr;
 }
 
 Core::Interface::IKeyboardInputs* Module::Inputs::Input::CreateKeyboardInputsWrapper(KeyboardInputsApi _api)
@@ -14,9 +18,22 @@ Core::Interface::IKeyboardInputs* Module::Inputs::Input::CreateKeyboardInputsWra
 	return keyboardInputsWrapper;
 }
 
+Core::Interface::IMouseInputs* Module::Inputs::Input::CreateMouseInputsWrapper(MouseInputsApi _api)
+{
+	if (_api == MouseInputsApi::Windows)
+		mouseInputsWrapper = new WindowsMouse;
+
+	return mouseInputsWrapper;
+}
+
 Core::Interface::IKeyboardInputs* Module::Inputs::Input::GetKeyboardInputsWrapper() const
 {
 	return keyboardInputsWrapper;
+}
+
+Core::Interface::IMouseInputs* Module::Inputs::Input::GetMouseInputsWrapper() const
+{
+	return mouseInputsWrapper;
 }
 
 bool Module::Inputs::Input::Initialize()

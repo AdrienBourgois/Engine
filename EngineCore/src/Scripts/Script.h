@@ -18,6 +18,10 @@ using namespace CoreType;
  */
 #define Keyboard getInputs()->GetKeyboardInputsWrapper()
 /**
+ * \brief Get mouse inputs
+ */
+#define Mouse getInputs()->GetMouseInputsWrapper()
+/**
  * \brief Get active camera
  */
 #define Camera getRenderInterface()->GetActiveCamera()

@@ -4,7 +4,7 @@
 
 #define FILE_NON_EXISTANT 0xFFFFFFFF
 
-bool Module::Tools::Logs::Logger::Initialize()
+Module::Tools::Logs::Logger::Logger()
 {
 	CreateEntry(S("Logger Initialized !"), ELog_level::LOG_DEBUG);
 
@@ -18,12 +18,16 @@ bool Module::Tools::Logs::Logger::Initialize()
 		CreateDirectory(L"Logs", nullptr);
 
 	outputFile.open(".\\Logs\\Default.log");
+}
 
+bool Module::Tools::Logs::Logger::Initialize()
+{
 	return true;
 }
 
 bool Module::Tools::Logs::Logger::Start()
 {
+	WriteLogs();
 	return true;
 }
 
@@ -34,7 +38,6 @@ bool Module::Tools::Logs::Logger::Update()
 
 bool Module::Tools::Logs::Logger::Destruct()
 {
-	WriteLogs();
 	ClearAllEntries();
 
 	return true;
@@ -44,6 +47,7 @@ void Module::Tools::Logs::Logger::CreateEntry(Core::CoreType::String _message, E
 {
 	Log* log = new Log(_message, _level);
 	logs.push_back(log);
+	WriteLog(log);
 }
 
 void Module::Tools::Logs::Logger::ClearAllEntries()
@@ -61,9 +65,26 @@ bool Module::Tools::Logs::Logger::WriteLogs()
 			Core::CoreType::String time_string = log->GetTime().ToString();
 			outputFile.write(time_string.CStr(), time_string.Length());
 			outputFile.write(" = ", 3);
-			outputFile.write(log->GetCMessage(), log->GetStringMessage().SafeLength());
+			outputFile.write(log->GetCMessage(), log->GetStringMessage().Length());
 			outputFile.put('\n');
+			outputFile.flush();
 		}
+		return true;
+	}
+
+	return false;
+}
+
+bool Module::Tools::Logs::Logger::WriteLog(Log* _log)
+{
+	if (outputFile.is_open())
+	{
+		Core::CoreType::String time_string = _log->GetTime().ToString();
+		outputFile.write(time_string.CStr(), time_string.Length());
+		outputFile.write(" = ", 3);
+		outputFile.write(_log->GetCMessage(), _log->GetStringMessage().Length());
+		outputFile.put('\n');
+
 		return true;
 	}
 

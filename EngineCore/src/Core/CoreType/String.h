@@ -2,8 +2,14 @@
 
 ///@cond DUPLICATE_MACRO
 #ifdef ENGINECORE_EXPORTS
+/**
+ * \brief If ENGINECORE_EXPORTS defined, export the symbol
+ */
 #define ENGINEDLL_API __declspec(dllexport)
 #else
+/**
+ * \brief If ENGINECORE_EXPORTS is not defined, import the symbol
+ */
 #define ENGINEDLL_API __declspec(dllimport)
 #endif
 ///@endcond

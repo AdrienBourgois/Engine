@@ -27,9 +27,9 @@ namespace Module
 				DECLARE_MODULE(S("Logger"))
 
 				/**
-				 * \brief Default constructor
+				 * \brief Constructor
 				 */
-				ENGINEDLL_API Logger() = default;
+				ENGINEDLL_API Logger();
 				/**
 				 * \brief Default desctructor
 				 */
@@ -49,10 +49,15 @@ namespace Module
 
 			private:
 				/**
-				 * \brief Write entries in file
+				 * \brief Write all entries in file
 				 * \return Is function a success
 				 */
 				bool WriteLogs();
+				/**
+				 * \brief Write single entrie in file
+				 * \return Is function a success
+				 */
+				bool WriteLog(Log* _log);
 
 				/**
 			 * \brief Store entries

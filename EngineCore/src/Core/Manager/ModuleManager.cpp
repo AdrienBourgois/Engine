@@ -7,15 +7,15 @@
 
 bool Core::Manager::ModuleManager::InitializeModules()
 {
-	if (!CreateModule<Module::Display::Window>(S("Window")))
-		return false;
-	if (!CreateModule<Module::Render::RenderInterface>(S("RenderInterface")))
-		return false;
-	if (!CreateModule<Module::Inputs::Input>(S("Input")))
+	if (!CreateModule<Module::Time::Clock>(S("Clock")))
 		return false;
 	if (!CreateModule<Module::Tools::Logs::Logger>(S("Logger")))
 		return false;
-	if (!CreateModule<Module::Time::Clock>(S("Clock")))
+	if (!CreateModule<Module::Inputs::Input>(S("Input")))
+		return false;
+	if (!CreateModule<Module::Display::Window>(S("Window")))
+		return false;
+	if (!CreateModule<Module::Render::RenderInterface>(S("RenderInterface")))
 		return false;
 
 	return true;

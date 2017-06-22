@@ -109,6 +109,9 @@
     <ClCompile Include="src\Modules\Render\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Modules\Inputs\WindowsMouse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\macros.h">
@@ -232,6 +235,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Modules\Render\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Modules\Inputs\WindowsMouse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Interface\IMouseInputs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
