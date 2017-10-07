@@ -31,18 +31,18 @@
     <ClInclude Include="src\Objects\Components\GraphicComponent.h" />
     <ClInclude Include="src\Core\CoreType\Id.h" />
     <ClInclude Include="src\Core\CoreType\Color.h" />
-    <ClInclude Include="Src\Core\CoreType\Vertex.h" />
+    <ClInclude Include="src\Core\CoreType\Vertex.h" />
     <ClInclude Include="src\Core\Interface\IRender.h" />
     <ClInclude Include="src\Core\Manager\ModuleManager.h" />
-    <ClInclude Include="Src\Maths\Vec2.h" />
+    <ClInclude Include="src\Maths\Vec2.h" />
     <ClInclude Include="src\Maths\Vec3.h" />
     <ClInclude Include="src\Modules\Display\Window.h" />
-    <ClInclude Include="Src\Engine.h" />
+    <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Core\Interface\IModule.h" />
     <ClInclude Include="src\Modules\Render\DirectX\Dx12.h" />
     <ClInclude Include="src\Modules\Render\DirectX\Dx12Factory.h" />
     <ClInclude Include="src\Modules\Render\DirectX\DX12Helper.h" />
-    <ClInclude Include="Src\Macros.h" />
+    <ClInclude Include="src\Macros.h" />
     <ClInclude Include="src\Modules\Render\RenderInterface.h" />
     <ClInclude Include="src\Utility\Ini\IniParser.h" />
     <ClInclude Include="src\Modules\Tools\Logs\Log.h" />
@@ -64,18 +64,16 @@
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.cpp" />
     <ClCompile Include="src\Maths\Mat4.cpp" />
-    <ClCompile Include="src\Objects\GameObject.cpp">
-      <FileType>CppCode</FileType>
-    </ClCompile>
+    <ClCompile Include="src\Objects\GameObject.cpp" />
     <ClCompile Include="src\Objects\Components\GraphicComponent.cpp" />
     <ClCompile Include="src\Core\CoreType\Id.cpp" />
     <ClCompile Include="src\Core\CoreType\Color.cpp" />
-    <ClCompile Include="Src\Core\CoreType\Vertex.cpp" />
+    <ClCompile Include="src\Core\CoreType\Vertex.cpp" />
     <ClCompile Include="src\Core\Manager\ModuleManager.cpp" />
-    <ClCompile Include="Src\Maths\Vec2.cpp" />
+    <ClCompile Include="src\Maths\Vec2.cpp" />
     <ClCompile Include="src\Maths\Vec3.cpp" />
     <ClCompile Include="src\Modules\Display\Window.cpp" />
-    <ClCompile Include="Src\Engine.cpp" />
+    <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Dx12.cpp" />
     <ClCompile Include="src\Modules\Render\DirectX\Dx12Factory.cpp" />
     <ClCompile Include="src\Modules\Render\RenderInterface.cpp" />
@@ -103,15 +101,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Config\config.ini" />
-    <None Include="src\Core\Manager\ModuleManager.inl">
-      <FileType>CppCode</FileType>
-    </None>
-    <None Include="src\Core\Manager\ScriptManager.inl">
-      <FileType>CppCode</FileType>
-    </None>
-    <None Include="src\Objects\GameObject.inl">
-      <FileType>CppCode</FileType>
-    </None>
+    <None Include="src\Core\Manager\ModuleManager.inl" />
+    <None Include="src\Core\Manager\ScriptManager.inl" />
+    <None Include="src\Objects\GameObject.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{291D2B5F-EF7F-4C55-B96D-87737397CA51}</ProjectGuid>

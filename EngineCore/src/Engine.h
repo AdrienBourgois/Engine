@@ -29,8 +29,9 @@ public:
 	 */
 	static Engine* GetInstance()
 	{
-		static Engine instance;
-		return &instance;
+		if (!instance)
+			instance = new Engine();
+		return instance;
 	}
 
 	/**
@@ -166,6 +167,11 @@ private:
 	 * \brief Store current engine state
 	 */
 	EEngineStates state = EEngineStates::Off;
+
+	/**
+	 * \brief Singleton instance of Engine Class
+	 */
+	static Engine* instance;
 };
 
 template <typename T>

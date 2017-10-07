@@ -9,6 +9,7 @@
 int WINAPI wWinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, PWSTR _pCmdLine, int _nCmdShow)
 {
 	HINSTANCE hinstLib = LoadLibrary(L"EngineCore.dll");
+	Engine::GetInstance()->Initialize();
 
 	ADD_SCRIPT(RedCube);
 	ADD_SCRIPT(GreenCube);

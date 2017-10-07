@@ -1,12 +1,13 @@
 #include "Engine.h"
 
+Engine* Engine::instance = nullptr;
+
 BOOL WINAPI DllMain(HINSTANCE _hinstDLL, DWORD _fdwReason, LPVOID _lpReserved )
 {
 	switch( _fdwReason )
 	{
 		case DLL_PROCESS_ATTACH:
 			Engine::GetInstance()->SetHInstance(_hinstDLL);
-			Engine::GetInstance()->Initialize();
 			break;
 		case DLL_THREAD_ATTACH:
 			break;

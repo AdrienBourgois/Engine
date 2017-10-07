@@ -6,7 +6,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
 {
-	TEST_CLASS(Vec2Tests)
+	TEST_CLASS(Vec2)
 	{
 	public:
 

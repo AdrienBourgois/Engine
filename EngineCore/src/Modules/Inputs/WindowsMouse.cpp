@@ -1,9 +1,9 @@
 #include "WindowsMouse.h"
 
-void Module::Inputs::WindowsMouse::SetMousePosition(int _x, int _y)
+void Module::Inputs::WindowsMouse::SetMousePosition(const int _x, const int _y)
 {
-	mousePosition.x = _x;
-	mousePosition.y = _y;
+	mousePosition.x = static_cast<float>(_x);
+	mousePosition.y = static_cast<float>(_y);
 }
 
 Math::Vec2 Module::Inputs::WindowsMouse::GetMousePosition() const

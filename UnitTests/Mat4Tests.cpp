@@ -6,7 +6,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
 {
-	TEST_CLASS(Mat4Tests)
+	TEST_CLASS(Mat4)
 	{
 	public:
 
