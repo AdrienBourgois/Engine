@@ -30,6 +30,8 @@ public:
 		transform.scale = { 0.3f, 0.3f, 0.3f };
 		transform.rotation.x += _delta / 5.f;
 		object.SetTransform(transform);
+
+		LOG(S("Delta = ") + SN(_delta), LOG_VERBOSE);
 	}
 
 

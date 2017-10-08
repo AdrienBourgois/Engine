@@ -9,7 +9,7 @@ Core::CoreType::String::String()
 Core::CoreType::String::String(const int _value)
 {
 	std::string string = std::to_string(_value);
-	capacity = static_cast<unsigned>(string.size());
+	capacity = static_cast<unsigned>(string.size() + 1);
 	data = new char[capacity];
 	memcpy(data, string.c_str(), string.size());
 	VerifyString();
@@ -18,8 +18,7 @@ Core::CoreType::String::String(const int _value)
 Core::CoreType::String::String(const float _value)
 {
 	std::string string = std::to_string(_value);
-	size = static_cast<unsigned>(string.size());
-	capacity = size + 1;
+	capacity = static_cast<unsigned>(string.size() + 1);
 	data = new char[capacity];
 	memcpy(data, string.c_str(), string.size());
 	VerifyString();
@@ -79,7 +78,7 @@ char Core::CoreType::String::operator[](const unsigned _range) const
 	return data[_range];
 }
 
-void Core::CoreType::String::operator=(const String _other_string)
+void Core::CoreType::String::operator=(const String& _other_string)
 {
 	if(_other_string.size + 1 > capacity)
 	{
@@ -90,10 +89,10 @@ void Core::CoreType::String::operator=(const String _other_string)
 
 	memcpy(data, _other_string.data, _other_string.size);
 
-	VerifyString();
+	VerifyString(_other_string.size);
 }
 
-Core::CoreType::String Core::CoreType::String::operator+(const String _other_string) const
+Core::CoreType::String Core::CoreType::String::operator+(const String& _other_string) const
 {
 	String string;
 
@@ -107,7 +106,7 @@ Core::CoreType::String Core::CoreType::String::operator+(const String _other_str
 	return string;
 }
 
-void Core::CoreType::String::operator+=(const String _other_string)
+void Core::CoreType::String::operator+=(const String& _other_string)
 {
 	Append(_other_string);
 }
@@ -117,7 +116,7 @@ void Core::CoreType::String::operator+=(char _character)
 	Append(String(&_character, 1));
 }
 
-bool Core::CoreType::String::operator==(const String _other_string) const
+bool Core::CoreType::String::operator==(const String& _other_string) const
 {
 	if(size != _other_string.size)
 		return false;
@@ -130,7 +129,7 @@ bool Core::CoreType::String::operator==(const String _other_string) const
 	return true;
 }
 
-bool Core::CoreType::String::operator!=(const String _other_string) const
+bool Core::CoreType::String::operator!=(const String& _other_string) const
 {
 	return !operator==(_other_string);
 }
@@ -143,33 +142,31 @@ Core::CoreType::String::operator bool() const
 	return false;
 }
 
-void Core::CoreType::String::Append(const String _other_string)
+void Core::CoreType::String::Append(const String& _other_string)
 {
 	const unsigned int new_size = size + _other_string.size;
-	const unsigned int first_string_size = size;
+	unsigned int first_string_size = size;
+	if (first_string_size == NullSize)
+		first_string_size = 0;
 
-	if(capacity < new_size + 1)
+	if(capacity == NullSize || capacity < new_size + 1)
 	{
-		capacity = new_size + 1;
-		char* new_pointer = new char[capacity];
-		memcpy(new_pointer, data, size);
-		DeletePointer();
-		data = new_pointer;
+		Reserve(new_size + 1);
 	}
 
 	memcpy(data + first_string_size, _other_string.data, _other_string.size);
 
-	VerifyString();
+	VerifyString(new_size);
 }
 
-bool Core::CoreType::String::Contain(const String _string_to_find) const
+bool Core::CoreType::String::Contain(const String& _string_to_find) const
 {
-	if(First(_string_to_find) == -1)
+	if(First(_string_to_find) == NullSize)
 		return false;
 	return true;
 }
 
-unsigned Core::CoreType::String::First(const String _string_to_find) const
+unsigned Core::CoreType::String::First(const String& _string_to_find) const
 {
 	if(_string_to_find.size > size)
 		return false;
@@ -191,7 +188,7 @@ unsigned Core::CoreType::String::First(const String _string_to_find) const
 					return i;
 		}
 	}
-	return -1;
+	return NullSize;
 }
 
 wchar_t const* Core::CoreType::String::ToWideString()
@@ -204,6 +201,33 @@ wchar_t const* Core::CoreType::String::ToWideString()
 	}
 
 	return widePointer;
+}
+
+bool Core::CoreType::String::Reserve(const unsigned _bytes_count)
+{
+	if (_bytes_count <= REAL_SIZE(capacity) || _bytes_count <= REAL_SIZE(size))
+		return false;
+
+	capacity = _bytes_count;
+
+	char* new_pointer = new char[capacity];
+	if(REAL_SIZE(size))
+		memcpy(new_pointer, data, size);
+	delete data;
+	data = new_pointer;
+	data[REAL_SIZE(size)] = '\0';
+	VerifyString();
+
+	return true;
+}
+
+void Core::CoreType::String::CopyString(const String& _source, unsigned _size, const unsigned _start_index) const
+{
+	if (data == nullptr || (_source.size == NullSize && _size == NullSize))
+		return;
+	if (_size == NullSize)
+		_size = _source.size;
+	memcpy(data + _start_index, _source.data, _size);
 }
 
 void Core::CoreType::String::DeletePointer()
@@ -219,11 +243,18 @@ void Core::CoreType::String::DeletePointer()
 	size = 0;
 }
 
-void Core::CoreType::String::VerifyString()
+void Core::CoreType::String::VerifyString(const unsigned _end_of_string_index)
 {
-	if(capacity == -1)
+	if(_end_of_string_index != NullSize)
 	{
-		size = -1;
+		data[_end_of_string_index] = '\0';
+		size = _end_of_string_index;
+		return;
+	}
+
+	if(capacity == NullSize)
+	{
+		size = NullSize;
 		return;
 	}
 

@@ -49,6 +49,10 @@ namespace Module
 
 			private:
 				/**
+				 * \brief Create a new Windows Console Prompt and bind it to standard outputs
+				 */
+				void CreateWindowsConsole() const;
+				/**
 				 * \brief Write all entries in file
 				 * \return Is function a success
 				 */
@@ -60,8 +64,8 @@ namespace Module
 				bool WriteLog(Log* _log);
 
 				/**
-			 * \brief Store entries
-			 */
+				 * \brief Store entries
+				 */
 				std::vector<Log*> logs;
 
 				/**

@@ -1,13 +1,14 @@
 ﻿#include <Windows.h>
 
 #include "Modules/Tools/Logs/Logger.h"
+#include <iostream>
+#include <fcntl.h>
+#include <io.h>
 
 #define FILE_NON_EXISTANT 0xFFFFFFFF
 
 Module::Tools::Logs::Logger::Logger()
 {
-	CreateEntry(S("Logger Initialized !"), ELog_level::LOG_DEBUG);
-
 	if (GetFileAttributes(L".\\Logs\\Default.log") != FILE_NON_EXISTANT)
 	{
 		if (GetFileAttributes(L".\\Logs\\Previous.log") != FILE_NON_EXISTANT)
@@ -18,6 +19,10 @@ Module::Tools::Logs::Logger::Logger()
 		CreateDirectory(L"Logs", nullptr);
 
 	outputFile.open(".\\Logs\\Default.log");
+
+	CreateWindowsConsole();
+
+	CreateEntry(S("Logger Initialized !"), ELog_level::LOG_DEBUG);
 }
 
 bool Module::Tools::Logs::Logger::Initialize()
@@ -43,10 +48,11 @@ bool Module::Tools::Logs::Logger::Destruct()
 	return true;
 }
 
-void Module::Tools::Logs::Logger::CreateEntry(Core::CoreType::String _message, ELog_level _level)
+void Module::Tools::Logs::Logger::CreateEntry(const Core::CoreType::String _message, const ELog_level _level)
 {
 	Log* log = new Log(_message, _level);
 	logs.push_back(log);
+	std::cout << log->GetStructuredLog().CStr() << std::endl;
 	WriteLog(log);
 }
 
@@ -56,17 +62,44 @@ void Module::Tools::Logs::Logger::ClearAllEntries()
 	logs.clear();
 }
 
+void Module::Tools::Logs::Logger::CreateWindowsConsole() const
+{
+	AllocConsole();
+	AttachConsole(GetCurrentProcessId());
+
+	HANDLE console_output = GetStdHandle(STD_OUTPUT_HANDLE);
+	const int system_output = _open_osfhandle(intptr_t(console_output), _O_TEXT);
+	FILE *c_output_handle = _fdopen(system_output, "w");
+
+	HANDLE console_error = GetStdHandle(STD_ERROR_HANDLE);
+	const int system_error = _open_osfhandle(intptr_t(console_error), _O_TEXT);
+	FILE *c_error_handle = _fdopen(system_error, "w");
+
+	HANDLE console_input = GetStdHandle(STD_INPUT_HANDLE);
+	const int system_input = _open_osfhandle(intptr_t(console_input), _O_TEXT);
+	FILE *c_input_handle = _fdopen(system_input, "r");
+
+	freopen_s(&c_input_handle, "CONIN$", "r", stdin);
+	freopen_s(&c_output_handle, "CONOUT$", "w", stdout);
+	freopen_s(&c_error_handle, "CONOUT$", "w", stderr);
+
+	std::wcout.clear();
+	std::cout.clear();
+	std::wcerr.clear();
+	std::cerr.clear();
+	std::wcin.clear();
+	std::cin.clear();
+
+	std::cout << "Windows Console Created and Initialized !" << std::endl;
+}
+
 bool Module::Tools::Logs::Logger::WriteLogs()
 {
 	if (outputFile.is_open())
 	{
 		for (Log* log : logs)
 		{
-			Core::CoreType::String time_string = log->GetTime().ToString();
-			outputFile.write(time_string.CStr(), time_string.Length());
-			outputFile.write(" = ", 3);
-			outputFile.write(log->GetCMessage(), log->GetStringMessage().Length());
-			outputFile.put('\n');
+			WriteLog(log);
 			outputFile.flush();
 		}
 		return true;
@@ -79,10 +112,8 @@ bool Module::Tools::Logs::Logger::WriteLog(Log* _log)
 {
 	if (outputFile.is_open())
 	{
-		Core::CoreType::String time_string = _log->GetTime().ToString();
-		outputFile.write(time_string.CStr(), time_string.Length());
-		outputFile.write(" = ", 3);
-		outputFile.write(_log->GetCMessage(), _log->GetStringMessage().Length());
+		Core::CoreType::String fancy_log = _log->GetStructuredLog();
+		outputFile.write(fancy_log.CStr(), fancy_log.SafeLength());
 		outputFile.put('\n');
 
 		return true;

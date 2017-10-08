@@ -24,7 +24,7 @@ namespace Core
 			 * \param _second Count of seconds
 			 * \param _millisecond Count of milliseconds
 			 */
-			explicit TimePoint(int _day, int _hour, int _minute, int _second, int _millisecond);
+			explicit TimePoint(const int _day, const int _hour, const int _minute, const int _second, const int _millisecond);
 			/**
 			 * \brief Constructor
 			 * \param _hour Count of hours
@@ -32,25 +32,25 @@ namespace Core
 			 * \param _second Count of seconds
 			 * \param _millisecond Count of milliseconds
 			 */
-			explicit TimePoint(int _hour, int _minute, int _second, int _millisecond);
+			explicit TimePoint(const int _hour, const int _minute, const int _second, const int _millisecond);
 			/**
 			 * \brief Constructor
 			 * \param _minute Count of minutes
 			 * \param _second Count of seconds
 			 * \param _millisecond Count of milliseconds
 			 */
-			explicit TimePoint(int _minute, int _second, int _millisecond);
+			explicit TimePoint(const int _minute, const int _second, const int _millisecond);
 			/**
 			 * \brief Constructor
 			 * \param _second Count of seconds
 			 * \param _millisecond Count of milliseconds
 			 */
-			explicit TimePoint(int _second, int _millisecond);
+			explicit TimePoint(const int _second, const int _millisecond);
 			/**
 			 * \brief Constructor
 			 * \param _millisecond Count of milliseconds
 			 */
-			explicit TimePoint(int _millisecond);
+			explicit TimePoint(const int _millisecond);
 			/**
 			 * \brief Default destructor
 			 */
@@ -113,7 +113,7 @@ namespace Core
 			 * \param _other Period to add
 			 * \return Sum of periods
 			 */
-			TimePoint operator+(TimePoint _other) const;
+			TimePoint operator+(const TimePoint _other) const;
 			/**
 			 * \brief Add period to this
 			 * \param _other Period to add

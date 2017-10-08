@@ -1,26 +1,26 @@
 #include "TimePoint.h"
 
-Core::CoreType::TimePoint::TimePoint(int _day, int _hour, int _minute, int _second, int _millisecond): day(_day), hour(_hour), minute(_minute), second(_second), millisecond(_millisecond)
+Core::CoreType::TimePoint::TimePoint(const int _day, const int _hour, const int _minute, const int _second, const int _millisecond): day(_day), hour(_hour), minute(_minute), second(_second), millisecond(_millisecond)
 {
 	Normalize();
 }
 
-Core::CoreType::TimePoint::TimePoint(int _hour, int _minute, int _second, int _millisecond): hour(_hour), minute(_minute), second(_second), millisecond(_millisecond)
+Core::CoreType::TimePoint::TimePoint(const int _hour, const int _minute, const int _second, const int _millisecond): hour(_hour), minute(_minute), second(_second), millisecond(_millisecond)
 {
 	Normalize();
 }
 
-Core::CoreType::TimePoint::TimePoint(int _minute, int _second, int _millisecond): minute(_minute), second(_second), millisecond(_millisecond)
+Core::CoreType::TimePoint::TimePoint(const int _minute, const int _second, const int _millisecond): minute(_minute), second(_second), millisecond(_millisecond)
 {
 	Normalize();
 }
 
-Core::CoreType::TimePoint::TimePoint(int _second, int _millisecond): second(_second), millisecond(_millisecond)
+Core::CoreType::TimePoint::TimePoint(const int _second, const int _millisecond): second(_second), millisecond(_millisecond)
 {
 	Normalize();
 }
 
-Core::CoreType::TimePoint::TimePoint(int _millisecond): millisecond(_millisecond)
+Core::CoreType::TimePoint::TimePoint(const int _millisecond): millisecond(_millisecond)
 {
 	Normalize();
 }
@@ -75,14 +75,14 @@ int Core::CoreType::TimePoint::GetTotalMillisecond() const
 	return GetTotalSecond() * 1000 + millisecond;
 }
 
-Core::CoreType::TimePoint Core::CoreType::TimePoint::operator+(TimePoint _other) const
+Core::CoreType::TimePoint Core::CoreType::TimePoint::operator+(const TimePoint _other) const
 {
 	TimePoint time = *this;
 	time += _other;
 	return time;
 }
 
-void Core::CoreType::TimePoint::operator+=(TimePoint _other)
+void Core::CoreType::TimePoint::operator+=(const TimePoint _other)
 {
 	millisecond += _other.millisecond;
 	second += _other.second;

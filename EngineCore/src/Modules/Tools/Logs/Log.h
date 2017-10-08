@@ -49,6 +49,11 @@ namespace Module
 				 * \return Message of log
 				 */
 				const char* GetCMessage() const { return message.CStr(); }
+				/**
+				 * \brief Create a fancy message ready for console or file with time and additionnals informations
+				 * \return Log structured for console, file, ...
+				 */
+				Core::CoreType::String GetStructuredLog();
 
 				/**
 				 * \brief Return the level of the log
@@ -74,6 +79,11 @@ namespace Module
 				 * \brief Time of log
 				 */
 				Core::CoreType::TimePoint time;
+
+				/**
+				 * \brief Fancy version of log (only populated if call to GetStructuredLog)
+				 */
+				Core::CoreType::String structuredLog;
 			};
 		}
 	}

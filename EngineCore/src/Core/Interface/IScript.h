@@ -47,7 +47,7 @@ namespace Core
 			 * \param _delta Delta time
 			 * \return Is update sucessfull
 			 */
-			virtual void Update(float _delta) {}
+			virtual void Update(const float _delta) {}
 			/**
 			 * \brief Stop and destruct script
 			 * \return Is desctruction sucessfull
@@ -66,7 +66,7 @@ namespace Core
 			 * \brief Set a new name for script
 			 * \param _new_name New name
 			 */
-			void SetScriptName(CoreType::String _new_name = S("Unnamed script")) { scriptName = _new_name; }
+			void SetScriptName(const CoreType::String _new_name = S("Unnamed script")) { scriptName = _new_name; }
 			/**
 			 * \brief Return tha name of script
 			 * \return Script name

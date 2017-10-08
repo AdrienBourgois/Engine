@@ -15,7 +15,7 @@ public:
 		Camera->SetTransform(transform);
 	}
 
-	void Update(float _delta) override
+	void Update(const float _delta) override
 	{
 		Transform transform = Camera->GetTransform();
 		if (Keyboard->IsKeyDown(Key::A))

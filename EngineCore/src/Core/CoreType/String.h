@@ -51,6 +51,10 @@ char (& StringSizeHelper(T (&_array)[N]))[N]{return N;}
  */
 #define MTOS(macro) TEXT_TO_STRING(macro)
 
+#define REAL_SIZE(_variable) _variable == NullSize ? 0u : _variable
+
+static unsigned NullSize = -1;
+
 namespace Core
 {
 	namespace CoreType
@@ -118,18 +122,18 @@ namespace Core
 			 * \brief Copy string into another
 			 * \param _new_string String to copy
 			 */
-			void operator=(const String _new_string);
+			void operator=(const String& _new_string);
 			/**
 			 * \brief Add string to another / Concatenation
 			 * \param _other_string String to copy
 			 * \return New String with concatenation of the input Strings
 			 */
-			String operator+(const String _other_string) const;
+			String operator+(const String& _other_string) const;
 			/**
 			 * \brief Add String to this String
 			 * \param _other_string String to add
 			 */
-			void operator+=(const String _other_string);
+			void operator+=(const String& _other_string);
 			/**
 			 * \brief Add a single character to the string
 			 * \param _character Character to add
@@ -140,13 +144,13 @@ namespace Core
 			 * \param _other_string String to compare
 			 * \return Comparison result
 			 */
-			bool operator==(const String _other_string) const;
+			bool operator==(const String& _other_string) const;
 			/**
 			 * \brief Compare content of Strings
 			 * \param _other_string String to compare
 			 * \return Comparison result
 			 */
-			bool operator!=(const String _other_string) const;
+			bool operator!=(const String& _other_string) const;
 			/**
 			 * \brief Does String has content
 			 */
@@ -156,20 +160,20 @@ namespace Core
 			 * \brief Add String to this String
 			 * \param _string String to add
 			 */
-			void Append(const String _string);
+			void Append(const String& _string);
 
 			/**
 			 * \brief Determine if this String contain an other String
 			 * \param _string_to_find String to find in this String
 			 * \return Does this String contain target String
 			 */
-			bool Contain(const String _string_to_find) const;
+			bool Contain(const String& _string_to_find) const;
 			/**
 			 * \brief Return position of a sub-string to find in this String
 			 * \param _string_to_find String to find in this String
 			 * \return 0-based index of begining of target String (-1u if does not contain target String)
 			 */
-			unsigned First(const String _string_to_find) const;
+			unsigned First(const String& _string_to_find) const;
 
 			/**
 			 * \brief Return C Style string pointer
@@ -191,16 +195,31 @@ namespace Core
 			 * \return String with wide char
 			 */
 			wchar_t const* ToWideString();
+			/**
+			 * \brief Reserve memory for this String
+			 * \param _bytes_count Count of characters to reserve (must be greater than size of String)
+			 * \return Is memory reserved
+			 */
+			bool Reserve(const unsigned _bytes_count);
 
 		private:
+			/**
+			 * \brief Safely copy an other String to this String
+			 * \param _source Other String to copy
+			 * \param _size Count of characters to copy
+			 * \param _start_index 0-based Index of this String to start copy
+			 * \note Assume that space for this String is already allocated
+			 */
+			void CopyString(const String& _source, unsigned _size = NullSize, const unsigned _start_index = 0) const;
 			/**
 			 * \brief Free string memory and reset size
 			 */
 			void DeletePointer();
 			/**
 			 * \brief Verify the Null Terminating Character ('\0') and size of String
+			 * \param _end_of_string_index If know, 0-based index of the Null Terminating Character ('\0')
 			 */
-			void VerifyString();
+			void VerifyString(const unsigned _end_of_string_index = NullSize);
 
 			/**
 			 * \brief Pointer to data
@@ -213,11 +232,11 @@ namespace Core
 			/**
 			 * \brief Length of String without null terminated character
 			 */
-			unsigned int size = -1;
+			unsigned int size = NullSize;
 			/**
 			 * \brief Size of allocated datas
 			 */
-			unsigned int capacity = -1;
+			unsigned int capacity = NullSize;
 		};
 	}
 }

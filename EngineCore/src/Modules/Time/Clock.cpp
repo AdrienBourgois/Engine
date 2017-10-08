@@ -62,11 +62,11 @@ float Module::Time::Clock::GetFpsAverage() const
 
 Core::CoreType::TimePoint Module::Time::Clock::Now()
 {
-	time_t currentTime;
-	time(&currentTime);
-	tm localTime;
-	localtime_s(&localTime, &currentTime);
-	return Core::CoreType::TimePoint(localTime.tm_hour, localTime.tm_min, localTime.tm_sec, 0);
+	time_t current_time;
+	time(&current_time);
+	tm local_time;
+	localtime_s(&local_time, &current_time);
+	return Core::CoreType::TimePoint(local_time.tm_hour, local_time.tm_min, local_time.tm_sec, 0);
 }
 
 void Module::Time::Clock::ComputeDeltaTime()
