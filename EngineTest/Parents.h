@@ -8,8 +8,8 @@ class Parents : public Scripts::Script
 public:
 	DECLARE_SCRIPT(S("Parents"), EObjectSubtype::SimpleScript)
 
-	Object::GameObject* parent;
-	Object::GameObject* child;
+	Object::GameObject* parent = nullptr;
+	Object::GameObject* child = nullptr;
 
 	void Start() override
 	{
@@ -24,7 +24,7 @@ public:
 		child->GetTransformReference()->position.x += 6.f;
 	}
 
-	void Update(float _delta) override
+	void Update(const float _delta) override
 	{
 		parent->GetTransformReference()->rotation.z += 0.3f * _delta;
 
@@ -40,7 +40,7 @@ public:
 		if (Keyboard->IsKeyDown(Key::Left))
 			transform.position.x -= _delta * 0.01f;
 
-		transform.scale = { 0.3f, 0.3f, 0.3f };
+		transform.scale = {0.3f, 0.3f, 0.3f};
 		parent->SetTransform(transform);
 	}
 

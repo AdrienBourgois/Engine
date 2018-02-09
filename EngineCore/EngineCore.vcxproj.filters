@@ -19,228 +19,234 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Engine.cpp">
+    <ClCompile Include="Source\Core\CoreType\Color.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\CoreType\String.cpp">
+    <ClCompile Include="Source\Core\CoreType\Id.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Manager\ModuleManager.cpp">
+    <ClCompile Include="Source\Core\CoreType\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Display\Window.cpp">
+    <ClCompile Include="Source\Core\CoreType\String.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Maths\Vec2.cpp">
+    <ClCompile Include="Source\Core\CoreType\TimePoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Maths\Vec3.cpp">
+    <ClCompile Include="Source\Core\CoreType\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\CoreType\Color.cpp">
+    <ClCompile Include="Source\Core\CoreType\Vertex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Core\CoreType\Vertex.cpp">
+    <ClCompile Include="Source\Core\Manager\ModuleManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Render\DirectX\Dx12.cpp">
+    <ClCompile Include="Source\Core\Manager\ScriptManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Render\DirectX\Dx12Factory.cpp">
+    <ClCompile Include="Source\Maths\Mat4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Render\RenderInterface.cpp">
+    <ClCompile Include="Source\Maths\Vec2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\CoreType\Id.cpp">
+    <ClCompile Include="Source\Maths\Vec3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Objects\Components\GraphicComponent.cpp">
+    <ClCompile Include="Source\Modules\Display\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Objects\GameObject.cpp">
+    <ClCompile Include="Source\Modules\Inputs\Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utility\Ini\IniParser.cpp">
+    <ClCompile Include="Source\Modules\Inputs\WindowsKeyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Maths\Mat4.cpp">
+    <ClCompile Include="Source\Modules\Inputs\WindowsMouse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.cpp">
+    <ClCompile Include="Source\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.cpp">
+    <ClCompile Include="Source\Modules\Render\DirectX\Objects\Dx12GraphicObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Manager\ScriptManager.cpp">
+    <ClCompile Include="Source\Modules\Render\DirectX\Dx12.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\CoreType\Transform.cpp">
+    <ClCompile Include="Source\Modules\Render\DirectX\Dx12Factory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\CoreType\Mesh.cpp">
+    <ClCompile Include="Source\Modules\Render\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Inputs\WindowsKeyboard.cpp">
+    <ClCompile Include="Source\Modules\Render\RenderInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Time\Clock.cpp">
+    <ClCompile Include="Source\Modules\Time\Clock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\Script.cpp">
+    <ClCompile Include="Source\Modules\Tools\Logs\Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripts\GameObjectScript.cpp">
+    <ClCompile Include="Source\Modules\Tools\Logs\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Inputs\Input.cpp">
+    <ClCompile Include="Source\Objects\Components\GraphicComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\CoreType\TimePoint.cpp">
+    <ClCompile Include="Source\Objects\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Tools\Logs\Log.cpp">
+    <ClCompile Include="Source\Scripts\GameObjectScript.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Tools\Logs\Logger.cpp">
+    <ClCompile Include="Source\Scripts\Script.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Render\Camera.cpp">
+    <ClCompile Include="Source\Utility\Ini\IniParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules\Inputs\WindowsMouse.cpp">
+    <ClCompile Include="Source\Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\macros.h">
+    <ClInclude Include="Source\Core\CoreType\Container\Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\macros.h">
+    <ClInclude Include="Source\Core\CoreType\Color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine.h">
+    <ClInclude Include="Source\Core\CoreType\Id.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\CoreType\String.h">
+    <ClInclude Include="Source\Core\CoreType\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Interface\IModule.h">
+    <ClInclude Include="Source\Core\CoreType\PrimitivesMeshs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Manager\ModuleManager.h">
+    <ClInclude Include="Source\Core\CoreType\String.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Render\DirectX\DX12Helper.h">
+    <ClInclude Include="Source\Core\CoreType\TimePoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Display\Window.h">
+    <ClInclude Include="Source\Core\CoreType\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Maths\Vec2.h">
+    <ClInclude Include="Source\Core\CoreType\Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Maths\Vec3.h">
+    <ClInclude Include="Source\Core\Interface\IComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\CoreType\Color.h">
+    <ClInclude Include="Source\Core\Interface\IKeyboardInputs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Core\CoreType\Vertex.h">
+    <ClInclude Include="Source\Core\Interface\IModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Render\DirectX\Dx12Factory.h">
+    <ClInclude Include="Source\Core\Interface\IMouseInputs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Render\DirectX\Dx12.h">
+    <ClInclude Include="Source\Core\Interface\IRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Render\RenderInterface.h">
+    <ClInclude Include="Source\Core\Interface\IScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Interface\IRender.h">
+    <ClInclude Include="Source\Core\Manager\ModuleManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\CoreType\Id.h">
+    <ClInclude Include="Source\Core\Manager\ScriptManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\Components\GraphicComponent.h">
+    <ClInclude Include="Source\Maths\Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\GameObject.h">
+    <ClInclude Include="Source\Maths\Mat4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Interface\IComponent.h">
+    <ClInclude Include="Source\Maths\Vec2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utility\Ini\IniParser.h">
+    <ClInclude Include="Source\Maths\Vec3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Maths\Constants.h">
+    <ClInclude Include="Source\Modules\Display\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Maths\Mat4.h">
+    <ClInclude Include="Source\Modules\Inputs\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.h">
+    <ClInclude Include="Source\Modules\Inputs\KeyList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.h">
+    <ClInclude Include="Source\Modules\Inputs\WindowsKeyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Manager\ScriptManager.h">
+    <ClInclude Include="Source\Modules\Inputs\WindowsMouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Interface\IScript.h">
+    <ClInclude Include="Source\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\CoreType\Transform.h">
+    <ClInclude Include="Source\Modules\Render\DirectX\Objects\Dx12GraphicObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\CoreType\Mesh.h">
+    <ClInclude Include="Source\Modules\Render\DirectX\Dx12.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\CoreType\PrimitivesMeshs.h">
+    <ClInclude Include="Source\Modules\Render\DirectX\Dx12Factory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Inputs\KeyList.h">
+    <ClInclude Include="Source\Modules\Render\DirectX\DX12Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Inputs\WindowsKeyboard.h">
+    <ClInclude Include="Source\Modules\Render\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Interface\IKeyboardInputs.h">
+    <ClInclude Include="Source\Modules\Render\RenderInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Time\Clock.h">
+    <ClInclude Include="Source\Modules\Time\Clock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scripts\Script.h">
+    <ClInclude Include="Source\Modules\Tools\Logs\Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scripts\GameObjectScript.h">
+    <ClInclude Include="Source\Modules\Tools\Logs\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Inputs\Input.h">
+    <ClInclude Include="Source\Objects\Components\GraphicComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\CoreType\TimePoint.h">
+    <ClInclude Include="Source\Objects\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Tools\Logs\Log.h">
+    <ClInclude Include="Source\Scripts\GameObjectScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Tools\Logs\Logger.h">
+    <ClInclude Include="Source\Scripts\Script.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Render\Camera.h">
+    <ClInclude Include="Source\Utility\Ini\IniParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Modules\Inputs\WindowsMouse.h">
+    <ClInclude Include="Source\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Interface\IMouseInputs.h">
+    <ClInclude Include="Source\macros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\CoreType\Container\Iterator\Iterators.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\CoreType\Container\Vector.inl">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -248,13 +254,13 @@
     <None Include="Content\Config\config.ini">
       <Filter>Content Files</Filter>
     </None>
-    <None Include="src\Objects\GameObject.inl">
+    <None Include="Source\Core\Manager\ModuleManager.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="src\Core\Manager\ScriptManager.inl">
+    <None Include="Source\Core\Manager\ScriptManager.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="src\Core\Manager\ModuleManager.inl">
+    <None Include="Source\Objects\GameObject.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

@@ -13,7 +13,7 @@ public:
 		object.GetTransformReference()->position += 0.5f;
 	}
 
-	void Update(float _delta) override
+	void Update(const float _delta) override
 	{
 		Transform transform = object.GetTransform();
 
@@ -27,12 +27,8 @@ public:
 		if (Keyboard->IsKeyDown(Key::Left))
 			transform.position.x += _delta * 0.01f;
 
-		transform.scale = { 0.3f, 0.3f, 0.3f };
+		transform.scale = {0.3f, 0.3f, 0.3f};
 		transform.rotation.x += _delta / 5.f;
 		object.SetTransform(transform);
-
-		LOG(S("Delta = ") + SN(_delta), LOG_VERBOSE);
 	}
-
-
 };

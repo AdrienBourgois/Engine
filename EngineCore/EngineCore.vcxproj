@@ -11,81 +11,83 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\Interface\IMouseInputs.h" />
-    <ClInclude Include="src\Modules\Render\Camera.h" />
-    <ClInclude Include="src\Scripts\GameObjectScript.h" />
-    <ClInclude Include="src\Scripts\Script.h" />
-    <ClInclude Include="src\Core\Interface\IKeyboardInputs.h" />
-    <ClInclude Include="src\Modules\Inputs\Input.h" />
-    <ClInclude Include="src\Core\CoreType\Mesh.h" />
-    <ClInclude Include="src\Core\Interface\IScript.h" />
-    <ClInclude Include="src\Core\Manager\ScriptManager.h" />
-    <ClInclude Include="src\Modules\Inputs\KeyList.h" />
-    <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.h" />
-    <ClInclude Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.h" />
-    <ClInclude Include="src\Core\Interface\IComponent.h" />
-    <ClInclude Include="src\Maths\Constants.h" />
-    <ClInclude Include="src\Maths\Mat4.h" />
-    <ClInclude Include="src\Core\CoreType\PrimitivesMeshs.h" />
-    <ClInclude Include="src\Objects\GameObject.h" />
-    <ClInclude Include="src\Objects\Components\GraphicComponent.h" />
-    <ClInclude Include="src\Core\CoreType\Id.h" />
-    <ClInclude Include="src\Core\CoreType\Color.h" />
-    <ClInclude Include="src\Core\CoreType\Vertex.h" />
-    <ClInclude Include="src\Core\Interface\IRender.h" />
-    <ClInclude Include="src\Core\Manager\ModuleManager.h" />
-    <ClInclude Include="src\Maths\Vec2.h" />
-    <ClInclude Include="src\Maths\Vec3.h" />
-    <ClInclude Include="src\Modules\Display\Window.h" />
-    <ClInclude Include="src\Engine.h" />
-    <ClInclude Include="src\Core\Interface\IModule.h" />
-    <ClInclude Include="src\Modules\Render\DirectX\Dx12.h" />
-    <ClInclude Include="src\Modules\Render\DirectX\Dx12Factory.h" />
-    <ClInclude Include="src\Modules\Render\DirectX\DX12Helper.h" />
-    <ClInclude Include="src\Macros.h" />
-    <ClInclude Include="src\Modules\Render\RenderInterface.h" />
-    <ClInclude Include="src\Utility\Ini\IniParser.h" />
-    <ClInclude Include="src\Modules\Tools\Logs\Log.h" />
-    <ClInclude Include="src\Modules\Tools\Logs\Logger.h" />
-    <ClInclude Include="src\Core\CoreType\String.h" />
-    <ClInclude Include="src\Core\CoreType\Transform.h" />
-    <ClInclude Include="src\Modules\Inputs\WindowsKeyboard.h" />
-    <ClInclude Include="src\Modules\Time\Clock.h" />
-    <ClInclude Include="src\Core\CoreType\TimePoint.h" />
-    <ClInclude Include="src\Modules\Inputs\WindowsMouse.h" />
+    <ClInclude Include="Source\Core\CoreType\Container\Iterator\Iterators.h" />
+    <ClInclude Include="Source\Core\CoreType\Container\Vector.h" />
+    <ClInclude Include="Source\Core\Interface\IMouseInputs.h" />
+    <ClInclude Include="Source\Modules\Render\Camera.h" />
+    <ClInclude Include="Source\Scripts\GameObjectScript.h" />
+    <ClInclude Include="Source\Scripts\Script.h" />
+    <ClInclude Include="Source\Core\Interface\IKeyboardInputs.h" />
+    <ClInclude Include="Source\Modules\Inputs\Input.h" />
+    <ClInclude Include="Source\Core\CoreType\Mesh.h" />
+    <ClInclude Include="Source\Core\Interface\IScript.h" />
+    <ClInclude Include="Source\Core\Manager\ScriptManager.h" />
+    <ClInclude Include="Source\Modules\Inputs\KeyList.h" />
+    <ClInclude Include="Source\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.h" />
+    <ClInclude Include="Source\Modules\Render\DirectX\Objects\Dx12GraphicObject.h" />
+    <ClInclude Include="Source\Core\Interface\IComponent.h" />
+    <ClInclude Include="Source\Maths\Constants.h" />
+    <ClInclude Include="Source\Maths\Mat4.h" />
+    <ClInclude Include="Source\Core\CoreType\PrimitivesMeshs.h" />
+    <ClInclude Include="Source\Objects\GameObject.h" />
+    <ClInclude Include="Source\Objects\Components\GraphicComponent.h" />
+    <ClInclude Include="Source\Core\CoreType\Id.h" />
+    <ClInclude Include="Source\Core\CoreType\Color.h" />
+    <ClInclude Include="Source\Core\CoreType\Vertex.h" />
+    <ClInclude Include="Source\Core\Interface\IRender.h" />
+    <ClInclude Include="Source\Core\Manager\ModuleManager.h" />
+    <ClInclude Include="Source\Maths\Vec2.h" />
+    <ClInclude Include="Source\Maths\Vec3.h" />
+    <ClInclude Include="Source\Modules\Display\Window.h" />
+    <ClInclude Include="Source\Engine.h" />
+    <ClInclude Include="Source\Core\Interface\IModule.h" />
+    <ClInclude Include="Source\Modules\Render\DirectX\Dx12.h" />
+    <ClInclude Include="Source\Modules\Render\DirectX\Dx12Factory.h" />
+    <ClInclude Include="Source\Modules\Render\DirectX\DX12Helper.h" />
+    <ClInclude Include="Source\Macros.h" />
+    <ClInclude Include="Source\Modules\Render\RenderInterface.h" />
+    <ClInclude Include="Source\Utility\Ini\IniParser.h" />
+    <ClInclude Include="Source\Modules\Tools\Logs\Log.h" />
+    <ClInclude Include="Source\Modules\Tools\Logs\Logger.h" />
+    <ClInclude Include="Source\Core\CoreType\String.h" />
+    <ClInclude Include="Source\Core\CoreType\Transform.h" />
+    <ClInclude Include="Source\Modules\Inputs\WindowsKeyboard.h" />
+    <ClInclude Include="Source\Modules\Time\Clock.h" />
+    <ClInclude Include="Source\Core\CoreType\TimePoint.h" />
+    <ClInclude Include="Source\Modules\Inputs\WindowsMouse.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Modules\Render\Camera.cpp" />
-    <ClCompile Include="src\Scripts\GameObjectScript.cpp" />
-    <ClCompile Include="src\Scripts\Script.cpp" />
-    <ClCompile Include="src\Modules\Inputs\Input.cpp" />
-    <ClCompile Include="src\Core\CoreType\Mesh.cpp" />
-    <ClCompile Include="src\Core\Manager\ScriptManager.cpp" />
-    <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.cpp" />
-    <ClCompile Include="src\Modules\Render\DirectX\Objects\Dx12GraphicObject.cpp" />
-    <ClCompile Include="src\Maths\Mat4.cpp" />
-    <ClCompile Include="src\Objects\GameObject.cpp" />
-    <ClCompile Include="src\Objects\Components\GraphicComponent.cpp" />
-    <ClCompile Include="src\Core\CoreType\Id.cpp" />
-    <ClCompile Include="src\Core\CoreType\Color.cpp" />
-    <ClCompile Include="src\Core\CoreType\Vertex.cpp" />
-    <ClCompile Include="src\Core\Manager\ModuleManager.cpp" />
-    <ClCompile Include="src\Maths\Vec2.cpp" />
-    <ClCompile Include="src\Maths\Vec3.cpp" />
-    <ClCompile Include="src\Modules\Display\Window.cpp" />
-    <ClCompile Include="src\Engine.cpp" />
-    <ClCompile Include="src\Modules\Render\DirectX\Dx12.cpp" />
-    <ClCompile Include="src\Modules\Render\DirectX\Dx12Factory.cpp" />
-    <ClCompile Include="src\Modules\Render\RenderInterface.cpp" />
-    <ClCompile Include="src\Utility\Ini\IniParser.cpp" />
-    <ClCompile Include="src\Modules\Tools\Logs\Log.cpp" />
-    <ClCompile Include="src\Modules\Tools\Logs\Logger.cpp" />
-    <ClCompile Include="src\Core\CoreType\String.cpp" />
-    <ClCompile Include="src\Core\CoreType\Transform.cpp" />
-    <ClCompile Include="src\Modules\Inputs\WindowsKeyboard.cpp" />
-    <ClCompile Include="src\Modules\Time\Clock.cpp" />
-    <ClCompile Include="src\Core\CoreType\TimePoint.cpp" />
-    <ClCompile Include="src\Modules\Inputs\WindowsMouse.cpp" />
+    <ClCompile Include="Source\Modules\Render\Camera.cpp" />
+    <ClCompile Include="Source\Scripts\GameObjectScript.cpp" />
+    <ClCompile Include="Source\Scripts\Script.cpp" />
+    <ClCompile Include="Source\Modules\Inputs\Input.cpp" />
+    <ClCompile Include="Source\Core\CoreType\Mesh.cpp" />
+    <ClCompile Include="Source\Core\Manager\ScriptManager.cpp" />
+    <ClCompile Include="Source\Modules\Render\DirectX\Objects\Dx12ConstantBuffer.cpp" />
+    <ClCompile Include="Source\Modules\Render\DirectX\Objects\Dx12GraphicObject.cpp" />
+    <ClCompile Include="Source\Maths\Mat4.cpp" />
+    <ClCompile Include="Source\Objects\GameObject.cpp" />
+    <ClCompile Include="Source\Objects\Components\GraphicComponent.cpp" />
+    <ClCompile Include="Source\Core\CoreType\Id.cpp" />
+    <ClCompile Include="Source\Core\CoreType\Color.cpp" />
+    <ClCompile Include="Source\Core\CoreType\Vertex.cpp" />
+    <ClCompile Include="Source\Core\Manager\ModuleManager.cpp" />
+    <ClCompile Include="Source\Maths\Vec2.cpp" />
+    <ClCompile Include="Source\Maths\Vec3.cpp" />
+    <ClCompile Include="Source\Modules\Display\Window.cpp" />
+    <ClCompile Include="Source\Engine.cpp" />
+    <ClCompile Include="Source\Modules\Render\DirectX\Dx12.cpp" />
+    <ClCompile Include="Source\Modules\Render\DirectX\Dx12Factory.cpp" />
+    <ClCompile Include="Source\Modules\Render\RenderInterface.cpp" />
+    <ClCompile Include="Source\Utility\Ini\IniParser.cpp" />
+    <ClCompile Include="Source\Modules\Tools\Logs\Log.cpp" />
+    <ClCompile Include="Source\Modules\Tools\Logs\Logger.cpp" />
+    <ClCompile Include="Source\Core\CoreType\String.cpp" />
+    <ClCompile Include="Source\Core\CoreType\Transform.cpp" />
+    <ClCompile Include="Source\Modules\Inputs\WindowsKeyboard.cpp" />
+    <ClCompile Include="Source\Modules\Time\Clock.cpp" />
+    <ClCompile Include="Source\Core\CoreType\TimePoint.cpp" />
+    <ClCompile Include="Source\Modules\Inputs\WindowsMouse.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Core\Shaders\PixelShader.hlsl">
@@ -101,15 +103,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Config\config.ini" />
-    <None Include="src\Core\Manager\ModuleManager.inl" />
-    <None Include="src\Core\Manager\ScriptManager.inl" />
-    <None Include="src\Objects\GameObject.inl" />
+    <None Include="Source\Core\Manager\ModuleManager.inl" />
+    <None Include="Source\Core\Manager\ScriptManager.inl" />
+    <None Include="Source\Objects\GameObject.inl" />
+    <ClInclude Include="Source\Core\CoreType\Container\Vector.inl">
+      <FileType>Document</FileType>
+    </ClInclude>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{291D2B5F-EF7F-4C55-B96D-87737397CA51}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>EngineCore</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -152,7 +157,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;ENGINECORE_EXPORTS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)EngineCore\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)EngineCore\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

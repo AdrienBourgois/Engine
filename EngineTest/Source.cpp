@@ -8,7 +8,7 @@
 
 int WINAPI wWinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, PWSTR _pCmdLine, int _nCmdShow)
 {
-	HINSTANCE hinstLib = LoadLibrary(L"EngineCore.dll");
+	HINSTANCE hinst_lib = LoadLibrary(L"EngineCore.dll");
 	Engine::GetInstance()->Initialize();
 
 	ADD_SCRIPT(RedCube);
@@ -18,7 +18,7 @@ int WINAPI wWinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, PWSTR _pCmdL
 
 	Engine::GetInstance()->Start();
 
-	FreeLibrary(hinstLib);
+	FreeLibrary(hinst_lib);
 
 	return EXIT_SUCCESS;
 }

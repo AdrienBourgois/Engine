@@ -27,9 +27,9 @@ public:
 		if (Keyboard->IsKeyDown(Key::S))
 			transform.rotation.x -= 0.1f * _delta;
 
-		if(Mouse->IsLeftMouseButtonDown())
+		if (Mouse->IsLeftMouseButtonDown())
 			transform.rotation.x += 0.1f * _delta;
-		if(Mouse->IsRightMouseButtonDown())
+		if (Mouse->IsRightMouseButtonDown())
 			transform.rotation.x -= 0.1f * _delta;
 		Camera->SetTransform(transform);
 	}
