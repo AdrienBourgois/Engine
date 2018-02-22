@@ -69,23 +69,23 @@ namespace Core
 			/**
 			 * \brief Constructor (empty String)
 			 */
-			String();
+			String() = default;
 			/**
 			 * \brief Interger constructor
 			 * \param _value Value to convert in string
 			 */
-			explicit String(const int _value);
+			explicit String(int _value);
 			/**
 			 * \brief Float constructor
 			 * \param _value Value to convert in string
 			 */
-			explicit String(const float _value);
+			explicit String(float _value);
 			/**
 			 * \brief Constructor from C String and her size
 			 * \param _text Pointer to a C String
 			 * \param _size C String size
 			 */
-			String(const char* _text, const unsigned int _size);
+			String(const char* _text, unsigned int _size);
 			/**
 			 * \brief Copy constructor
 			 * \param _other_string String to copy
@@ -111,24 +111,30 @@ namespace Core
 			 * \param _index 0-based index in String
 			 * \return Pointer to data at desired position
 			 */
-			char* At(const unsigned _index) const;
+			char* At(unsigned _index) const;
 			/**
 			 * \brief Access to character in String
 			 * \param _index 0-based index in String
 			 * \return Character at desired position
 			 */
-			char operator[](const unsigned _index) const;
+			char operator[](unsigned _index) const;
 			/**
 			 * \brief Copy string into another
-			 * \param _new_string String to copy
+			 * \param _other_string String to copy
 			 */
-			void operator=(const String& _new_string);
+			String& operator=(const String& _other_string);
 			/**
 			 * \brief Add string to another / Concatenation
-			 * \param _other_string String to copy
+			 * \param _other_string String to add
 			 * \return New String with concatenation of the input Strings
 			 */
 			String operator+(const String& _other_string) const;
+			/**
+			 * \brief Add character to a String
+			 * \param _character Character to add
+			 * \return New String with concatenation of the input Strings
+			 */
+			String operator+(char _character) const;
 			/**
 			 * \brief Add String to this String
 			 * \param _other_string String to add
@@ -138,7 +144,7 @@ namespace Core
 			 * \brief Add a single character to the string
 			 * \param _character Character to add
 			 */
-			void operator+=(const char _character);
+			void operator+=(char _character);
 			/**
 			 * \brief Compare content of Strings
 			 * \param _other_string String to compare
@@ -158,9 +164,14 @@ namespace Core
 
 			/**
 			 * \brief Add String to this String
-			 * \param _string String to add
+			 * \param _other_string String to add
 			 */
-			void Append(const String& _string);
+			void Append(const String& _other_string);
+			/**
+			 * \brief Add String to this String
+			 * \param _character Character to add
+			 */
+			void Append(char _character);
 
 			/**
 			 * \brief Determine if this String contain an other String
@@ -200,7 +211,7 @@ namespace Core
 			 * \param _bytes_count Count of characters to reserve (must be greater than size of String)
 			 * \return Is memory reserved
 			 */
-			bool Reserve(const unsigned _bytes_count);
+			bool Reserve(unsigned _bytes_count);
 
 		private:
 			/**
@@ -210,7 +221,7 @@ namespace Core
 			 * \param _start_index 0-based Index of this String to start copy
 			 * \note Assume that space for this String is already allocated
 			 */
-			void CopyString(const String& _source, unsigned _size = NullSize, const unsigned _start_index = 0) const;
+			void CopyString(const String& _source, unsigned _size = NullSize, unsigned _start_index = 0) const;
 			/**
 			 * \brief Free string memory and reset size
 			 */
@@ -219,7 +230,7 @@ namespace Core
 			 * \brief Verify the Null Terminating Character ('\0') and size of String
 			 * \param _end_of_string_index If know, 0-based index of the Null Terminating Character ('\0')
 			 */
-			void VerifyString(const unsigned _end_of_string_index = NullSize);
+			void VerifyString(unsigned _end_of_string_index = NullSize);
 
 			/**
 			 * \brief Pointer to data
@@ -234,7 +245,7 @@ namespace Core
 			 */
 			unsigned int size = NullSize;
 			/**
-			 * \brief Size of allocated datas
+			 * \brief Size of allocated data
 			 */
 			unsigned int capacity = NullSize;
 		};

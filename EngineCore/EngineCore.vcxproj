@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Core\CoreType\Container\Iterator\Iterators.h" />
+    <ClInclude Include="Source\Core\Interface\Iterators.h" />
     <ClInclude Include="Source\Core\CoreType\Container\Vector.h" />
     <ClInclude Include="Source\Core\Interface\IMouseInputs.h" />
     <ClInclude Include="Source\Modules\Render\Camera.h" />
@@ -109,6 +109,12 @@
     <ClInclude Include="Source\Core\CoreType\Container\Vector.inl">
       <FileType>Document</FileType>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Natvis\Core\CoreType\Container\Vector.natvis">
+      <SubType>Designer</SubType>
+    </Natvis>
+    <Natvis Include="Natvis\Core\CoreType\String.natvis" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{291D2B5F-EF7F-4C55-B96D-87737397CA51}</ProjectGuid>

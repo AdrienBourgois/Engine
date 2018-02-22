@@ -315,16 +315,16 @@ bool Module::Render::DirectX12::Dx12Factory::CreateVertexBuffer(Dx12CommandExecu
 	return true;
 }
 
-bool Module::Render::DirectX12::Dx12Factory::CreateIndexBuffer(Dx12CommandExecutionPack _pack, Core::CoreType::String _name, unsigned int* _indexs_array, unsigned int _indexs_count, ID3D12GraphicsCommandList* _command_list, D3D12_INDEX_BUFFER_VIEW** _index_buffer_view)
+bool Module::Render::DirectX12::Dx12Factory::CreateIndexBuffer(Dx12CommandExecutionPack _pack, Core::CoreType::String _name, unsigned int* _indexes_array, unsigned int _indexes_count, ID3D12GraphicsCommandList* _command_list, D3D12_INDEX_BUFFER_VIEW** _index_buffer_view)
 {
 	TRYFUNC(_command_list->Reset(_pack.commandAllocator, _pack.pipelineState));
 
-	unsigned int* index_list = new unsigned int[_indexs_count];
+	unsigned int* index_list = new unsigned int[_indexes_count];
 
-	for (unsigned int i = 0; i < _indexs_count; ++i)
-		index_list[i] = _indexs_array[i];
+	for (unsigned int i = 0; i < _indexes_count; ++i)
+		index_list[i] = _indexes_array[i];
 
-	int buffer_size = _indexs_count * sizeof(unsigned int);
+	int buffer_size = _indexes_count * sizeof(unsigned int);
 
 	CD3DX12_HEAP_PROPERTIES default_heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 	CD3DX12_HEAP_PROPERTIES upload_heap_properties  = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);

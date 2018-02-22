@@ -20,10 +20,14 @@ namespace Core
 				 * \brief Simple cube
 				 */
 				Cube,
+				/**
+				 * \brief Plane
+				 */
+				Plane,
 			};
 
 			/**
-			 * \brief Static vertices datas for cube
+			 * \brief Static vertices data for cube
 			 */
 			static const Vertex CubeVertices[] =
 			{
@@ -65,7 +69,7 @@ namespace Core
 			};
 
 			/**
-			 * \brief Static indexs datas for cube
+			 * \brief Static indexs data for cube
 			 */
 			static unsigned int CubeIndexs[] =
 			{

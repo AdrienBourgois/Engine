@@ -201,22 +201,22 @@ namespace Module
 				 * \brief Create an index buffer from object
 				 * \param _pack Dx12CommandExecutionPack with objects needed to create buffer
 				 * \param _name Name of buffer
-				 * \param _indexs_array Array of indexs (If vertices are indexed)
-				 * \param _indexs_count Size of indexs array
+				 * \param _indexes_array Array of indexes (If vertices are indexed)
+				 * \param _indexes_count Size of indexes array
 				 * \param _command_list Command list used to create buffer
 				 * \param[out] _index_buffer_view Pointer to a D3D12_INDEX_BUFFER_VIEW
 				 * \return Is function success
 				 */
-				bool CreateIndexBuffer(Dx12CommandExecutionPack _pack, Core::CoreType::String _name, unsigned int* _indexs_array, unsigned int _indexs_count, ID3D12GraphicsCommandList* _command_list, D3D12_INDEX_BUFFER_VIEW** _index_buffer_view);
+				bool CreateIndexBuffer(Dx12CommandExecutionPack _pack, Core::CoreType::String _name, unsigned int* _indexes_array, unsigned int _indexes_count, ID3D12GraphicsCommandList* _command_list, D3D12_INDEX_BUFFER_VIEW** _index_buffer_view);
 				/**
-				 * \brief Create a constabnt buffer
-				 * \tparam T Type of datas to pass
-				 * \param _datas Default datas for buffer
+				 * \brief Create a constant buffer
+				 * \tparam T Type of data to pass
+				 * \param _data Default data for buffer
 				 * \param[out] _constant_buffer Pointer to a Module::Render::DirectX12::Objects::Dx12ConstantBuffer
 				 * \return Is function success
 				 */
 				template <typename T>
-				bool CreateConstantBuffer(T* _datas, Objects::Dx12ConstantBuffer** _constant_buffer);
+				bool CreateConstantBuffer(T* _data, Objects::Dx12ConstantBuffer** _constant_buffer);
 
 			private:
 				/**
@@ -235,7 +235,7 @@ namespace Module
 			};
 
 			template <typename T>
-			bool Dx12Factory::CreateConstantBuffer(T* _datas, Objects::Dx12ConstantBuffer** _constant_buffer)
+			bool Dx12Factory::CreateConstantBuffer(T* _data, Objects::Dx12ConstantBuffer** _constant_buffer)
 			{
 				ID3D12DescriptorHeap* _heap_descriptor = nullptr;
 
@@ -254,12 +254,12 @@ namespace Module
 
 				D3D12_CONSTANT_BUFFER_VIEW_DESC constant_buffer_view_desc;
 				constant_buffer_view_desc.BufferLocation = constant_buffer_upload_heap->GetGPUVirtualAddress();
-				constant_buffer_view_desc.SizeInBytes = sizeof(_datas) + 255 & ~255;
+				constant_buffer_view_desc.SizeInBytes = sizeof(_data) + 255 & ~255;
 				device->CreateConstantBufferView(&constant_buffer_view_desc, _heap_descriptor->GetCPUDescriptorHandleForHeapStart());
 
 				*_constant_buffer = new Objects::Dx12ConstantBuffer(_heap_descriptor, constant_buffer_upload_heap);
 
-				memcpy((*_constant_buffer)->Map(), &_datas, sizeof(_datas));
+				memcpy((*_constant_buffer)->Map(), &_data, sizeof(_data));
 
 				(*_constant_buffer)->Unmap();
 

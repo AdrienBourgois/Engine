@@ -12,6 +12,7 @@ public:
 	{
 		Transform transform = Camera->GetTransform();
 		transform.position.z = 4.f;
+		transform.rotation = 0.f;
 		Camera->SetTransform(transform);
 	}
 
@@ -27,10 +28,14 @@ public:
 		if (Keyboard->IsKeyDown(Key::S))
 			transform.rotation.x -= 0.1f * _delta;
 
-		if (Mouse->IsLeftMouseButtonDown())
-			transform.rotation.x += 0.1f * _delta;
-		if (Mouse->IsRightMouseButtonDown())
-			transform.rotation.x -= 0.1f * _delta;
+		if (Keyboard->IsKeyDown(Key::Left))
+			transform.position.x -= 0.01f * _delta;
+		if (Keyboard->IsKeyDown(Key::Right))
+			transform.position.x += 0.01f * _delta;
+		if (Keyboard->IsKeyDown(Key::Down))
+			transform.position.z += 0.01f * _delta;
+		if (Keyboard->IsKeyDown(Key::Up))
+			transform.position.z -= 0.01f * _delta;
 		Camera->SetTransform(transform);
 	}
 };

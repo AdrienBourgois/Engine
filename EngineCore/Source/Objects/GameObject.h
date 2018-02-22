@@ -31,7 +31,7 @@ namespace Object
 		 * \brief Constructor
 		 * \param _name Name of object
 		 */
-		explicit GameObject(Core::CoreType::String _name);
+		explicit GameObject(const Core::CoreType::String& _name);
 		/**
 		 * \brief Default destructor
 		 */

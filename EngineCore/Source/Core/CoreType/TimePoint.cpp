@@ -94,16 +94,14 @@ void Core::CoreType::TimePoint::operator+=(const TimePoint _other)
 
 Core::CoreType::TimePoint::operator bool() const
 {
-	if (millisecond || second || minute || hour || day)
-		return true;
-	return false;
+	return millisecond || second || minute || hour || day;
 }
 
 Core::CoreType::String Core::CoreType::TimePoint::ToString()
 {
 	Normalize();
 
-	return SN(hour) + S(":") + SN(minute) + S(":") + SN(second);
+	return SN(hour) + ':' + SN(minute) + ':' + SN(second);
 }
 
 void Core::CoreType::TimePoint::Normalize()

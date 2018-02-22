@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="Core::CoreType::String">
+    <DisplayString Condition="data == nullptr">Empty String</DisplayString>
+    <DisplayString>{data,s} ({size})</DisplayString>
+    <StringView>data,s</StringView>
+    <Expand HideRawView="1">
+      <Item Name="[Size]">size</Item>
+      <Item Name="[Capacity]">capacity</Item>
+      <Synthetic Name="[Characters list]">
+        <Expand>
+          <ArrayItems>
+            <Direction>Forward</Direction>
+            <Size>size</Size>
+            <ValuePointer>data</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+    </Expand>
+  </Type>
+</AutoVisualizer>

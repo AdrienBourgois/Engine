@@ -36,9 +36,9 @@ public:
 
 	/**
 	 * \brief Initialize the engine
-	 * \param hInstance Handle Instance of a parent
+	 * \param _h_instance Handle Instance of a parent
 	 */
-	void Initialize(HINSTANCE hInstance = nullptr);
+	void Initialize(HINSTANCE _h_instance = nullptr);
 	/**
 	 * \brief Start the engine (and components, scripts...)
 	 */
@@ -58,9 +58,9 @@ public:
 
 	/**
 	 * \brief Set a new hInstance
-	 * \param _hInstance New instance
+	 * \param _h_instance New instance
 	 */
-	void SetHInstance(HINSTANCE _hInstance) { hInstance = _hInstance; }
+	void SetHInstance(const HINSTANCE _h_instance) { hInstance = _h_instance; }
 	/**
 	 * \brief Return the hInstance
 	 * \return Instance
@@ -87,7 +87,7 @@ public:
 	 * \tparam U Ensure that the script inherit from Core::Interface::IScript
 	 */
 	template <typename T, class U = typename std::enable_if<std::is_base_of<Core::Interface::IScript, T>::value, T>::type>
-	const void AddScript() const;
+	void AddScript() const;
 
 	/**
 	 * \brief List of engine states
@@ -107,7 +107,7 @@ public:
 		 */
 		Ready,
 		/**
-		 * \brief Start  engine, modules, scripts...
+		 * \brief Start engine, modules, scripts...
 		 */
 		Starting,
 		/**
@@ -115,7 +115,7 @@ public:
 		 */
 		Running,
 		/**
-		 * \brief An script, module, ... (or the engine himself) ask to stop the engine
+		 * \brief A script, module, ... (or the engine himself) ask to stop the engine
 		 */
 		AskToStop,
 		/**
@@ -181,7 +181,7 @@ T* Engine::GetModule() const
 }
 
 template <typename T, class U>
-const void Engine::AddScript() const
+void Engine::AddScript() const
 {
 	scriptManager->AddScript<U>();
 }

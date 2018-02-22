@@ -46,12 +46,12 @@ namespace Core
 			 * \brief Get a local matrix for this transformation
 			 * \return Local matrix
 			 */
-			const Math::Mat4 GetLocalMatrix() const;
+			Math::Mat4 GetLocalMatrix() const;
 			/**
 			 * \brief Get the world matrix for this transformation
 			 * \return World matrix
 			 */
-			const Math::Mat4 GetWorldMatrix() const;
+			Math::Mat4 GetWorldMatrix() const;
 
 			/**
 			 * \brief Set a new parent for this transform

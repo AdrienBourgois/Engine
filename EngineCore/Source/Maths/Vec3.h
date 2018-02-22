@@ -39,10 +39,17 @@ namespace Math
 		Vec3(const Vec3& _other_vec) = default;
 
 		/**
-		 * \brief Copy vector
-		 * \param _other_vector Vetor to copy
+		 * \brief Copy members vector
+		 * \param _other_vector Vector with members to copy
+		 * \return Reference to vector
 		 */
-		void operator=(Vec3 _other_vector);
+		Vec3& operator=(Vec3 _other_vector);
+		/**
+		 * \brief Set all members to same value
+		 * \param _value Value to set for each member
+		 * \return Reference to vector
+		 */
+		Vec3& operator=(float _value);
 		/**
 		 * \brief Compare vector
 		 * \param _other_vec Vector to compare

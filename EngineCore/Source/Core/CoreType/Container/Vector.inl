@@ -1,9 +1,60 @@
 ﻿#pragma once
+#include <vector>
 
 template<typename T>
 Core::CoreType::Container::Vector<T>::Vector(const size_t _capacity): capacity(_capacity)
 {
 	elements = new T[_capacity];
+}
+
+template<typename T>
+Core::CoreType::Container::Vector<T>::Vector(const Vector& _other)
+{
+	Reserve(_other.size);
+	size = _other.size;
+	for (int i = 0; i < _other.size; ++i)
+	{
+		elements[i] = _other.elements[i];
+	}
+}
+
+template<typename T>
+Core::CoreType::Container::Vector<T>::Vector(Vector&& _other) noexcept
+{
+	capacity = _other.capacity;
+	elements = _other.elements;
+	size = _other.size;
+
+	_other.capacity = 0;
+	_other.size = 0;
+	_other.elements = nullptr;
+}
+
+template<typename T>
+Core::CoreType::Container::Vector<T>& Core::CoreType::Container::Vector<T>::operator=(const Vector& _other)
+{
+	Reserve(_other.size);
+	size = _other.size;
+	for (int i = 0; i < _other.size; ++i)
+	{
+		elements[i] = _other.elements[i];
+	}
+
+	return *this;
+}
+
+template<typename T>
+Core::CoreType::Container::Vector<T>& Core::CoreType::Container::Vector<T>::operator=(Vector&& _other) noexcept
+{
+	capacity = _other.capacity;
+	elements = _other.elements;
+	size = _other.size;
+
+	_other.capacity = 0;
+	_other.size = 0;
+	_other.elements = nullptr;
+
+	return *this;
 }
 
 template<typename T>
@@ -140,45 +191,42 @@ bool Core::CoreType::Container::Vector<T>::IsEmpty() const
 template<typename T>
 typename Core::CoreType::Container::Vector<T>::VectorIterator Core::CoreType::Container::Vector<T>::Begin()
 {
-	return VectorIterator(*this);
+	return VectorIterator(elements);
 }
 
 template<typename T>
 typename Core::CoreType::Container::Vector<T>::VectorIterator Core::CoreType::Container::Vector<T>::End()
 {
-	return VectorIterator(*this, IsEmpty() ? 0 : size);
+	return VectorIterator(elements + size);
 }
 
 /* VectorIterator */
 
 template<typename T>
-Core::CoreType::Container::Vector<T>::VectorIterator::VectorIterator(Vector<T>& _vector) : vector(_vector) {}
-
-template<typename T>
-Core::CoreType::Container::Vector<T>::VectorIterator::VectorIterator(Vector<T>& _vector, const size_t _index) : vector(_vector), index(_index) {}
+Core::CoreType::Container::Vector<T>::VectorIterator::VectorIterator(T* _pointer) : pointer(_pointer) {}
 
 template<typename T>
 T& Core::CoreType::Container::Vector<T>::VectorIterator::operator*()
 {
-	return vector[index];
+	return *pointer;
 }
 
 template<typename T>
 T* Core::CoreType::Container::Vector<T>::VectorIterator::operator->()
 {
-	return &vector[index];
+	return pointer;
 }
 
 template<typename T>
 bool Core::CoreType::Container::Vector<T>::VectorIterator::operator==(const VectorIterator& _other)
 {
-	return &_other.vector == &vector && _other.index == index;
+	return pointer == _other.pointer;
 }
 
 template<typename T>
 bool Core::CoreType::Container::Vector<T>::VectorIterator::operator!=(const VectorIterator& _other)
 {
-	return &_other.vector != &vector || _other.index != index;
+	return pointer != _other.pointer;
 }
 
 template<typename T>
@@ -190,7 +238,7 @@ typename Core::CoreType::Container::Vector<T>::VectorIterator& Core::CoreType::C
 template<typename T>
 typename Core::CoreType::Container::Vector<T>::VectorIterator& Core::CoreType::Container::Vector<T>::VectorIterator::operator++()
 {
-	++index;
+	++pointer;
 	return *this;
 }
 
@@ -203,78 +251,62 @@ typename Core::CoreType::Container::Vector<T>::VectorIterator& Core::CoreType::C
 template<typename T>
 typename Core::CoreType::Container::Vector<T>::VectorIterator& Core::CoreType::Container::Vector<T>::VectorIterator::operator--()
 {
-	--index;
+	--pointer;
 	return *this;
 }
 
 template<typename T>
-T& Core::CoreType::Container::Vector<T>::VectorIterator::operator[](size_t _index)
+T& Core::CoreType::Container::Vector<T>::VectorIterator::operator[](const size_t _index)
 {
-	return vector[index];
+	return *(pointer + _index);
 }
 
 template<typename T>
 typename Core::CoreType::Container::Vector<T>::VectorIterator& Core::CoreType::Container::Vector<T>::VectorIterator::operator+=(const size_t _index)
 {
-	index += _index;
+	pointer += _index;
 	return *this;
 }
 
 template<typename T>
 typename Core::CoreType::Container::Vector<T>::VectorIterator& Core::CoreType::Container::Vector<T>::VectorIterator::operator-=(const size_t _index)
 {
-	index -= _index;
+	pointer -= _index;
 	return *this;
 }
 
 template<typename T>
 bool Core::CoreType::Container::Vector<T>::VectorIterator::operator<(const VectorIterator& _other)
 {
-	return &_other.vector == &vector && _other.index < index;
+	return pointer < _other.pointer;
 }
 
 template<typename T>
 bool Core::CoreType::Container::Vector<T>::VectorIterator::operator>(const VectorIterator& _other)
 {
-	return &_other.vector == &vector && _other.index > index;
+	return pointer > _other.pointer;
 }
 
 template<typename T>
 bool Core::CoreType::Container::Vector<T>::VectorIterator::operator<=(const VectorIterator& _other)
 {
-	return &_other.vector == &vector && _other.index <= index;
+	return pointer <= _other.pointer;
 }
 
 template<typename T>
 bool Core::CoreType::Container::Vector<T>::VectorIterator::operator>=(const VectorIterator& _other)
 {
-	return &_other.vector == &vector && _other.index >= index;
-}
-
-template<typename T>
-typename Core::CoreType::Container::Vector<T>::VectorIterator Core::CoreType::Container::Vector<T>::VectorIterator::operator+(VectorIterator _other)
-{
-	index += _other.index;
-	return *this;
-}
-
-template<typename T>
-typename Core::CoreType::Container::Vector<T>::VectorIterator Core::CoreType::Container::Vector<T>::VectorIterator::operator-(VectorIterator _other)
-{
-	index -= _other.index;
-	return *this;
+	return pointer >= _other.pointer;
 }
 
 template<typename T>
 typename Core::CoreType::Container::Vector<T>::VectorIterator Core::CoreType::Container::Vector<T>::VectorIterator::operator+(const size_t _delta)
 {
-	index += _delta;
-	return *this;
+	return VectorIterator(pointer + _delta);
 }
 
 template<typename T>
 typename Core::CoreType::Container::Vector<T>::VectorIterator Core::CoreType::Container::Vector<T>::VectorIterator::operator-(const size_t _delta)
 {
-	index -= _delta;
-	return *this;
+	return VectorIterator(pointer - _delta);
 }

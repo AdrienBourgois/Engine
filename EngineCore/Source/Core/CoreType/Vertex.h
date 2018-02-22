@@ -8,7 +8,7 @@ namespace Core
 	namespace CoreType
 	{
 		/**
-		 * \brief Store location and color datas for vertex
+		 * \brief Store location and color data for vertex
 		 */
 		class ENGINEDLL_API Vertex
 		{
@@ -18,7 +18,7 @@ namespace Core
 			 */
 			Vertex() = default;
 			/**
-			 * \brief Contructor with 7 float
+			 * \brief Constructor with 7 float
 			 * \param _x Location x
 			 * \param _y Location y
 			 * \param _z Location z
@@ -29,7 +29,7 @@ namespace Core
 			 */
 			Vertex(float _x, float _y, float _z, float _r, float _g, float _b, float _a);
 			/**
-			 * \brief Contructor whith location as float and Color as color
+			 * \brief Constructor with location as float and Color as color
 			 * \param _x Location x
 			 * \param _y Location y
 			 * \param _z Location z
@@ -37,7 +37,7 @@ namespace Core
 			 */
 			Vertex(float _x, float _y, float _z, Color _color);
 			/**
-			 * \brief Contructor with Vec3 as location and 4 float as color
+			 * \brief Constructor with Vec3 as location and 4 float as color
 			 * \param _location Location vector
 			 * \param _r Color red
 			 * \param _g Color green
@@ -74,22 +74,22 @@ namespace Core
 			void SetColor(Color _new_color);
 
 			/**
-			 * \brief Return a pointer to array with datas
+			 * \brief Return a pointer to array with data
 			 * \return Array pointer
 			 */
-			const float* GetTable() const { return datas; }
+			const float* GetTable() const { return data; }
 
 			/**
-			 * \brief Return size of datas
-			 * \return Size of datas in bytes
+			 * \brief Return size of data
+			 * \return Size of data in bytes
 			 */
-			static int GetSize() { return sizeof datas; }
+			static int GetSize() { return sizeof data; }
 
 		private:
 			/**
-			 * \brief Array with datas continue in memory
+			 * \brief Array with data continue in memory
 			 */
-			float datas[7] = {0.f, 0.f, 0.f, 1.f, 1.f, 1.f, 1.f};
+			float data[7] = {0.f, 0.f, 0.f, 1.f, 1.f, 1.f, 1.f};
 		};
 	}
 }

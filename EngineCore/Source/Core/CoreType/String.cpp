@@ -1,10 +1,7 @@
 #include "Core/CoreType/String.h"
 #include <cstring>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string>
-
-Core::CoreType::String::String()
-{}
 
 Core::CoreType::String::String(const int _value)
 {
@@ -52,33 +49,29 @@ Core::CoreType::String::~String()
 
 bool Core::CoreType::String::IsEmpty() const
 {
-	if(data == nullptr || size == 0)
-		return true;
-	return false;
+	return data == nullptr || size == 0;
 }
 
 bool Core::CoreType::String::IsNull() const
 {
-	if (data == nullptr)
-		return true;
-	return false;
+	return data == nullptr;
 }
 
-char* Core::CoreType::String::At(const unsigned _range) const
+char* Core::CoreType::String::At(const unsigned _index) const
 {
-	if (_range > size)
+	if (_index > size)
 		return nullptr;
-	return data + _range;
+	return data + _index;
 }
 
-char Core::CoreType::String::operator[](const unsigned _range) const
+char Core::CoreType::String::operator[](const unsigned _index) const
 {
-	if (_range > size)
+	if (_index > size)
 		return 0;
-	return data[_range];
+	return data[_index];
 }
 
-void Core::CoreType::String::operator=(const String& _other_string)
+Core::CoreType::String& Core::CoreType::String::operator=(const String& _other_string)
 {
 	if(_other_string.size + 1 > capacity)
 	{
@@ -90,10 +83,14 @@ void Core::CoreType::String::operator=(const String& _other_string)
 	memcpy(data, _other_string.data, _other_string.size);
 
 	VerifyString(_other_string.size);
+
+	return *this;
 }
 
 Core::CoreType::String Core::CoreType::String::operator+(const String& _other_string) const
 {
+	if(_other_string.IsNull()) return *this;
+
 	String string;
 
 	string.capacity = size + _other_string.size + 1;
@@ -106,14 +103,29 @@ Core::CoreType::String Core::CoreType::String::operator+(const String& _other_st
 	return string;
 }
 
+Core::CoreType::String Core::CoreType::String::operator+(const char _character) const
+{
+	String string;
+
+	string.capacity = size + 2;
+	string.data = new char[string.capacity];
+	memcpy(string.data, data, size);
+	string.data[size] = _character;
+
+	string.VerifyString();
+
+	return string;
+
+}
+
 void Core::CoreType::String::operator+=(const String& _other_string)
 {
 	Append(_other_string);
 }
 
-void Core::CoreType::String::operator+=(char _character)
+void Core::CoreType::String::operator+=(const char _character)
 {
-	Append(String(&_character, 1));
+	Append(_character);
 }
 
 bool Core::CoreType::String::operator==(const String& _other_string) const
@@ -136,10 +148,7 @@ bool Core::CoreType::String::operator!=(const String& _other_string) const
 
 Core::CoreType::String::operator bool() const
 {
-	if (size)
-		return true;
-
-	return false;
+	return size != 0;
 }
 
 void Core::CoreType::String::Append(const String& _other_string)
@@ -150,20 +159,28 @@ void Core::CoreType::String::Append(const String& _other_string)
 		first_string_size = 0;
 
 	if(capacity == NullSize || capacity < new_size + 1)
-	{
 		Reserve(new_size + 1);
-	}
 
 	memcpy(data + first_string_size, _other_string.data, _other_string.size);
 
 	VerifyString(new_size);
 }
 
+void Core::CoreType::String::Append(const char _character)
+{
+	const unsigned int new_size = size + 1;
+
+	if(capacity == NullSize || capacity < new_size + 1)
+		Reserve(new_size + 1);
+
+	data[size] = _character;
+
+	VerifyString(new_size);
+}
+
 bool Core::CoreType::String::Contain(const String& _string_to_find) const
 {
-	if(First(_string_to_find) == NullSize)
-		return false;
-	return true;
+	return First(_string_to_find) != NullSize;
 }
 
 unsigned Core::CoreType::String::First(const String& _string_to_find) const
@@ -232,10 +249,8 @@ void Core::CoreType::String::CopyString(const String& _source, unsigned _size, c
 
 void Core::CoreType::String::DeletePointer()
 {
-	if (data)
-		delete data;
-	if (widePointer)
-		delete widePointer;
+	delete data;
+	delete widePointer;
 
 	data = nullptr;
 	widePointer = nullptr;

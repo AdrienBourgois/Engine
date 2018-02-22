@@ -40,7 +40,16 @@ namespace Module
 				 * \param _message Message of log
 				 * \param _level Level of log
 				 */
-				ENGINEDLL_API void CreateEntry(Core::CoreType::String _message, ELog_level _level);
+				ENGINEDLL_API void CreateEntry(const Core::CoreType::String& _message, ELog_level _level);
+
+				/**
+				 * \brief Create log entry with source file
+				 * \param _message Message of log
+				 * \param _level Level of log
+				 * \param _file File caller of this function
+				 * \param _line Line number of file call of this function
+				 */
+				ENGINEDLL_API void CreateEntry(const Core::CoreType::String& _message, ELog_level _level, const Core::CoreType::String& _file, int _line);
 
 				/**
 				 * \brief Clear all entries
@@ -51,7 +60,7 @@ namespace Module
 				/**
 				 * \brief Create a new Windows Console Prompt and bind it to standard outputs
 				 */
-				void CreateWindowsConsole() const;
+				static void CreateWindowsConsole();
 				/**
 				 * \brief Write all entries in file
 				 * \return Is function a success

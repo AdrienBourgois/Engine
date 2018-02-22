@@ -33,7 +33,7 @@ namespace Module
 			namespace Objects
 			{
 				/**
-				 * \brief Handle datas and buffers from engine Object::Component::GraphicComponent
+				 * \brief Handle data and buffers from engine Object::Component::GraphicComponent
 				 */
 				class Dx12GraphicObject
 				{

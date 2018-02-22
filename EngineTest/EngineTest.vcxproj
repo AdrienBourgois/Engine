@@ -95,9 +95,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GreenCube.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Parents.h" />
     <ClInclude Include="RedCube.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -19,12 +19,6 @@
     <ClInclude Include="RedCube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GreenCube.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Parents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -57,7 +57,7 @@
  * \param log Text of entry
  * \param level Level of the log (see ELog_level)
  */
-#define LOG(log, level) MODULE(Module::Tools::Logs::Logger)->CreateEntry(log, ELog_level::level)
+#define LOG(log, level) MODULE(Module::Tools::Logs::Logger)->CreateEntry(log, ELog_level::level, S(__FILE__), __LINE__)
 
 /**
  * \brief Add a script to the engine

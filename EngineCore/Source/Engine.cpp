@@ -2,12 +2,12 @@
 
 Engine* Engine::instance = nullptr;
 
-BOOL WINAPI DllMain(HINSTANCE _hinstDLL, DWORD _fdwReason, LPVOID _lpReserved )
+BOOL WINAPI DllMain(const HINSTANCE _hinst_dll, const DWORD _fdw_reason, LPVOID _lp_reserved )
 {
-	switch( _fdwReason )
+	switch( _fdw_reason )
 	{
 		case DLL_PROCESS_ATTACH:
-			Engine::GetInstance()->SetHInstance(_hinstDLL);
+			Engine::GetInstance()->SetHInstance(_hinst_dll);
 			break;
 		case DLL_THREAD_ATTACH:
 			break;
@@ -23,12 +23,12 @@ BOOL WINAPI DllMain(HINSTANCE _hinstDLL, DWORD _fdwReason, LPVOID _lpReserved )
 	return true;
 }
 
-void Engine::Initialize(HINSTANCE _hInstance)
+void Engine::Initialize(const HINSTANCE _h_instance)
 {
 	state = EEngineStates::Initializing;
 
-	if(_hInstance)
-		hInstance = _hInstance;
+	if(_h_instance)
+		hInstance = _h_instance;
 
 	parameters = new Utility::IniParser(".\\content\\Config\\config.ini");
 	parameters->Parse();

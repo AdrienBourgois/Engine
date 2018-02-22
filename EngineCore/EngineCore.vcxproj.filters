@@ -243,10 +243,10 @@
     <ClInclude Include="Source\macros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\CoreType\Container\Iterator\Iterators.h">
+    <ClInclude Include="Source\Core\CoreType\Container\Vector.inl">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\CoreType\Container\Vector.inl">
+    <ClInclude Include="Source\Core\Interface\Iterators.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -271,5 +271,9 @@
     <FxCompile Include="Content\Core\Shaders\PixelShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Natvis\Core\CoreType\Container\Vector.natvis" />
+    <Natvis Include="Natvis\Core\CoreType\String.natvis" />
   </ItemGroup>
 </Project>

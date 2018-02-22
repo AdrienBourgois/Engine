@@ -32,7 +32,15 @@ namespace Module
 				 * \param _message Message of log
 				 * \param _level Level of log
 				 */
-				Log(Core::CoreType::String _message, ELog_level _level);
+				Log(const Core::CoreType::String& _message, ELog_level _level);
+				/**
+				 * \brief Log constructor
+				 * \param _message Message of log
+				 * \param _level Level of log
+				 * \param _file File caller
+				 * \param _line Line number of file caller
+				 */
+				Log(const Core::CoreType::String& _message, ELog_level _level, const Core::CoreType::String& _file, int _line);
 				/**
 				 * \brief Default destructor
 				 */
@@ -75,6 +83,14 @@ namespace Module
 				 * \brief Level of log
 				 */
 				ELog_level level = ELog_level::LOG_VERBOSE;
+				/**
+				 * \brief Source file that create log
+				 */
+				Core::CoreType::String file;
+				/**
+				 * \brief Line number of file that create log
+				 */
+				int line = 0;
 				/**
 				 * \brief Time of log
 				 */

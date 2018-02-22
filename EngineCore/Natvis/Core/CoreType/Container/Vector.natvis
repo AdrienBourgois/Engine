@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="Core::CoreType::Container::Vector&lt;*&gt;">
+    <DisplayString Condition="size == 0">Empty</DisplayString>
+    <DisplayString>Size = {size}; Capacity = {capacity}</DisplayString>
+    <Expand>
+      <Item Name="[Size]">size</Item>
+      <Item Name="[Capacity]">capacity</Item>
+      <Synthetic Name="[Elements]">
+        <Expand>
+          <ArrayItems>
+            <Size>size</Size>
+            <ValuePointer>elements</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+    </Expand>
+  </Type>
+</AutoVisualizer>

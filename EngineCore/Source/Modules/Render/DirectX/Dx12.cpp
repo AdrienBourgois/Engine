@@ -141,8 +141,7 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 		SAFE_RELEASE(fence[i]);
 	}
 
-	if (factory)
-		delete factory;
+	delete factory;
 
 	return true;
 }
