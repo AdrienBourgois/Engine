@@ -1,31 +1,31 @@
 #include "Mesh.h"
 
-Core::CoreType::Mesh::Mesh(Vertex _vertexs_array[], unsigned int _vertexs_count, unsigned int _indexs_array[], unsigned int _indexs_count)
+Core::CoreType::Mesh::Mesh(Vertex _vertices_array[], const unsigned int _vertices_count, unsigned int _indexes_array[], const unsigned int _indexes_count)
 {
-	CopyVerticesArray(_vertexs_array, _vertexs_count);
+	CopyVerticesArray(_vertices_array, _vertices_count);
 
-	if(_indexs_array && _indexs_count)
+	if(_indexes_array && _indexes_count)
 	{
-		CopyIndexsArray(_indexs_array, _indexs_count);
+		CopyIndexesArray(_indexes_array, _indexes_count);
 		indexed = true;
 	}
 }
 
-Core::CoreType::Mesh::Mesh(PrimitiveMesh::PrimitivesMeshType _mesh_type)
+Core::CoreType::Mesh::Mesh(const PrimitiveMesh::PrimitivesMeshType _mesh_type)
 {
 	if(_mesh_type == PrimitiveMesh::PrimitivesMeshType::Cube)
 	{
 		CopyVerticesArray(PrimitiveMesh::CubeVertices, _countof(PrimitiveMesh::CubeVertices));
-		CopyIndexsArray(PrimitiveMesh::CubeIndexs, _countof(PrimitiveMesh::CubeIndexs));
+		CopyIndexesArray(PrimitiveMesh::CubeIndexes, _countof(PrimitiveMesh::CubeIndexes));
 		indexed = true;
 	}
 }
 
-void Core::CoreType::Mesh::SetColor(Color _color) const
+void Core::CoreType::Mesh::SetColor(const Color _color)
 {
 	for (int i = 0; i < GetVertexCount(); ++i)
 	{
-		vertices->at(i).SetColor(_color);
+		vertices[i].SetColor(_color);
 	}
 }
 
@@ -36,36 +36,36 @@ bool Core::CoreType::Mesh::IsIndexed() const
 
 Core::CoreType::Vertex* Core::CoreType::Mesh::GetVertices() const
 {
-	return vertices->data();
+	return vertices.GetData();
 }
 
-unsigned int* Core::CoreType::Mesh::GetIndexs() const
+unsigned int* Core::CoreType::Mesh::GetIndexes() const
 {
-	return indexs->data();
+	return indexes.GetData();
 }
 
 int Core::CoreType::Mesh::GetVertexCount() const
 {
-	return static_cast<int>(vertices->size());
+	return static_cast<int>(vertices.Size());
 }
 
 int Core::CoreType::Mesh::GetIndexCount() const
 {
-	return static_cast<int>(indexs->size());
+	return static_cast<int>(indexes.Size());
 }
 
-void Core::CoreType::Mesh::CopyVerticesArray(const Vertex _vertexs_array[], unsigned int _vertexs_count) const
+void Core::CoreType::Mesh::CopyVerticesArray(const Vertex _vertices_array[], const unsigned int _vertices_count)
 {
-	vertices->reserve(_vertexs_count);
+	vertices.Reserve(_vertices_count);
 
-	for (unsigned int i = 0; i < _vertexs_count; ++i)
-		vertices->push_back(_vertexs_array[i]);
+	for (unsigned int i = 0; i < _vertices_count; ++i)
+		vertices.PushBack(_vertices_array[i]);
 }
 
-void Core::CoreType::Mesh::CopyIndexsArray(unsigned int _indexs_array[], unsigned int _indexs_count) const
+void Core::CoreType::Mesh::CopyIndexesArray(unsigned int _indexes_array[], const unsigned int _indexes_count)
 {
-	indexs->reserve(_indexs_count);
+	indexes.Reserve(_indexes_count);
 
-	for (unsigned int i = 0; i < _indexs_count; ++i)
-		indexs->push_back(_indexs_array[i]);
+	for (unsigned int i = 0; i < _indexes_count; ++i)
+		indexes.PushBack(_indexes_array[i]);
 }

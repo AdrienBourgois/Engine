@@ -4,6 +4,8 @@
 #include <dxgi1_4.h>
 #include "DX12Helper.h"
 #include "Modules/Render/DirectX/Objects/Dx12ConstantBuffer.h"
+#include "Core/CoreType/Container/Vector.h"
+#include "Core/CoreType/String.h"
 
 /**
  * \brief Return false if function failed
@@ -18,14 +20,13 @@
  * \param blob ID3DBlob to test
  */
 #define CHECK_BLOB(blob) if(FAILED(hr))\
-						 { OutputDebugStringA((char*)blob->GetBufferPointer()); return false; }
+						 { OutputDebugStringA((char*)(blob)->GetBufferPointer()); return false; }
 
 namespace Core
 {
 	namespace CoreType
 	{
 		class Vertex;
-		class String;
 	}
 }
 
@@ -82,6 +83,9 @@ namespace Module
 				 * \return Is function success
 				 */
 				bool InitFactory();
+
+				/*********************************** Create Objects ***********************************/
+
 				/**
 				 * \brief Search adapter and create device
 				 * \param[out] _device Pointer to ID3D12Device
@@ -186,6 +190,9 @@ namespace Module
 				 * \return Is function success
 				 */
 				bool MakePipelineStateObject(ID3D12RootSignature* _root_signature, D3D12_SHADER_BYTECODE* _vertex_shader_bytecode, D3D12_SHADER_BYTECODE* _pixel_shader_bytecode, ID3D12PipelineState** _pipeline_state_object);
+
+				/*********************************** Create Buffers ***********************************/
+
 				/**
 				 * \brief Create a vertex buffer
 				 * \param _pack Dx12CommandExecutionPack with objects needed to create buffer
@@ -219,6 +226,13 @@ namespace Module
 				bool CreateConstantBuffer(T* _data, Objects::Dx12ConstantBuffer** _constant_buffer);
 
 			private:
+
+				Core::CoreType::Container::Vector<IDXGIAdapter1*> GetAdaptersList() const;
+
+				void LogAdapters() const;
+
+
+
 				/**
 				 * \brief Pointer to the DirectX Factory kept to create objects
 				 */
@@ -237,13 +251,13 @@ namespace Module
 			template <typename T>
 			bool Dx12Factory::CreateConstantBuffer(T* _data, Objects::Dx12ConstantBuffer** _constant_buffer)
 			{
-				ID3D12DescriptorHeap* _heap_descriptor = nullptr;
+				ID3D12DescriptorHeap* heap_descriptor = nullptr;
 
 				D3D12_DESCRIPTOR_HEAP_DESC heap_desc = {};
 				heap_desc.NumDescriptors = 1;
 				heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 				heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-				TRYFUNC(device->CreateDescriptorHeap(&heap_desc, IID_PPV_ARGS(&_heap_descriptor)));
+				TRYFUNC(device->CreateDescriptorHeap(&heap_desc, IID_PPV_ARGS(&heap_descriptor)));
 
 				ID3D12Resource* constant_buffer_upload_heap = nullptr;
 
@@ -255,9 +269,9 @@ namespace Module
 				D3D12_CONSTANT_BUFFER_VIEW_DESC constant_buffer_view_desc;
 				constant_buffer_view_desc.BufferLocation = constant_buffer_upload_heap->GetGPUVirtualAddress();
 				constant_buffer_view_desc.SizeInBytes = sizeof(_data) + 255 & ~255;
-				device->CreateConstantBufferView(&constant_buffer_view_desc, _heap_descriptor->GetCPUDescriptorHandleForHeapStart());
+				device->CreateConstantBufferView(&constant_buffer_view_desc, heap_descriptor->GetCPUDescriptorHandleForHeapStart());
 
-				*_constant_buffer = new Objects::Dx12ConstantBuffer(_heap_descriptor, constant_buffer_upload_heap);
+				*_constant_buffer = new Objects::Dx12ConstantBuffer(heap_descriptor, constant_buffer_upload_heap);
 
 				memcpy((*_constant_buffer)->Map(), &_data, sizeof(_data));
 

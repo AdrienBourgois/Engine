@@ -28,9 +28,6 @@
     <ClCompile Include="Source\Core\CoreType\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\CoreType\String.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\CoreType\TimePoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -243,9 +240,6 @@
     <ClInclude Include="Source\macros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\CoreType\Container\Vector.inl">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Interface\Iterators.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -261,6 +255,12 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="Source\Objects\GameObject.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Source\Core\CoreType\Container\Vector.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Source\Core\CoreType\String.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

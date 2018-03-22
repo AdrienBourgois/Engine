@@ -30,22 +30,22 @@ namespace Core
 
 			/**
 			 * \brief Initialize module
-			 * \return Is initialization sucessfull
+			 * \return Is initialization successful
 			 */
 			virtual bool Initialize() = 0;
 			/**
 			 * \brief Start module
-			 * \return Is start sucessfull
+			 * \return Is start successful
 			 */
 			virtual bool Start() = 0;
 			/**
 			 * \brief Update module
-			 * \return Is update sucessfull
+			 * \return Is update successful
 			 */
 			virtual bool Update() = 0;
 			/**
 			 * \brief Stop and destruct module
-			 * \return Is desctruction sucessfull
+			 * \return Is destruction successful
 			 */
 			virtual bool Destruct() = 0;
 			/**
@@ -59,7 +59,7 @@ namespace Core
 			 */
 			void SetModuleName(CoreType::String _new_name = S("Unnamed Module")) { moduleName = _new_name; }
 			/**
-			 * \brief Return tha name of module
+			 * \brief Return name of module
 			 * \return Module name
 			 */
 			CoreType::String GetModuleName() const { return moduleName; }

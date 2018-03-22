@@ -8,7 +8,7 @@ namespace Module
 		DirectX12::Objects::Dx12GraphicObject::Dx12GraphicObject(unsigned int _id, Core::CoreType::String _name, Core::CoreType::Transform* _transform, ID3D12GraphicsCommandList* _command_list, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, D3D12_VERTEX_BUFFER_VIEW* _vertex_buffer_view, unsigned int* _indexs_array, unsigned int _indexs_count, D3D12_INDEX_BUFFER_VIEW* _index_buffer_view, Dx12ConstantBuffer* _constant_buffer)
 			: id(_id), commandList(_command_list), vertexBufferView(_vertex_buffer_view), indexBufferView(_index_buffer_view), constantBuffer(_constant_buffer), name(_name), transform(_transform), vertices(_vertices_array), verticesCount(_vertices_count), indexsArray(_indexs_array), indexsCount(_indexs_count)
 		{
-			commandList->SetName((_name + S(" Command List")).ToWideString());
+			commandList->SetName((_name + S(" Command List")).ToWideString().CStr());
 			if (_indexs_array && _indexs_count)
 				indexed = true;
 		}
@@ -17,10 +17,8 @@ namespace Module
 		{
 			SAFE_RELEASE(commandList);
 
-			if (vertexBufferView)
-				delete vertexBufferView;
-			if (indexBufferView)
-				delete indexBufferView;
+			delete vertexBufferView;
+			delete indexBufferView;
 		}
 
 		void DirectX12::Objects::Dx12GraphicObject::PrepareCommandList() const

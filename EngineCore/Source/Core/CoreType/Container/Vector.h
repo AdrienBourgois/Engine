@@ -163,6 +163,12 @@ namespace Core
 				bool IsEmpty() const;
 
 				/**
+				 * \brief Return pointer to the array used by the Vector to store elements
+				 * \return Pointer to array
+				 */
+				T* GetData() const;
+
+				/**
 				 * \brief Return an iterator to the first element in the Vector
 				 * \return Iterator to the first element
 				 */
@@ -172,6 +178,21 @@ namespace Core
 				 * \return Iterator to the past-the-end element
 				 */
 				VectorIterator End();
+
+				// ReSharper disable CppInconsistentNaming
+				/**
+				 * \brief Return an iterator to the first element in the Vector
+				 * \return Iterator to the first element
+				 * \note Call Begin() - Use of lower case to match for-loop range restrictions
+				 */
+				VectorIterator begin();
+				/**
+				 * \brief Return an iterator to the past-the-end element of the Vector
+				 * \return Iterator to the past-the-end element
+				 * \note Call End() - Use of lower case to match for-loop range restrictions
+				 */
+				VectorIterator end();
+				// ReSharper restore CppInconsistentNaming
 
 			private:
 				/**

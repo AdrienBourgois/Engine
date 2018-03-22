@@ -187,6 +187,12 @@ bool Core::CoreType::Container::Vector<T>::IsEmpty() const
 	return !elements && !capacity;
 }
 
+template<typename T>
+T* Core::CoreType::Container::Vector<T>::GetData() const
+{
+	return elements;
+}
+
 
 template<typename T>
 typename Core::CoreType::Container::Vector<T>::VectorIterator Core::CoreType::Container::Vector<T>::Begin()
@@ -198,6 +204,18 @@ template<typename T>
 typename Core::CoreType::Container::Vector<T>::VectorIterator Core::CoreType::Container::Vector<T>::End()
 {
 	return VectorIterator(elements + size);
+}
+
+template<typename T>
+typename Core::CoreType::Container::Vector<T>::VectorIterator Core::CoreType::Container::Vector<T>::begin()
+{
+	return Begin();
+}
+
+template<typename T>
+typename Core::CoreType::Container::Vector<T>::VectorIterator Core::CoreType::Container::Vector<T>::end()
+{
+	return End();
 }
 
 /* VectorIterator */

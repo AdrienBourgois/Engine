@@ -82,7 +82,6 @@
     <ClCompile Include="Source\Utility\Ini\IniParser.cpp" />
     <ClCompile Include="Source\Modules\Tools\Logs\Log.cpp" />
     <ClCompile Include="Source\Modules\Tools\Logs\Logger.cpp" />
-    <ClCompile Include="Source\Core\CoreType\String.cpp" />
     <ClCompile Include="Source\Core\CoreType\Transform.cpp" />
     <ClCompile Include="Source\Modules\Inputs\WindowsKeyboard.cpp" />
     <ClCompile Include="Source\Modules\Time\Clock.cpp" />
@@ -106,9 +105,8 @@
     <None Include="Source\Core\Manager\ModuleManager.inl" />
     <None Include="Source\Core\Manager\ScriptManager.inl" />
     <None Include="Source\Objects\GameObject.inl" />
-    <ClInclude Include="Source\Core\CoreType\Container\Vector.inl">
-      <FileType>Document</FileType>
-    </ClInclude>
+    <None Include="Source\Core\CoreType\Container\Vector.inl" />
+    <None Include="Source\Core\CoreType\String.inl" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="Natvis\Core\CoreType\Container\Vector.natvis">
@@ -164,6 +162,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;ENGINECORE_EXPORTS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)EngineCore\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -187,6 +186,7 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;ENGINECORE_EXPORTS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)EngineCore\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

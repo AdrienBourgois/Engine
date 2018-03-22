@@ -39,9 +39,16 @@ namespace Math
 
 		/**
 		 * \brief Copy vector
-		 * \param _other_vector Vetor to copy
+		 * \param _other_vec Vector to copy
 		 */
-		void operator=(Vec2 _other_vector);
+		Vec2& operator=(Vec2 _other_vec);
+		/**
+		 * \brief Set all members to same value
+		 * \param _value Value to set for each member
+		 * \return Reference to this vector
+		 */
+		Vec2& operator=(float _value);
+
 		/**
 		 * \brief Compare vector
 		 * \param _other_vec Vector to compare
@@ -55,14 +62,19 @@ namespace Math
 		 */
 		bool operator!=(Vec2 _other_vec) const;
 		/**
+		 * \brief Is vector != (0,0)
+		 */
+		explicit operator bool() const;
+
+		/**
 		 * \brief Add vector
 		 * \param _other_vec Vector to add
 		 * \return Vector result
 		 */
 		Vec2 operator+(Vec2 _other_vec) const;
 		/**
-		 * \brief Substract vector
-		 * \param _other_vec Vector to substract
+		 * \brief Subtract vector
+		 * \param _other_vec Vector to subtract
 		 * \return Vector result
 		 */
 		Vec2 operator-(Vec2 _other_vec) const;
@@ -72,14 +84,66 @@ namespace Math
 		 */
 		void operator+=(Vec2 _other_vec);
 		/**
-		 * \brief Substract vector to this vector
-		 * \param _other_vec Vector to substract
+		 * \brief Subtract vector to this vector
+		 * \param _other_vec Vector to subtract
 		 */
 		void operator-=(Vec2 _other_vec);
+
 		/**
-		 * \brief Is vector != 0
+		 * \brief Add value to each member of vector
+		 * \param _value Value to add
+		 * \return Vector result
 		 */
-		explicit operator bool() const;
+		Vec2 operator+(float _value) const;
+		/**
+		 * \brief Subtract value to each member of vector
+		 * \param _value Value to subtract
+		 * \return Vector result
+		 */
+		Vec2 operator-(float _value) const;
+		/**
+		 * \brief Multiply value to each member of vector
+		 * \param _value Value to multiply
+		 * \return Vector result
+		 */
+		Vec2 operator*(float _value) const;
+		/**
+		 * \brief Divide value to each member of vector
+		 * \param _value Value with which divide
+		 * \return Vector result
+		 */
+		Vec2 operator/(float _value) const;
+
+		/**
+		 * \brief Add value to this vector
+		 * \param _value Value to add
+		 * \return Reference to this vector
+		 */
+		Vec2& operator+=(float _value);
+		/**
+		 * \brief Subtract value to this vector
+		 * \param _value Value to subtract
+		 * \return Reference to this vector
+		 */
+		Vec2& operator-=(float _value);
+		/**
+		 * \brief Multiply value to this vector
+		 * \param _value Value to multiply
+		 * \return Reference to this vector
+		 */
+		Vec2& operator*=(float _value);
+		/**
+		 * \brief Divide value to this vector
+		 * \param _value Value with which divide
+		 * \return Reference to this vector
+		 */
+		Vec2& operator/=(float _value);
+
+		/**
+		 * \brief Return the opposite vector
+		 * \return Opposite vector
+		 */
+		Vec2 operator-() const;
 
 		/**
 		 * \brief Return length of vector
@@ -89,7 +153,7 @@ namespace Math
 		/**
 		 * \brief Normalize the vector
 		 */
-		void Normalize();
+		Vec2& Normalize();
 		/**
 		 * \brief Return a normalized version of this vector
 		 * \return Normalized vector
@@ -101,6 +165,13 @@ namespace Math
 		 * \return Scalar result
 		 */
 		float Dot(Vec2 _other_vec) const;
+
+		/**
+		 * \brief Compute angle in radian between this vector and another vector
+		 * \param _other_vec Other vector to compute
+		 * \return Angle in radian
+		 */
+		float Angle(Vec2 _other_vec) const;
 
 		/**
 		 * \brief x component

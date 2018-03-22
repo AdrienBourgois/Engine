@@ -51,7 +51,7 @@ bool Module::Tools::Logs::Logger::Destruct()
 void Module::Tools::Logs::Logger::CreateEntry(const Core::CoreType::String& _message, const ELog_level _level)
 {
 	Log* log = new Log(_message, _level);
-	logs.push_back(log);
+	logs.PushBack(log);
 	std::cout << log->GetStructuredLog().CStr() << std::endl << std::endl;
 	WriteLog(log);
 }
@@ -59,7 +59,7 @@ void Module::Tools::Logs::Logger::CreateEntry(const Core::CoreType::String& _mes
 void Module::Tools::Logs::Logger::CreateEntry(const Core::CoreType::String& _message, const ELog_level _level, const Core::CoreType::String& _file, const int _line)
 {
 	Log* log = new Log(_message, _level, _file, _line);
-	logs.push_back(log);
+	logs.PushBack(log);
 	std::cout << log->GetStructuredLog().CStr() << std::endl << std::endl;
 	WriteLog(log);
 }
@@ -67,7 +67,7 @@ void Module::Tools::Logs::Logger::CreateEntry(const Core::CoreType::String& _mes
 void Module::Tools::Logs::Logger::ClearAllEntries()
 {
 	for (Log* log : logs) { delete log; }
-	logs.clear();
+	logs.Clear();
 }
 
 void Module::Tools::Logs::Logger::CreateWindowsConsole()

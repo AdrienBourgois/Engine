@@ -40,16 +40,17 @@ namespace Math
 
 		/**
 		 * \brief Copy members vector
-		 * \param _other_vector Vector with members to copy
-		 * \return Reference to vector
+		 * \param _other_vec Vector with members to copy
+		 * \return Reference to this vector
 		 */
-		Vec3& operator=(Vec3 _other_vector);
+		Vec3& operator=(Vec3 _other_vec);
 		/**
 		 * \brief Set all members to same value
 		 * \param _value Value to set for each member
-		 * \return Reference to vector
+		 * \return Reference to this vector
 		 */
 		Vec3& operator=(float _value);
+
 		/**
 		 * \brief Compare vector
 		 * \param _other_vec Vector to compare
@@ -63,11 +64,35 @@ namespace Math
 		 */
 		bool operator!=(Vec3 _other_vec) const;
 		/**
+		 * \brief Is vector != (0,0,0)
+		 */
+		explicit operator bool() const;
+
+		/**
 		 * \brief Add vector
 		 * \param _other_vec Vector to add
 		 * \return Vector result
 		 */
 		Vec3 operator+(Vec3 _other_vec) const;
+		/**
+		 * \brief Subtract vector
+		 * \param _other_vec Vector to subtract
+		 * \return Vector result
+		 */
+		Vec3 operator-(Vec3 _other_vec) const;
+		/**
+		 * \brief Add vector to this vector
+		 * \param _other_vec Vector to add
+		 * \return Reference to this vector
+		 */
+		Vec3& operator+=(Vec3 _other_vec);
+		/**
+		 * \brief Subtract vector to this vector
+		 * \param _other_vec Vector to subtract
+		 * \return Reference to this vector
+		 */
+		Vec3& operator-=(Vec3 _other_vec);
+
 		/**
 		 * \brief Add value to each member of vector
 		 * \param _value Value to add
@@ -75,46 +100,54 @@ namespace Math
 		 */
 		Vec3 operator+(float _value) const;
 		/**
-		 * \brief Substract vector
-		 * \param _other_vec Vector to substract
-		 * \return Vector result
-		 */
-		Vec3 operator-(Vec3 _other_vec) const;
-		/**
-		 * \brief Substract value to each member of vector
-		 * \param _value Value to substract
+		 * \brief Subtract value to each member of vector
+		 * \param _value Value to subtract
 		 * \return Vector result
 		 */
 		Vec3 operator-(float _value) const;
+		/**
+		 * \brief Multiply value to each member of vector
+		 * \param _value Value to multiply
+		 * \return Vector result
+		 */
+		Vec3 operator*(float _value) const;
+		/**
+		 * \brief Divide value to each member of vector
+		 * \param _value Value with which divide
+		 * \return Vector result
+		 */
+		Vec3 operator/(float _value) const;
+
+		/**
+		 * \brief Add value to this vector
+		 * \param _value Value to add
+		 * \return Reference to this vector
+		 */
+		Vec3& operator+=(float _value);
+		/**
+		 * \brief Subtract value to this vector
+		 * \param _value Value to subtract
+		 * \return Reference to this vector
+		 */
+		Vec3& operator-=(float _value);
+		/**
+		 * \brief Multiply value to this vector
+		 * \param _value Value to multiply
+		 * \return Reference to this vector
+		 */
+		Vec3& operator*=(float _value);
+		/**
+		 * \brief Divide value to this vector
+		 * \param _value Value with which divide
+		 * \return Reference to this vector
+		 */
+		Vec3& operator/=(float _value);
+
 		/**
 		 * \brief Return the opposite vector
 		 * \return Opposite vector
 		 */
 		Vec3 operator-() const;
-		/**
-		 * \brief Add vector to this vector
-		 * \param _other_vec Vector to add
-		 */
-		void operator+=(Vec3 _other_vec);
-		/**
-		 * \brief Substract vector to this vector
-		 * \param _other_vec Vector to substract
-		 */
-		void operator-=(Vec3 _other_vec);
-		/**
-		 * \brief Add value to this vector
-		 * \param _value value to add
-		 */
-		void operator+=(float _value);
-		/**
-		 * \brief Substract value to this vector
-		 * \param _value Value to substract
-		 */
-		void operator-=(float _value);
-		/**
-		 * \brief Is vector != 0
-		 */
-		explicit operator bool() const;
 
 		/**
 		 * \brief Return length of vector
@@ -123,8 +156,9 @@ namespace Math
 		float Length() const;
 		/**
 		 * \brief Normalize the vector
+		 * \return Reference to this vector
 		 */
-		void Normalize();
+		Vec3& Normalize();
 		/**
 		 * \brief Return a normalized version of this vector
 		 * \return Normalized vector
@@ -141,7 +175,14 @@ namespace Math
 		 * \param _other_vec Other vector to compute
 		 * \return Result vector
 		 */
-		Vec3 Cross(Vec3 const _other_vec) const;
+		Vec3 Cross(Vec3 _other_vec) const;
+
+		/**
+		 * \brief Compute angle in radian between this vector and another vector
+		 * \param _other_vec Other vector to compute
+		 * \return Angle in radian
+		 */
+		float Angle(Vec3 _other_vec) const;
 
 		/**
 		 * \brief x component

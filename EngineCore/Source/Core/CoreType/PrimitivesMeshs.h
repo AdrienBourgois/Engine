@@ -69,9 +69,9 @@ namespace Core
 			};
 
 			/**
-			 * \brief Static indexs data for cube
+			 * \brief Static indexes data for cube
 			 */
-			static unsigned int CubeIndexs[] =
+			static unsigned int CubeIndexes[] =
 			{
 				// front face
 				0, 1, 2, // first triangle

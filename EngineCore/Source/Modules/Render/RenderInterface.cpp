@@ -31,7 +31,7 @@ bool Module::Render::RenderInterface::Destruct()
 bool Module::Render::RenderInterface::CreateBuffer(Object::Component::GraphicComponent* _component) const
 {
 	objects->insert_or_assign(_component->GetId().GetInstanceNumber(), _component);
-	return renderer->CreateBuffers(_component->GetId().GetInstanceNumber(), _component->GetComponentName(), _component->GetTransformReference(), _component->GetMesh()->GetVertices(), _component->GetMesh()->GetVertexCount(), _component->GetMesh()->GetIndexs(), _component->GetMesh()->GetIndexCount());
+	return renderer->CreateBuffers(_component->GetId().GetInstanceNumber(), _component->GetComponentName(), _component->GetTransformReference(), _component->GetMesh()->GetVertices(), _component->GetMesh()->GetVertexCount(), _component->GetMesh()->GetIndexes(), _component->GetMesh()->GetIndexCount());
 }
 
 Module::Render::Camera* Module::Render::RenderInterface::GetActiveCamera() const

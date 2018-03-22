@@ -16,13 +16,14 @@
 
 /**
  * \brief Helper template to define size of a string at compilation
- * \tparam T Always char
+ * \tparam T Always array element / character type
  * \tparam N Deduced size of string
  * \param _array Input string
  * \return Size of string
  */
-template <typename T = char, size_t N>
-char (& StringSizeHelper(T (&_array)[N]))[N]{return N;}
+template<typename T, size_t N>
+T (& StringSizeHelper(T (&_array)[N]))[N] { return N; }
+
 /**
  * \brief Using StringSizeHelper template, return size of string
  * \param array Input string
@@ -30,12 +31,19 @@ char (& StringSizeHelper(T (&_array)[N]))[N]{return N;}
 #define STRINGSIZE(array) (sizeof(StringSizeHelper(array)))
 
 /**
- * \brief Create String and deduce size
+ * \brief Create string and deduce size
  * \param _text Input string
  */
 #define S(_text) Core::CoreType::String(_text, STRINGSIZE(_text))
+
 /**
- * \brief Create String with number (float / int)
+ * \brief Create Wide string and deduce size
+ * \param _text Input wide-string
+ */
+#define WS(_text) Core::CoreType::WideString(_text, STRINGSIZE(_text))
+
+/**
+ * \brief Create string with number (float / int)
  * \param _value Value to stringify
  */
 #define SN(_value) Core::CoreType::String(_value)
@@ -46,14 +54,14 @@ char (& StringSizeHelper(T (&_array)[N]))[N]{return N;}
  */
 #define TEXT_TO_STRING(text) S(#text).CStr()
 /**
- * \brief Macro to string : Return C String with value of resolved macro
+ * \brief Macro to string : Return C string with value of resolved macro
  * \param macro Macro to resolve
  */
 #define MTOS(macro) TEXT_TO_STRING(macro)
 
 #define REAL_SIZE(_variable) _variable == NullSize ? 0u : _variable
 
-static unsigned NullSize = -1;
+static size_t NullSize = -1;
 
 namespace Core
 {
@@ -61,193 +69,210 @@ namespace Core
 	{
 		/**
 		 * \brief Class to simples characters manipulations
-		 * \note Design to always have a Null Terminating Character ('\0') at the end of String
+		 * \note Design to always have a Null Terminating Character ('\0' for char) at the end of string
+		 * \tparam CharType Type of each character
+		 * \tparam EosChar End of string Character
 		 */
-		class ENGINEDLL_API String
+		template<typename CharType, CharType EosChar>
+		class BasicString
 		{
 		public:
 			/**
-			 * \brief Constructor (empty String)
+			 * \brief Constructor (empty string)
 			 */
-			String() = default;
+			BasicString() = default;
 			/**
-			 * \brief Interger constructor
+			 * \brief Integer constructor
 			 * \param _value Value to convert in string
 			 */
-			explicit String(int _value);
+			explicit BasicString(int _value);
 			/**
 			 * \brief Float constructor
 			 * \param _value Value to convert in string
 			 */
-			explicit String(float _value);
+			explicit BasicString(float _value);
 			/**
-			 * \brief Constructor from C String and her size
-			 * \param _text Pointer to a C String
-			 * \param _size C String size
+			 * \brief Constructor from C string and her size
+			 * \param _text Pointer to a C string
+			 * \param _size C string size
 			 */
-			String(const char* _text, unsigned int _size);
+			BasicString(const CharType* _text, size_t _size);
 			/**
 			 * \brief Copy constructor
-			 * \param _other_string String to copy
+			 * \param _other_string string to copy
 			 */
-			String(const String& _other_string);
+			BasicString(const BasicString& _other_string);
 			/**
 			 * \brief Destructor
 			 */
-			~String();
+			~BasicString();
 
 			/**
-			 * \brief Determine if String is empty
-			 * \return Is String empty
+			 * \brief Determine if string is empty
+			 * \return Is string empty
 			 */
 			bool IsEmpty() const;
 			/**
-			 * \brief Determine if String is null
-			 * \return Is String null
+			 * \brief Determine if string is null
+			 * \return Is string null
 			 */
 			bool IsNull() const;
 			/**
-			 * \brief Access to position in String
-			 * \param _index 0-based index in String
+			 * \brief Access to position in string
+			 * \param _index 0-based index in string
 			 * \return Pointer to data at desired position
 			 */
-			char* At(unsigned _index) const;
+			CharType* At(size_t _index) const;
 			/**
-			 * \brief Access to character in String
-			 * \param _index 0-based index in String
+			 * \brief Access to character in string
+			 * \param _index 0-based index in string
 			 * \return Character at desired position
 			 */
-			char operator[](unsigned _index) const;
+			CharType operator[](size_t _index) const;
 			/**
 			 * \brief Copy string into another
-			 * \param _other_string String to copy
+			 * \param _other_string string to copy
 			 */
-			String& operator=(const String& _other_string);
+			BasicString& operator=(const BasicString& _other_string);
 			/**
 			 * \brief Add string to another / Concatenation
-			 * \param _other_string String to add
-			 * \return New String with concatenation of the input Strings
+			 * \param _other_string string to add
+			 * \return New string with concatenation of the input Strings
 			 */
-			String operator+(const String& _other_string) const;
+			BasicString operator+(const BasicString& _other_string) const;
 			/**
-			 * \brief Add character to a String
+			 * \brief Add character to a string
 			 * \param _character Character to add
-			 * \return New String with concatenation of the input Strings
+			 * \return New string with concatenation of the input Strings
 			 */
-			String operator+(char _character) const;
+			BasicString operator+(CharType _character) const;
 			/**
-			 * \brief Add String to this String
-			 * \param _other_string String to add
+			 * \brief Add string to this string
+			 * \param _other_string string to add
 			 */
-			void operator+=(const String& _other_string);
+			void operator+=(const BasicString& _other_string);
 			/**
 			 * \brief Add a single character to the string
 			 * \param _character Character to add
 			 */
-			void operator+=(char _character);
+			void operator+=(CharType _character);
 			/**
 			 * \brief Compare content of Strings
-			 * \param _other_string String to compare
+			 * \param _other_string string to compare
 			 * \return Comparison result
 			 */
-			bool operator==(const String& _other_string) const;
+			bool operator==(const BasicString& _other_string) const;
 			/**
 			 * \brief Compare content of Strings
-			 * \param _other_string String to compare
+			 * \param _other_string string to compare
 			 * \return Comparison result
 			 */
-			bool operator!=(const String& _other_string) const;
+			bool operator!=(const BasicString& _other_string) const;
 			/**
-			 * \brief Does String has content
+			 * \brief Does string has content
 			 */
 			explicit operator bool() const;
 
 			/**
-			 * \brief Add String to this String
-			 * \param _other_string String to add
+			 * \brief Add string to this string
+			 * \param _other_string string to add
 			 */
-			void Append(const String& _other_string);
+			void Append(const BasicString& _other_string);
 			/**
-			 * \brief Add String to this String
+			 * \brief Add string to this string
 			 * \param _character Character to add
 			 */
-			void Append(char _character);
+			void Append(CharType _character);
 
 			/**
-			 * \brief Determine if this String contain an other String
-			 * \param _string_to_find String to find in this String
-			 * \return Does this String contain target String
+			 * \brief Determine if this string contain an other string
+			 * \param _string_to_find string to find in this string
+			 * \return Does this string contain target string
 			 */
-			bool Contain(const String& _string_to_find) const;
+			bool Contain(const BasicString& _string_to_find) const;
 			/**
-			 * \brief Return position of a sub-string to find in this String
-			 * \param _string_to_find String to find in this String
-			 * \return 0-based index of begining of target String (-1u if does not contain target String)
+			 * \brief Return position of a sub-string to find in this string
+			 * \param _string_to_find String to find in this string
+			 * \return 0-based index of beginning of target string (-1u if does not contain target string)
 			 */
-			unsigned First(const String& _string_to_find) const;
+			size_t First(const BasicString& _string_to_find) const;
 
 			/**
 			 * \brief Return C Style string pointer
 			 * \return C Style string pointer
 			 */
-			const char* CStr() const { return data; }
+			const CharType* CStr() const { return data; }
+
 			/**
-			 * \brief Return length of the String without null terminated character
-			 * \return Length of String
+			 * \brief Return length of the string without null terminated character
+			 * \return Length of string
 			 */
-			unsigned int Length() const { return size; }
+			size_t Length() const { return size; }
+
 			/**
-			 * \brief Return length of the String with null terminated character
-			 * \return Length of String with '\0'
+			 * \brief Return length of the string with null terminated character
+			 * \return Length of string with '\0'
 			 */
-			unsigned int SafeLength() const { return size + 1; }
+			size_t SafeLength() const { return size + 1; }
+			/**
+			 * \brief Reserve memory for this string
+			 * \param _bytes_count Count of characters to reserve (must be greater than size of string)
+			 * \return Is memory reserved
+			 */
+			bool Reserve(size_t _bytes_count);
+
 			/**
 			 * \brief Return a wide version of string
 			 * \return String with wide char
+			 * \note Can only be used to convert String (char) to WideString (wchar_t)
 			 */
-			wchar_t const* ToWideString();
+			template <typename = std::enable_if_t<std::is_same<CharType, char>::value>>
+			BasicString<wchar_t, L'\0'> ToWideString();
+
 			/**
-			 * \brief Reserve memory for this String
-			 * \param _bytes_count Count of characters to reserve (must be greater than size of String)
-			 * \return Is memory reserved
+			 * \brief Return a char version of string
+			 * \return String with char
+			 * \note Can only be used to convert WideString (wchar_t) to String (char)
 			 */
-			bool Reserve(unsigned _bytes_count);
+			template <typename = std::enable_if_t<std::is_same<CharType, wchar_t>::value>>
+			BasicString<char, '\0'> ToCharString();
 
 		private:
 			/**
-			 * \brief Safely copy an other String to this String
-			 * \param _source Other String to copy
+			 * \brief Safely copy an other string to this string
+			 * \param _source Other string to copy
 			 * \param _size Count of characters to copy
-			 * \param _start_index 0-based Index of this String to start copy
-			 * \note Assume that space for this String is already allocated
+			 * \param _start_index 0-based Index of this string to start copy
+			 * \note Assume that space for this string is already allocated
 			 */
-			void CopyString(const String& _source, unsigned _size = NullSize, unsigned _start_index = 0) const;
+			void CopyString(const BasicString& _source, size_t _size = NullSize, size_t _start_index = 0) const;
 			/**
 			 * \brief Free string memory and reset size
 			 */
 			void DeletePointer();
 			/**
-			 * \brief Verify the Null Terminating Character ('\0') and size of String
+			 * \brief Verify the Null Terminating Character ('\0') and size of string
 			 * \param _end_of_string_index If know, 0-based index of the Null Terminating Character ('\0')
 			 */
-			void VerifyString(unsigned _end_of_string_index = NullSize);
+			void VerifyString(size_t _end_of_string_index = NullSize);
 
 			/**
 			 * \brief Pointer to data
 			 */
-			char* data = nullptr;
+			CharType* data = nullptr;
 			/**
-			 * \brief Pointer to wide data (only populated if ToWideString is called)
+			 * \brief Length of string without null terminated character
 			 */
-			wchar_t* widePointer = nullptr;
-			/**
-			 * \brief Length of String without null terminated character
-			 */
-			unsigned int size = NullSize;
+			size_t size = NullSize;
 			/**
 			 * \brief Size of allocated data
 			 */
-			unsigned int capacity = NullSize;
+			size_t capacity = NullSize;
 		};
+
+		using String = BasicString<char, '\0'>;
+		using WideString = BasicString<wchar_t, L'\0'>;
 	}
 }
+
+#include "String.inl"

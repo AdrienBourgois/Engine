@@ -2,6 +2,7 @@
 
 #include "Macros.h"
 #include <unordered_map>
+#include "Container/Vector.h"
 
 namespace Core
 {
@@ -11,7 +12,7 @@ namespace Core
 		/**
 		 * \brief Main type of an object : 8 values max with Undefined
 		 */
-		enum class ENGINEDLL_API EObjectType : uint8_t
+		enum class EObjectType : uint8_t
 		{
 			/**
 			 * \brief Generic main type
@@ -34,7 +35,7 @@ namespace Core
 		/**
 		 * \brief Secondary type of an object (directly implies the main type) : 32 values max with Undefined
 		 */
-		enum class ENGINEDLL_API EObjectSubtype : uint32_t
+		enum class EObjectSubtype : uint32_t
 		{
 			/// EObjectType::Undefined
 			UndefinedSubtype = 1 << 0,

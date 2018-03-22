@@ -5,6 +5,7 @@
 
 #include "Modules/Tools/Logs/Log.h"
 #include "Core/Interface/IModule.h"
+#include "Core/CoreType/Container/Vector.h"
 
 namespace Module
 {
@@ -31,7 +32,7 @@ namespace Module
 				 */
 				ENGINEDLL_API Logger();
 				/**
-				 * \brief Default desctructor
+				 * \brief Default destructor
 				 */
 				ENGINEDLL_API ~Logger() = default;
 
@@ -67,7 +68,7 @@ namespace Module
 				 */
 				bool WriteLogs();
 				/**
-				 * \brief Write single entrie in file
+				 * \brief Write single entry in file
 				 * \return Is function a success
 				 */
 				bool WriteLog(Log* _log);
@@ -75,7 +76,7 @@ namespace Module
 				/**
 				 * \brief Store entries
 				 */
-				std::vector<Log*> logs;
+				Core::CoreType::Container::Vector<Log*> logs;
 
 				/**
 				 * \brief Stream to output file

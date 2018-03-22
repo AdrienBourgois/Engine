@@ -1,6 +1,6 @@
 #include "Modules/Render/DirectX/Dx12.h"
 
-#include <D3Dcompiler.h>
+#include <d3dcompiler.h>
 #include "Modules/Render/DirectX/DX12Helper.h"
 #include "Core/CoreType/Vertex.h"
 #include "Maths/Mat4.h"
@@ -12,8 +12,8 @@ bool Module::Render::DirectX12::DirectX12::Initialize()
 
 bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 {
-	unsigned int width = MODULE(Display::Window)->getWidth();
-	unsigned int height = MODULE(Display::Window)->getHeight();
+	const unsigned int width = MODULE(Display::Window)->getWidth();
+	const unsigned int height = MODULE(Display::Window)->getHeight();
 
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;

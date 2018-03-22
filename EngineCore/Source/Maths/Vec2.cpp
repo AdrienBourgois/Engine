@@ -1,31 +1,40 @@
 ﻿#include "Vec2.h"
 #include <cmath>
 
-Math::Vec2::Vec2(float _value): x(_value), y(_value)
-{}
+Math::Vec2::Vec2(const float _value): x(_value), y(_value) {}
 
-Math::Vec2::Vec2(float _x, float _y): x(_x), y(_y)
-{}
+Math::Vec2::Vec2(const float _x, const float _y): x(_x), y(_y) {}
 
-void Math::Vec2::operator=(Vec2 _other_vector)
+Math::Vec2& Math::Vec2::operator=(const Vec2 _other_vec)
 {
-	x = _other_vector.x;
-	y = _other_vector.y;
+	x = _other_vec.x;
+	y = _other_vec.y;
+	return *this;
 }
 
-bool Math::Vec2::operator==(Vec2 _other_vec) const
+Math::Vec2& Math::Vec2::operator=(const float _value)
 {
-	if(x == _other_vec.x && y == _other_vec.y)
-		return true;
-	return false;
+	x = _value;
+	y = _value;
+	return *this;
 }
 
-bool Math::Vec2::operator!=(Vec2 _other_vec) const
+bool Math::Vec2::operator==(const Vec2 _other_vec) const
+{
+	return x == _other_vec.x && y == _other_vec.y;
+}
+
+bool Math::Vec2::operator!=(const Vec2 _other_vec) const
 {
 	return !operator==(_other_vec);
 }
 
-Math::Vec2 Math::Vec2::operator+(Vec2 _other_vec) const
+Math::Vec2::operator bool() const
+{
+	return x || y;
+}
+
+Math::Vec2 Math::Vec2::operator+(const Vec2 _other_vec) const
 {
 	Vec2 result_vec;
 	result_vec.x = x + _other_vec.x;
@@ -33,7 +42,7 @@ Math::Vec2 Math::Vec2::operator+(Vec2 _other_vec) const
 	return result_vec;
 }
 
-Math::Vec2 Math::Vec2::operator-(Vec2 _other_vec) const
+Math::Vec2 Math::Vec2::operator-(const Vec2 _other_vec) const
 {
 	Vec2 result_vec;
 	result_vec.x = x - _other_vec.x;
@@ -41,47 +50,95 @@ Math::Vec2 Math::Vec2::operator-(Vec2 _other_vec) const
 	return result_vec;
 }
 
-void Math::Vec2::operator+=(Vec2 _other_vec)
+void Math::Vec2::operator+=(const Vec2 _other_vec)
 {
 	x += _other_vec.x;
 	y += _other_vec.y;
 }
 
-void Math::Vec2::operator-=(Vec2 _other_vec)
+void Math::Vec2::operator-=(const Vec2 _other_vec)
 {
 	x -= _other_vec.x;
 	y -= _other_vec.y;
 }
 
-Math::Vec2::operator bool() const
+Math::Vec2 Math::Vec2::operator+(const float _value) const
 {
-	if(x || y)
-		return true;
-	return false;
+	return Vec2(x + _value, y + _value);
+}
+
+Math::Vec2 Math::Vec2::operator-(const float _value) const
+{
+	return Vec2(x - _value, y - _value);
+}
+
+Math::Vec2 Math::Vec2::operator*(const float _value) const
+{
+	return Vec2(x * _value, y * _value);
+}
+
+Math::Vec2 Math::Vec2::operator/(const float _value) const
+{
+	return Vec2(x / _value, y / _value);
+}
+
+Math::Vec2& Math::Vec2::operator+=(const float _value)
+{
+	x += _value;
+	y += _value;
+	return *this;
+}
+
+Math::Vec2& Math::Vec2::operator-=(const float _value)
+{
+	x -= _value;
+	y -= _value;
+	return *this;
+}
+
+Math::Vec2& Math::Vec2::operator*=(const float _value)
+{
+	x *= _value;
+	y *= _value;
+	return *this;
+}
+
+Math::Vec2& Math::Vec2::operator/=(const float _value)
+{
+	x /= _value;
+	y /= _value;
+	return *this;
+}
+
+Math::Vec2 Math::Vec2::operator-() const
+{
+	return {-x, -y};
 }
 
 float Math::Vec2::Length() const
 {
-	return sqrt(x*x + y*y);
+	return sqrt(x * x + y * y);
 }
 
-void Math::Vec2::Normalize()
+Math::Vec2& Math::Vec2::Normalize()
 {
-	float length = Length();
+	const float length = Length();
 	x /= length;
 	y /= length;
+	return *this;
 }
 
 Math::Vec2 Math::Vec2::Normalized() const
 {
-	Vec2 new_vector(x, y);
-	float length = Length();
-	new_vector.x /= length;
-	new_vector.y /= length;
-	return new_vector;
+	return Vec2(x, y).Normalize();
 }
 
-float Math::Vec2::Dot(Vec2 _other_vec) const
+float Math::Vec2::Dot(const Vec2 _other_vec) const
 {
-	return x*_other_vec.x + y*_other_vec.y;
+	return x * _other_vec.x + y * _other_vec.y;
+}
+
+float Math::Vec2::Angle(Vec2 _other_vec) const
+{
+	return acos(Dot(_other_vec) / (Length() * _other_vec.Length()));
 }

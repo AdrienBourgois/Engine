@@ -1,13 +1,16 @@
 ﻿#include "Modules/Render/DirectX/Dx12Factory.h"
 
-#include <D3Dcompiler.h>
+#include "Engine.h"
+#include <d3dcompiler.h>
 #include "Modules/Render/DirectX/DX12Helper.h"
 #include "Core/CoreType/String.h"
 #include "Core/CoreType/Vertex.h"
+#include "Macros.h"
 
 bool Module::Render::DirectX12::Dx12Factory::InitFactory()
 {
 	TRYFUNC(CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory)));
+	LogAdapters();
 
 	return true;
 }
@@ -16,28 +19,28 @@ bool Module::Render::DirectX12::Dx12Factory::MakeDevice(ID3D12Device** _device)
 {
 	IDXGIAdapter1* adapter;
 
-	int adapterIndex = 0;
-	bool adapterFound = false;
+	int adapter_index = 0;
+	bool adapter_found = false;
 
-	while (dxgiFactory->EnumAdapters1(adapterIndex, &adapter) != DXGI_ERROR_NOT_FOUND)
+	while (dxgiFactory->EnumAdapters1(adapter_index, &adapter) != DXGI_ERROR_NOT_FOUND)
 	{
 		DXGI_ADAPTER_DESC1 desc;
 		adapter->GetDesc1(&desc);
 
 		if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
-			adapterIndex++;
+			adapter_index++;
 
-		HRESULT adapter_compatible = D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_12_1, _uuidof(ID3D12Device), nullptr);
+		const HRESULT adapter_compatible = D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_12_1, _uuidof(ID3D12Device), nullptr);
 		if (SUCCEEDED(adapter_compatible))
 		{
-			adapterFound = true;
+			adapter_found = true;
 			break;
 		}
 
-		adapterIndex++;
+		adapter_index++;
 	}
 
-	if (!adapterFound)
+	if (!adapter_found)
 		return false;
 
 	TRYFUNC(D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_12_1, IID_PPV_ARGS(_device)));
@@ -278,11 +281,11 @@ bool Module::Render::DirectX12::Dx12Factory::CreateVertexBuffer(Dx12CommandExecu
 
 	ID3D12Resource* vertex_buffer = nullptr;
 	device->CreateCommittedResource(&default_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&vertex_buffer));
-	vertex_buffer->SetName((_name + S(" - Vertex Buffer")).ToWideString());
+	vertex_buffer->SetName((_name + S(" - Vertex Buffer")).ToWideString().CStr());
 
 	ID3D12Resource* vertex_buffer_upload_heap;
 	device->CreateCommittedResource(&upload_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertex_buffer_upload_heap));
-	vertex_buffer_upload_heap->SetName((_name + S(" - Vertex Upload")).ToWideString());
+	vertex_buffer_upload_heap->SetName((_name + S(" - Vertex Upload")).ToWideString().CStr());
 
 	D3D12_SUBRESOURCE_DATA vertexData;
 	vertexData.pData                  = reinterpret_cast<BYTE*>(vertex_list);
@@ -332,11 +335,11 @@ bool Module::Render::DirectX12::Dx12Factory::CreateIndexBuffer(Dx12CommandExecut
 
 	ID3D12Resource* index_buffer = nullptr;
 	device->CreateCommittedResource(&default_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&index_buffer));
-	index_buffer->SetName((_name + S(" - Index Buffer")).ToWideString());
+	index_buffer->SetName((_name + S(" - Index Buffer")).ToWideString().CStr());
 
 	ID3D12Resource* index_buffer_upload_heap;
 	device->CreateCommittedResource(&upload_heap_properties, D3D12_HEAP_FLAG_NONE, &buffer_size_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&index_buffer_upload_heap));
-	index_buffer_upload_heap->SetName((_name + S(" - Index Upload")).ToWideString());
+	index_buffer_upload_heap->SetName((_name + S(" - Index Upload")).ToWideString().CStr());
 
 	D3D12_SUBRESOURCE_DATA index_data;
 	index_data.pData                  = reinterpret_cast<BYTE*>(index_list);
@@ -367,4 +370,29 @@ bool Module::Render::DirectX12::Dx12Factory::CreateIndexBuffer(Dx12CommandExecut
 	delete[] index_list;
 
 	return true;
+}
+
+Core::CoreType::Container::Vector<IDXGIAdapter1*> Module::Render::DirectX12::Dx12Factory::GetAdaptersList() const
+{
+	Core::CoreType::Container::Vector<IDXGIAdapter1*> adapters;
+	IDXGIAdapter1* adapter;
+	int adapter_index = 0;
+
+	while (dxgiFactory->EnumAdapters1(adapter_index, &adapter) != DXGI_ERROR_NOT_FOUND)
+	{
+		adapters.PushBack(adapter);
+		++adapter_index;
+	}
+
+	return adapters;
+}
+
+void Module::Render::DirectX12::Dx12Factory::LogAdapters() const
+{
+	DXGI_ADAPTER_DESC1 desc;
+	for (IDXGIAdapter1* adapter : GetAdaptersList())
+	{
+		adapter->GetDesc1(&desc);
+		LOG(S("Adapter : ") + WS(desc.Description).ToCharString(), LOG_VERBOSE);
+	}
 }

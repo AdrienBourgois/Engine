@@ -1,29 +1,29 @@
 #pragma once
 
-#include <vector>
 #include "Core/CoreType/Vertex.h"
 #include "PrimitivesMeshs.h"
+#include "Container/Vector.h"
 
 namespace Core
 {
 	namespace CoreType
 	{
 		/**
-		 * \brief Handle vertices and indexs for mesh
+		 * \brief Handle vertices and indexes for mesh
 		 */
 		class Mesh
 		{
 		public:
 			/**
-			 * \brief Contructor from vertives (and indexs) array(s)
-			 * \param _vertexs_array Array of vertices
-			 * \param _vertexs_count Count of vertex in array / Array size
-			 * \param _indexs_array Array of indexs (if index buffer needed)
-			 * \param _indexs_count Count of indexs in array / Array size (if index buffer needed)
+			 * \brief Constructor from vertices (and indexes) array(s)
+			 * \param _vertices_array Array of vertices
+			 * \param _vertices_count Count of vertex in array / Array size
+			 * \param _indexes_array Array of indexes (if index buffer needed)
+			 * \param _indexes_count Count of indexes in array / Array size (if index buffer needed)
 			 */
-			explicit Mesh(Vertex _vertexs_array[], unsigned int _vertexs_count, unsigned int _indexs_array[] = {}, unsigned int _indexs_count = 0);
+			explicit Mesh(Vertex _vertices_array[], unsigned int _vertices_count, unsigned int _indexes_array[] = {}, unsigned int _indexes_count = 0);
 			/**
-			 * \brief Contructor from primitive mesh type
+			 * \brief Constructor from primitive mesh type
 			 * \param _mesh_type Type of the primitive mesh
 			 */
 			explicit Mesh(PrimitiveMesh::PrimitivesMeshType _mesh_type);
@@ -36,7 +36,7 @@ namespace Core
 			 * \brief Change color of mesh
 			 * \param _color Mew color
 			 */
-			void SetColor(Color _color) const;
+			void SetColor(Color _color);
 
 			/**
 			 * \brief Specify if vertices are indexed or not
@@ -50,18 +50,18 @@ namespace Core
 			 */
 			Vertex* GetVertices() const;
 			/**
-			 * \brief Return an array with indexs
-			 * \return Array of indexs
+			 * \brief Return an array with indexes
+			 * \return Array of indexes
 			 */
-			unsigned int* GetIndexs() const;
+			unsigned int* GetIndexes() const;
 			/**
 			 * \brief Return the number of vertices
 			 * \return Count of vertices
 			 */
 			int GetVertexCount() const;
 			/**
-			 * \brief Return the number of indexs
-			 * \return Count of indexs
+			 * \brief Return the number of indexes
+			 * \return Count of indexes
 			 */
 			int GetIndexCount() const;
 
@@ -73,25 +73,25 @@ namespace Core
 
 			/**
 			 * \brief Copy list of vertices in this mesh
-			 * \param _vertexs_array List of vertices
-			 * \param _vertexs_count Count of vertices
+			 * \param _vertices_array List of vertices
+			 * \param _vertices_count Count of vertices
 			 */
-			void CopyVerticesArray(const Vertex _vertexs_array[], unsigned int _vertexs_count) const;
+			void CopyVerticesArray(const Vertex _vertices_array[], unsigned int _vertices_count);
 			/**
-			 * \brief Copy list of indexs in this mesh
-			 * \param _indexs_array List of indexs
-			 * \param _indexs_count Count of indexs
+			 * \brief Copy list of indexes in this mesh
+			 * \param _indexes_array List of indexes
+			 * \param _indexes_count Count of indexes
 			 */
-			void CopyIndexsArray(unsigned int _indexs_array[], unsigned int _indexs_count) const;
+			void CopyIndexesArray(unsigned int _indexes_array[], unsigned int _indexes_count);
 
 			/**
 			 * \brief Store vertices
 			 */
-			std::vector<Vertex>* vertices = new std::vector<Vertex>();
+			Container::Vector<Vertex> vertices;
 			/**
-			 * \brief Store indexs
+			 * \brief Store indexes
 			 */
-			std::vector<unsigned int>* indexs = new std::vector<unsigned>();
+			Container::Vector<unsigned int> indexes;
 		};
 	}
 }
