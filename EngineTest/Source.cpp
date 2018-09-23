@@ -4,9 +4,9 @@
 #include "RedCube.h"
 #include "Camera.h"
 
-int WINAPI wWinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, PWSTR _pCmdLine, int _nCmdShow)
+int WINAPI wWinMain(HINSTANCE _h_instance, HINSTANCE _h_prev_instance, PWSTR _p_cmd_line, int _n_cmd_show)
 {
-	HINSTANCE hinst_lib = LoadLibrary(L"EngineCore.dll");
+	HINSTANCE__* hinst_lib = LoadLibrary(L"EngineCore.dll");
 	Engine::GetInstance()->Initialize();
 
 	ADD_SCRIPT(RedCube);

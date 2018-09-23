@@ -95,14 +95,14 @@ namespace Module
 				bool MakeDevice(ID3D12Device** _device);
 				/**
 				 * \brief Create Command queue
-				 * \param[out] _commandQueue Pointer to ID3D12CommandQueue
+				 * \param[out] _command_queue Pointer to ID3D12CommandQueue
 				 * \return Is function success
 				 * \note Must be called after Dx12Factory::MakeDevice
 				 */
-				bool MakeCommandQueue(ID3D12CommandQueue** _commandQueue);
+				bool MakeCommandQueue(ID3D12CommandQueue** _command_queue);
 				/**
 				 * \brief Create SwapChain
-				 * \param _device A Direct Command Queue
+				 * \param _command_queue A Direct Command Queue
 				 * \param _frame_buffer_count Count of frames buffer used
 				 * \param _window Window reference
 				 * \param _width Width of render
@@ -112,9 +112,9 @@ namespace Module
 				 * \return Is function success
 				 * \note Must be called after Dx12Factory::MakeDevice
 				 */
-				bool MakeSwapChain(IUnknown* _device, UINT _frame_buffer_count, HWND _window, UINT _width, UINT _height, BOOL _fullscreen, IDXGISwapChain3** _swap_chain);
+				bool MakeSwapChain(ID3D12CommandQueue* _command_queue, UINT _frame_buffer_count, HWND _window, UINT _width, UINT _height, BOOL _fullscreen, IDXGISwapChain3** _swap_chain);
 				/**
-				 * \brief Create Descriptor heap and renders targets
+				 * \brief Create Renders target views
 				 * \param _frame_buffer_count Count of frames buffer used
 				 * \param _swap_chain SwapChain to use
 				 * \param[out] _rtv_descriptor_heap Pointer to ID3D12DescriptorHeap
@@ -123,7 +123,7 @@ namespace Module
 				 * \return Is function success
 				 * \note Must be called after Dx12Factory::MakeDevice
 				 */
-				bool MakeDescriptorHeap(UINT _frame_buffer_count, IDXGISwapChain3* _swap_chain, ID3D12DescriptorHeap** _rtv_descriptor_heap, UINT* _rtv_descriptor_size, ID3D12Resource** _render_targets);
+				bool MakeRenderTargetView(UINT _frame_buffer_count, IDXGISwapChain3* _swap_chain, ID3D12DescriptorHeap** _rtv_descriptor_heap, UINT* _rtv_descriptor_size, ID3D12Resource** _render_targets);
 				/**
 				 * \brief Create Command allocators
 				 * \param _frame_buffer_count Count of frames buffer used
@@ -145,11 +145,11 @@ namespace Module
 				 * \param _frame_buffer_count Count of frames buffer used
 				 * \param[out] _fence Pointer to an array of ID3D12Fence
 				 * \param[out] _fence_value Pointer to an array of UINT64
-				 * \param[out] fence_event Pointer to an HANDLE
+				 * \param[out] _fence_event Pointer to an HANDLE
 				 * \return Is function success
 				 * \note Must be called after Dx12Factory::MakeDevice
 				 */
-				bool MakeFence(UINT _frame_buffer_count, ID3D12Fence** _fence, UINT64* _fence_value, HANDLE* fence_event);
+				bool MakeFence(UINT _frame_buffer_count, ID3D12Fence** _fence, UINT64* _fence_value, HANDLE* _fence_event);
 				/**
 				 * \brief Create Root Signature
 				 * \param[out] _root_signature Pointer to ID3D12RootSignature
@@ -176,11 +176,11 @@ namespace Module
 				 * \param[out] _descriptor Pointer to a ID3D12DescriptorHeap
 				 * \param[out] _buffer Pointer to a ID3D12Resource
 				 * \param _width Width of the buffer
-				 * \param _weight Weight of the buffer
+				 * \param _height Weight of the buffer
 				 * \return Is function success
 				 * \note Must be called after Dx12Factory::MakeDevice
 				 */
-				bool MakeDepthStencilBuffer(ID3D12DescriptorHeap** _descriptor, ID3D12Resource** _buffer, UINT _width, UINT _weight);
+				bool MakeDepthStencilBuffer(ID3D12DescriptorHeap** _descriptor, ID3D12Resource** _buffer, UINT _width, UINT _height);
 				/**
 				 * \brief Create PSO
 				 * \param _root_signature Root Signature to use
@@ -228,8 +228,11 @@ namespace Module
 			private:
 
 				Core::CoreType::Container::Vector<IDXGIAdapter1*> GetAdaptersList() const;
+				Core::CoreType::Container::Vector<IDXGIAdapter1*> GetCompatibleAdaptersList() const;
+				static Core::CoreType::Container::Vector<IDXGIOutput*> GetOutputList(IDXGIAdapter1* _adapter);
 
-				void LogAdapters() const;
+				static void LogAdapters(Core::CoreType::Container::Vector<IDXGIAdapter1*> _adapters);
+				static void LogOutputs(Core::CoreType::Container::Vector<IDXGIOutput*> _outputs);
 
 
 

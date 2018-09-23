@@ -24,7 +24,7 @@ namespace Core
 			 */
 			Color() = default;
 			/**
-			 * \brief Contructor for range value 0-1
+			 * \brief Constructor for range value 0-1
 			 * \param _r Red component
 			 * \param _g Green component
 			 * \param _b Blue component
@@ -32,7 +32,7 @@ namespace Core
 			 */
 			Color(float _r, float _g, float _b, float _a = 1.f);
 			/**
-			 * \brief Contructor for range value 0-255
+			 * \brief Constructor for range value 0-255
 			 * \param _r Red component
 			 * \param _g Green component
 			 * \param _b Blue component
@@ -43,6 +43,15 @@ namespace Core
 			 * \brief Default destructor
 			 */
 			~Color() = default;
+
+			/**
+			 * \brief Fill an array with color components
+			 * \warning Array must be a 4 float array
+			 * \param _array Array to populate
+			 * \param _color Color to use
+			 * \return Pointer to array
+			 */
+			static const float* FillArrayColor(float* _array, Color _color);
 
 			/**
 			 * \brief Red component
@@ -733,14 +742,5 @@ namespace Core
 
 			/** @} */
 		};
-
-		/**
-		 * \brief Fill an array with color components
-		 * \warning Array must be a 4 float array
-		 * \param _array Array to populate
-		 * \param _color Color to use
-		 * \return Pointer to array
-		 */
-		const float* FillArrayColor(float* _array, Color _color);
 	}
 }

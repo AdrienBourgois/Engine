@@ -16,12 +16,12 @@ public:
 		object.MakeMesh(PrimitiveMesh::PrimitivesMeshType::Cube);
 		object.GetTransformReference()->rotation.y += 45.f;
 
-		for (int x = 0; x < 10; ++x)
+		for (int x = 0; x < 2; ++x)
 		{
-			for (int z = 0; z < 10; ++z)
+			for (int z = 0; z < 2; ++z)
 			{
 				Object::GameObject* o = new Object::GameObject();
-				o->MakeMesh(PrimitiveMesh::PrimitivesMeshType::Cube, Color(unsigned char(25 * x) , 0, 0, char(255)));
+				o->MakeMesh(PrimitiveMesh::PrimitivesMeshType::Cube);
 				o->GetTransformReference()->position = Math::Vec3(x * 5.f, 0.f, z * 5.f);
 				o->GetTransformReference()->rotation = Math::Vec3(0.3f, 0.3f, 0.3f);
 				objects += o;

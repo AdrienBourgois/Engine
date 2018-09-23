@@ -91,12 +91,12 @@ namespace Module
 				 * \brief Update the pipeline
 				 * \return Is function success
 				 */
-				bool UpdatePipeline() const;
+				bool UpdatePipeline();
 				/**
 				 * \brief Block until the GPU had finished rendering previous frame
 				 * \return Is function success
 				 */
-				bool WaitForPreviousFrame();
+				bool FlushCommandQueue();
 				/**
 				 * \brief Prepare the pre render command list
 				 * \return Is function success

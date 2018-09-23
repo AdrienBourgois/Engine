@@ -47,8 +47,8 @@ namespace Module
 					 * \param _vertices_array Array of object vertices
 					 * \param _vertices_count Count of vertices in array
 					 * \param _vertex_buffer_view Vertex buffer view of object
-					 * \param _indexs_array Array of object indexs (if object indexed)
-					 * \param _indexs_count Count of indexs in array (if object indexed)
+					 * \param _indexs_array Array of object indexes (if object indexed)
+					 * \param _indexs_count Count of indexes in array (if object indexed)
 					 * \param _index_buffer_view Index buffer view of object (if object indexed)
 					 * \param _constant_buffer Constant buffer to use
 					 */
@@ -101,8 +101,8 @@ namespace Module
 					 */
 					D3D12_INDEX_BUFFER_VIEW* GetIndexBufferView() const;
 					/**
-					 * \brief Return count of indexs of object
-					 * \return Count of indexs of object
+					 * \brief Return count of indexes of object
+					 * \return Count of indexes of object
 					 */
 					unsigned int GetIndexCount() const;
 					/**
@@ -155,11 +155,11 @@ namespace Module
 					 */
 					unsigned int verticesCount = 0;
 					/**
-					 * \brief Indexs list of object
+					 * \brief Indexes list of object
 					 */
 					unsigned int* indexsArray = nullptr;
 					/**
-					 * \brief Indexs count
+					 * \brief Indexes count
 					 */
 					unsigned int indexsCount = 0;
 				};

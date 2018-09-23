@@ -12,6 +12,12 @@ bool Module::Render::DirectX12::DirectX12::Initialize()
 
 bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 {
+#ifdef _DEBUG
+	ID3D12Debug* debug;
+	D3D12GetDebugInterface(IID_PPV_ARGS(&debug));
+	debug->EnableDebugLayer();
+#endif
+
 	const unsigned int width = MODULE(Display::Window)->getWidth();
 	const unsigned int height = MODULE(Display::Window)->getHeight();
 
@@ -35,7 +41,7 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 
 	factory->MakeCommandQueue(&commandQueue);
 	factory->MakeSwapChain(commandQueue, FRAME_BUFFER_COUNT, *MODULE(Display::Window)->getHandle(), width, height, MODULE(Display::Window)->isFullscreen(), &swapChain);
-	factory->MakeDescriptorHeap(FRAME_BUFFER_COUNT, swapChain, &renderTargetDescriptorHeap, &renderTargetDescriptorSize, renderTargets);
+	factory->MakeRenderTargetView(FRAME_BUFFER_COUNT, swapChain, &renderTargetDescriptorHeap, &renderTargetDescriptorSize, renderTargets);
 	factory->MakeCommandAllocator(FRAME_BUFFER_COUNT, commandAllocator);
 	factory->MakeCommandList(commandAllocator[0], &preRenderCommandList);
 	factory->MakeCommandList(commandAllocator[0], &postRenderCommandList);
@@ -57,44 +63,44 @@ bool Module::Render::DirectX12::DirectX12::Render()
 	UpdatePipeline();
 	PreRender();
 
-	ID3D12CommandList** ppCommandLists = new ID3D12CommandList*[graphicsObjects.size() + 2];
+	ID3D12CommandList** pp_command_lists = new ID3D12CommandList*[graphicsObjects.size() + 2];
 
-	ppCommandLists[0] = preRenderCommandList;
+	pp_command_lists[0] = preRenderCommandList;
 
 	unsigned int i = 0;
-	for (std::pair<const int, Objects::Dx12GraphicObject*> object_command_list : graphicsObjects)
+	for (const std::pair<const int, Objects::Dx12GraphicObject*> object_command_list : graphicsObjects)
 	{
-		ppCommandLists[i + 1] = object_command_list.second->GetCommandList();
+		pp_command_lists[i + 1] = object_command_list.second->GetCommandList();
 		++i;
 	}
-	ppCommandLists[i + 1] = postRenderCommandList;
+	pp_command_lists[i + 1] = postRenderCommandList;
 
-	commandQueue->ExecuteCommandLists(static_cast<UINT>(graphicsObjects.size()) + 2, ppCommandLists);
+	commandQueue->ExecuteCommandLists(static_cast<UINT>(graphicsObjects.size()) + 2, pp_command_lists);
 
-	TRYFUNC(commandQueue->Signal(fence[frameIndex], fenceValue[frameIndex]));
+	FlushCommandQueue();
 
 	TRYFUNC(swapChain->Present(0, 0));
 
-	delete[] ppCommandLists;
+	delete[] pp_command_lists;
 
 	PostRender();
 
 	return true;
 }
 
-bool Module::Render::DirectX12::DirectX12::UpdatePipeline() const
+bool Module::Render::DirectX12::DirectX12::UpdatePipeline()
 {
+	frameIndex = swapChain->GetCurrentBackBufferIndex();
+
 	return true;
 }
 
 bool Module::Render::DirectX12::DirectX12::PreRender()
 {
-	WaitForPreviousFrame();
-
 	TRYFUNC(commandAllocator[frameIndex]->Reset());
 
 	PreparePreRenderCommandList();
-	for (std::pair<const int, Objects::Dx12GraphicObject*> pair : graphicsObjects)
+	for (const std::pair<const int, Objects::Dx12GraphicObject*> pair : graphicsObjects)
 	{
 		PrepareObjectCommandList(pair.second);
 	}
@@ -110,14 +116,13 @@ bool Module::Render::DirectX12::DirectX12::PostRender() const
 
 bool Module::Render::DirectX12::DirectX12::Cleanup()
 {
-	WaitForPreviousFrame();
+	FlushCommandQueue();
 	CloseHandle(fenceEvent);
 
 	BOOL fs = false;
 	if (swapChain->GetFullscreenState(&fs, nullptr))
 		swapChain->SetFullscreenState(false, nullptr);
 
-	SAFE_RELEASE(device);
 	SAFE_RELEASE(swapChain);
 	SAFE_RELEASE(commandQueue);
 	SAFE_RELEASE(preRenderCommandList);
@@ -143,16 +148,23 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 
 	delete factory;
 
+#ifdef _DEBUG
+	ID3D12DebugDevice1* debug_device;
+	device->QueryInterface(IID_PPV_ARGS(&debug_device));
+	debug_device->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL);
+#endif
+	SAFE_RELEASE(device);
+
 	return true;
 }
 
-bool Module::Render::DirectX12::DirectX12::CreateBuffers(unsigned int _id, Core::CoreType::String _name, Core::CoreType::Transform* _transform, Core::CoreType::Vertex* _vertices_array, unsigned int _vertices_count, unsigned int* _indexs_array, unsigned int _indexs_count)
+bool Module::Render::DirectX12::DirectX12::CreateBuffers(const unsigned int _id, Core::CoreType::String _name, Core::CoreType::Transform* _transform, Core::CoreType::Vertex* _vertices_array, const unsigned int _vertices_count, unsigned int* _indexs_array, const unsigned int _indexs_count)
 {
 	ID3D12GraphicsCommandList* command_list = nullptr;
 	factory->MakeCommandList(commandAllocator[frameIndex], &command_list);
 
 	D3D12_VERTEX_BUFFER_VIEW* buffer_view = nullptr;
-	Dx12CommandExecutionPack pack = { pipelineStateObject, commandAllocator[frameIndex], commandQueue, fence[frameIndex], &fenceValue[frameIndex] };
+	const Dx12CommandExecutionPack pack = { pipelineStateObject, commandAllocator[frameIndex], commandQueue, fence[frameIndex], &fenceValue[frameIndex] };
 	factory->CreateVertexBuffer(pack, _name, _vertices_array, _vertices_count, command_list, &buffer_view);
 
 	D3D12_INDEX_BUFFER_VIEW* index_view = nullptr;
@@ -167,19 +179,21 @@ bool Module::Render::DirectX12::DirectX12::CreateBuffers(unsigned int _id, Core:
 	return true;
 }
 
-void Module::Render::DirectX12::DirectX12::SetCameraViewMatrix(Math::Mat4 _camera_view)
+void Module::Render::DirectX12::DirectX12::SetCameraViewMatrix(const Math::Mat4 _camera_view)
 {
 	cameraViewMatrix = _camera_view;
 }
 
-void Module::Render::DirectX12::DirectX12::SetCameraProjectionMatrix(Math::Mat4 _camera_projection)
+void Module::Render::DirectX12::DirectX12::SetCameraProjectionMatrix(const Math::Mat4 _camera_projection)
 {
 	cameraProjectionMatrix = _camera_projection;
 }
 
-bool Module::Render::DirectX12::DirectX12::WaitForPreviousFrame()
+bool Module::Render::DirectX12::DirectX12::FlushCommandQueue()
 {
-	frameIndex = swapChain->GetCurrentBackBufferIndex();
+	fenceValue[frameIndex]++;
+
+	TRYFUNC(commandQueue->Signal(fence[frameIndex], fenceValue[frameIndex]));
 
 	if (fence[frameIndex]->GetCompletedValue() < fenceValue[frameIndex])
 	{
@@ -187,8 +201,6 @@ bool Module::Render::DirectX12::DirectX12::WaitForPreviousFrame()
 
 		WaitForSingleObject(fenceEvent, INFINITE);
 	}
-
-	fenceValue[frameIndex]++;
 
 	return true;
 }
@@ -206,7 +218,7 @@ bool Module::Render::DirectX12::DirectX12::PreparePreRenderCommandList()
 	preRenderCommandList->OMSetRenderTargets(1, &render_target_view_handle, FALSE, &depth_stencil_view_handle);
 
 	float clear_color[4];
-	FillArrayColor(clear_color, Core::CoreType::Color::Turquoise);
+	Core::CoreType::Color::FillArrayColor(clear_color, Core::CoreType::Color::Turquoise);
 	preRenderCommandList->ClearRenderTargetView(render_target_view_handle, clear_color, 0, nullptr);
 	preRenderCommandList->ClearDepthStencilView(depthStencilDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	preRenderCommandList->SetGraphicsRootSignature(rootSignature);
@@ -231,7 +243,8 @@ bool Module::Render::DirectX12::DirectX12::PreparePostRenderCommandList()
 bool Module::Render::DirectX12::DirectX12::PrepareObjectCommandList(Objects::Dx12GraphicObject* _graphic_object)
 {
 	Math::Mat4 wvs_matrix = (_graphic_object->GetTransform()->GetWorldMatrix() * cameraViewMatrix * cameraProjectionMatrix).GetTranspose();
-	memcpy(_graphic_object->GetConstantBuffer()->Map(), &wvs_matrix, sizeof wvs_matrix);
+	const auto virtual_gpu_adress = _graphic_object->GetConstantBuffer()->Map();
+	memcpy(virtual_gpu_adress, &wvs_matrix, sizeof wvs_matrix);
 	_graphic_object->GetConstantBuffer()->Unmap();
 
 	ID3D12GraphicsCommandList* command_list = _graphic_object->GetCommandList();
