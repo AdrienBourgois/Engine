@@ -19,10 +19,10 @@ namespace Module
 		{
 			if(structuredLog.IsEmpty())
 			{
-				structuredLog.Reserve(50);
-				structuredLog += S("\t(") + time.ToString() + S(") ");
+				structuredLog.Reserve(100);
+				structuredLog += S("\t[") + time.ToString() + S("] ");
 				if(!file.IsNull())
-					structuredLog += file + ':' + SN(line);
+					structuredLog += S("(") + file + ':' + SN(line) + ')';
 				structuredLog += '\n';
 				structuredLog += message;
 			}

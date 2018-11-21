@@ -97,6 +97,28 @@ namespace Core
 				20, 21, 22, // first triangle
 				20, 23, 21, // second triangle
 			};
+
+			/**
+			 * \brief Static vertices data for plane
+			 */
+			static const Vertex PlaneVertices[] =
+			{
+				{ -0.5f,  0.f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f },
+				{  0.5f,  0.f,  0.5f, 1.0f, 0.0f, 1.0f, 1.0f },
+				{  0.5f,  0.f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f },
+				{ -0.5f,  0.f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f },
+			};
+
+			/**
+			 * \brief Static indexes data for plane
+			 */
+			static unsigned int PlaneIndexes[] =
+			{
+				0, 1, 2,
+				0, 3, 1,
+				2, 1, 0,
+				1, 3, 0,
+			};
 		}
 	}
 }

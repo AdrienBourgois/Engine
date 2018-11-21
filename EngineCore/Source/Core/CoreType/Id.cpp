@@ -13,44 +13,45 @@ bool operator&(const Core::CoreType::EObjectType& _lhs, const Core::CoreType::EO
 	return static_cast<int>(_lhs) == static_cast<int>(_rhs);
 }
 
-Core::CoreType::Id::Id(EObjectType _type)
+Core::CoreType::Id::Id(const EObjectType _type)
 {
-	EObjectType type = _type;
-	EObjectSubtype subtype = EObjectSubtype::UndefinedSubtype;
-
-	SetType(type);
-	SetSubtype(subtype);
+	SetType(_type);
+	SetSubtype(EObjectSubtype::UndefinedSubtype);
 	SetInstanceNumber(Register());
 }
 
-Core::CoreType::Id::Id(EObjectSubtype _subtype)
+Core::CoreType::Id::Id(const EObjectSubtype _subtype)
 {
-	EObjectType type = GetMainType(_subtype);
+	const EObjectType type = GetMainType(_subtype);
 
 	SetType(type);
 	SetSubtype(_subtype);
 	SetInstanceNumber(Register());
 }
 
-void Core::CoreType::Id::operator=(EObjectSubtype _subtype)
+Core::CoreType::Id& Core::CoreType::Id::operator=(const EObjectSubtype _subtype)
 {
 	Unregister();
 	SetSubtype(_subtype);
 	SetType(GetMainType(_subtype));
 	Register();
+
+	return *this;
 }
 
-void Core::CoreType::Id::operator=(EObjectType _type)
+Core::CoreType::Id& Core::CoreType::Id::operator=(const EObjectType _type)
 {
 	Unregister();
 	SetSubtype(EObjectSubtype::UndefinedSubtype);
 	SetType(_type);
 	Register();
+
+	return *this;
 }
 
 uint16_t Core::CoreType::Id::Register()
 {
-	EObjectSubtype subtype = GetSubtype();
+	const EObjectSubtype subtype = GetSubtype();
 	InstanceCountHandle::currentInstanceCount[subtype]++;
 	InstanceCountHandle::nextInstanceCount[subtype]++;
 	return InstanceCountHandle::nextInstanceCount[subtype];
@@ -58,7 +59,7 @@ uint16_t Core::CoreType::Id::Register()
 
 void Core::CoreType::Id::Unregister()
 {
-	EObjectSubtype subtype = GetSubtype();
+	const EObjectSubtype subtype = GetSubtype();
 	InstanceCountHandle::currentInstanceCount[subtype]--;
 }
 
@@ -71,20 +72,14 @@ bool Core::CoreType::Id::operator==(Id _other_id)
 	return false;
 }
 
-bool Core::CoreType::Id::operator==(EObjectType _other_type)
+bool Core::CoreType::Id::operator==(const EObjectType _other_type)
 {
-	if (GetType() & _other_type)
-		return true;
-
-	return false;
+	return GetType() & _other_type;
 }
 
-bool Core::CoreType::Id::operator==(EObjectSubtype _other_subtype)
+bool Core::CoreType::Id::operator==(const EObjectSubtype _other_subtype)
 {
-	if (GetSubtype() & _other_subtype)
-		return true;
-
-	return false;
+	return GetSubtype() & _other_subtype;
 }
 
 Core::CoreType::EObjectType Core::CoreType::Id::GetType()
@@ -102,7 +97,7 @@ uint16_t Core::CoreType::Id::GetInstanceNumber()
 	return *GetInstanceNumberPointer();
 }
 
-Core::CoreType::EObjectType Core::CoreType::Id::GetMainType(EObjectSubtype _subtype) const
+Core::CoreType::EObjectType Core::CoreType::Id::GetMainType(const EObjectSubtype _subtype)
 {
 	EObjectType type = EObjectType::Undefined;
 
@@ -152,13 +147,13 @@ void Core::CoreType::Id::SetSubtype(EObjectSubtype _new_subtype)
 	*pointer = static_cast<uint32_t>(_new_subtype);
 }
 
-void Core::CoreType::Id::SetFlag(uint8_t _new_flag)
+void Core::CoreType::Id::SetFlag(const uint8_t _new_flag)
 {
 	uint8_t* pointer = GetFlagPointer();
 	*pointer = _new_flag;
 }
 
-void Core::CoreType::Id::SetInstanceNumber(uint16_t _new_number)
+void Core::CoreType::Id::SetInstanceNumber(const uint16_t _new_number)
 {
 	uint16_t* pointer = GetInstanceNumberPointer();
 	*pointer = _new_number;

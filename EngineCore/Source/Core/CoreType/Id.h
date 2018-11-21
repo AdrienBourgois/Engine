@@ -2,7 +2,6 @@
 
 #include "Macros.h"
 #include <unordered_map>
-#include "Container/Vector.h"
 
 namespace Core
 {
@@ -83,12 +82,12 @@ namespace Core
 			 * \brief Change subtype of Id
 			 * \param _subtype New subtype
 			 */
-			void operator=(EObjectSubtype _subtype);
+			Id& operator=(EObjectSubtype _subtype);
 			/**
 			 * \brief Change type of Id
 			 * \param _type New type
 			 */
-			void operator=(EObjectType _type);
+			Id& operator=(EObjectType _type);
 
 			/**
 			 * \brief Compare types of id's
@@ -146,7 +145,7 @@ namespace Core
 			 * \param _subtype Subtype to test
 			 * \return Main type of the subtype
 			 */
-			EObjectType GetMainType(EObjectSubtype _subtype) const;
+			static EObjectType GetMainType(EObjectSubtype _subtype);
 
 			/**
 			 * \brief Return pointer to type data

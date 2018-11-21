@@ -10,7 +10,7 @@ Module::Inputs::Input::~Input()
 	mouseInputsWrapper = nullptr;
 }
 
-Core::Interface::IKeyboardInputs* Module::Inputs::Input::CreateKeyboardInputsWrapper(KeyboardInputsApi _api)
+Core::Interface::IKeyboardInputs* Module::Inputs::Input::CreateKeyboardInputsWrapper(const KeyboardInputsApi _api)
 {
 	if (_api == KeyboardInputsApi::Windows)
 		keyboardInputsWrapper = new WindowsKeyboard;
@@ -18,7 +18,7 @@ Core::Interface::IKeyboardInputs* Module::Inputs::Input::CreateKeyboardInputsWra
 	return keyboardInputsWrapper;
 }
 
-Core::Interface::IMouseInputs* Module::Inputs::Input::CreateMouseInputsWrapper(MouseInputsApi _api)
+Core::Interface::IMouseInputs* Module::Inputs::Input::CreateMouseInputsWrapper(const MouseInputsApi _api)
 {
 	if (_api == MouseInputsApi::Windows)
 		mouseInputsWrapper = new WindowsMouse;

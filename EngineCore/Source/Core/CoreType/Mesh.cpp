@@ -19,6 +19,12 @@ Core::CoreType::Mesh::Mesh(const PrimitiveMesh::PrimitivesMeshType _mesh_type)
 		CopyIndexesArray(PrimitiveMesh::CubeIndexes, _countof(PrimitiveMesh::CubeIndexes));
 		indexed = true;
 	}
+	else if(_mesh_type == PrimitiveMesh::PrimitivesMeshType::Plane)
+	{
+		CopyVerticesArray(PrimitiveMesh::PlaneVertices, _countof(PrimitiveMesh::PlaneVertices));
+		CopyIndexesArray(PrimitiveMesh::PlaneIndexes, _countof(PrimitiveMesh::PlaneIndexes));
+		indexed = true;
+	}
 }
 
 void Core::CoreType::Mesh::SetColor(const Color _color)

@@ -68,7 +68,7 @@ namespace Core
 	namespace CoreType
 	{
 		/**
-		 * \brief Class to simples characters manipulations
+		 * \brief Class for characters manipulations
 		 * \note Design to always have a Null Terminating Character ('\0' for char) at the end of string
 		 * \tparam CharType Type of each character
 		 * \tparam EosChar End of string Character
@@ -202,6 +202,8 @@ namespace Core
 			 * \return C Style string pointer
 			 */
 			const CharType* CStr() const { return data; }
+
+			explicit operator CharType*() const { return data; }
 
 			/**
 			 * \brief Return length of the string without null terminated character

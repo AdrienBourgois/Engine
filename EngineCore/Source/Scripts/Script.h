@@ -9,28 +9,28 @@
 using namespace Core;
 using namespace CoreType;
 
-/**
- * \brief Get current delta time
- */
-#define DeltaTime getClock()->GetDeltaTime()
-/**
- * \brief Get keyboard inputs
- */
-#define Keyboard getInputs()->GetKeyboardInputsWrapper()
-/**
- * \brief Get mouse inputs
- */
-#define Mouse getInputs()->GetMouseInputsWrapper()
-/**
- * \brief Get active camera
- */
-#define Camera getRenderInterface()->GetActiveCamera()
+///**
+// * \brief Get current delta time
+// */
+//#define DeltaTime getClock()->GetDeltaTime()
+///**
+// * \brief Get keyboard inputs
+// */
+//#define Keyboard getInputs()->GetKeyboardInputsWrapper()
+///**
+// * \brief Get mouse inputs
+// */
+//#define Mouse getInputs()->GetMouseInputsWrapper()
+///**
+// * \brief Get active camera
+// */
+//#define Camera getRenderInterface()->GetActiveCamera()
 
 namespace Scripts
 {
 	/**
 	 * \brief Simple script class
-	 * \note Inherit your scripts from this class, or childs of this class
+	 * \note Inherit your scripts from this class, or children of this class
 	 */
 	class ENGINEDLL_API Script : public Interface::IScript
 	{
@@ -48,27 +48,27 @@ namespace Scripts
 		 * \brief Return clock module
 		 * \return Clock module
 		 */
-		Module::Time::Clock* getClock() const;
+		Module::Time::Clock* GetClock() const;
 		/**
 		 * \brief Return window module
 		 * \return Window module
 		 */
-		Module::Display::Window* getWindow() const;
+		Module::Display::Window* GetWindow() const;
 		/**
 		 * \brief Return render interface module
 		 * \return RenderInterface module
 		 */
-		Module::Render::RenderInterface* getRenderInterface() const;
+		Module::Render::RenderInterface* GetRenderInterface() const;
 		/**
 		 * \brief Return logger module
 		 * \return Logger module
 		 */
-		Module::Tools::Logs::Logger* getLogger() const;
+		Module::Tools::Logs::Logger* GetLogger() const;
 		/**
 		 * \brief Return inputs module
 		 * \return Inputs module
 		 */
-		Module::Inputs::Input* getInputs() const;
+		Module::Inputs::Input* GetInputs() const;
 
 	private:
 		/**

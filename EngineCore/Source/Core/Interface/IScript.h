@@ -29,28 +29,28 @@ namespace Core
 
 			/**
 			 * \brief Initialize script
-			 * \return Is initialization sucessfull
+			 * \return Is initialization successful
 			 */
 			virtual void Initialize() {}
 			/**
 			 * \brief Start script
-			 * \return Is start sucessfull
+			 * \return Is start successful
 			 */
 			virtual void Start() {}
 			/**
 			 * \brief Update script
-			 * \return Is update sucessfull
+			 * \return Is update successful
 			 */
 			virtual void Update() {}
 			/**
 			 * \brief Update script with delta time
 			 * \param _delta Delta time
-			 * \return Is update sucessfull
+			 * \return Is update successful
 			 */
 			virtual void Update(const float _delta) {}
 			/**
 			 * \brief Stop and destruct script
-			 * \return Is desctruction sucessfull
+			 * \return Is destruction successful
 			 */
 			virtual void Destruct() {}
 			/**
@@ -64,9 +64,9 @@ namespace Core
 
 			/**
 			 * \brief Set a new name for script
-			 * \param _new_name New name
+			 * \param _newName New name
 			 */
-			void SetScriptName(const CoreType::String _new_name = S("Unnamed script")) { scriptName = _new_name; }
+			void SetScriptName(const CoreType::String& _newName = S("Unnamed script")) { scriptName = _newName; }
 			/**
 			 * \brief Return tha name of script
 			 * \return Script name

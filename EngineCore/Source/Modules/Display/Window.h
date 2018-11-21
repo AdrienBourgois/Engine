@@ -34,38 +34,38 @@ namespace Module
 
 			/**
 			 * \brief Callback function for system messages
-			 * \param _windowHandle Handle to the window
+			 * \param _window_handle Handle to the window
 			 * \param _message Message
-			 * \param _windowParameter Message Parameter
-			 * \param _longParameter Message Parameter
+			 * \param _window_parameter Message Parameter
+			 * \param _long_parameter Message Parameter
 			 * \return Is message processed
 			 */
-			static LRESULT CALLBACK WndProc(HWND _windowHandle, UINT _message, WPARAM _windowParameter, LPARAM _longParameter);
+			static LRESULT CALLBACK WndProc(HWND _window_handle, UINT _message, WPARAM _window_parameter, LPARAM _long_parameter);
 			/**
 			 * \brief Get and process messages from system
 			 */
-			void GetMessages() const;
+			static void GetMessages();
 
 			/**
 			 * \brief Is window in fullscreen
 			 * \return Is window in fullscreen
 			 */
-			bool isFullscreen() const { return fullscreen; }
+			bool IsFullscreen() const { return fullscreen; }
 			/**
 			 * \brief Return width of the window
 			 * \return Width of window
 			 */
-			unsigned int getWidth() const { return width; }
+			unsigned int GetWidth() const { return width; }
 			/**
-			 * \brief Return heigt of the window
+			 * \brief Return height of the window
 			 * \return Width of window
 			 */
-			unsigned int getHeight() const { return height; }
+			unsigned int GetHeight() const { return height; }
 			/**
 			 * \brief Return the handle of the window
 			 * \return Handle of window
 			 */
-			HWND* getHandle() { return &windowHandler; }
+			HWND* GetHandle() { return &windowHandler; }
 
 		private:
 			/**
@@ -77,10 +77,10 @@ namespace Module
 			bool PrepareWindow(int _width, int _height);
 			/**
 			 * \brief Create and display window
-			 * \param _showWindow Must the window be show
+			 * \param _show_window Must the window be show
 			 * \return Is window created
 			 */
-			bool MakeWindow(int _showWindow);
+			bool MakeWindow(int _show_window);
 
 			/**
 			 * \brief Handle the instance
@@ -94,7 +94,7 @@ namespace Module
 			/**
 			 * \brief Class of window
 			 */
-			WNDCLASSEX windowClass;
+			WNDCLASSEX windowClass{};
 			/**
 			 * \brief Name of the window class
 			 */
@@ -115,7 +115,7 @@ namespace Module
 			unsigned int height = 900;
 
 			/**
-			 * \brief Store fulscreen state of window
+			 * \brief Store fullscreen state of window
 			 */
 			bool fullscreen = false;
 			/**

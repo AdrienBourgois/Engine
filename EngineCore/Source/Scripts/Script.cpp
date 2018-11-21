@@ -2,34 +2,34 @@
 
 Scripts::Script::Script()
 {
-	clockModuleReference = MODULE(Module::Time::Clock);
-	windowModuleReference = MODULE(Module::Display::Window);
-	renderInterfaceModuleReference = MODULE(Module::Render::RenderInterface);
-	loggerModuleReference = MODULE(Module::Tools::Logs::Logger);
-	inputsModuleReference = MODULE(Module::Inputs::Input);
+	clockModuleReference = Engine::GetInstance()->GetModule<Module::Time::Clock>();
+	windowModuleReference = Engine::GetInstance()->GetModule<Module::Display::Window>();
+	renderInterfaceModuleReference = Engine::GetInstance()->GetModule<Module::Render::RenderInterface>();
+	loggerModuleReference = Engine::GetInstance()->GetModule<Module::Tools::Logs::Logger>();
+	inputsModuleReference = Engine::GetInstance()->GetModule<Module::Inputs::Input>();
 }
 
-Module::Time::Clock* Scripts::Script::getClock() const
+Module::Time::Clock* Scripts::Script::GetClock() const
 {
 	return clockModuleReference;
 }
 
-Module::Display::Window* Scripts::Script::getWindow() const
+Module::Display::Window* Scripts::Script::GetWindow() const
 {
 	return windowModuleReference;
 }
 
-Module::Render::RenderInterface* Scripts::Script::getRenderInterface() const
+Module::Render::RenderInterface* Scripts::Script::GetRenderInterface() const
 {
 	return renderInterfaceModuleReference;
 }
 
-Module::Tools::Logs::Logger* Scripts::Script::getLogger() const
+Module::Tools::Logs::Logger* Scripts::Script::GetLogger() const
 {
 	return loggerModuleReference;
 }
 
-Module::Inputs::Input* Scripts::Script::getInputs() const
+Module::Inputs::Input* Scripts::Script::GetInputs() const
 {
 	return inputsModuleReference;
 }

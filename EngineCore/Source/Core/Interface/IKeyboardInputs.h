@@ -15,7 +15,7 @@ namespace Core
 		{
 		public:
 			/**
-			* \brief Virtual default desctructor
+			* \brief Virtual default destructor
 			*/
 			virtual ~IKeyboardInputs() = default;
 
@@ -24,7 +24,7 @@ namespace Core
 			* \param _key Key to test
 			* \return Is key pressed
 			*/
-			virtual bool IsKeyDown(Key _key) = 0;
+			virtual bool IsKeyDown(EKey _key) = 0;
 
 			/**
 			* \brief Notify that a key has been pressed

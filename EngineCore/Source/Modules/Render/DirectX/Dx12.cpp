@@ -18,8 +18,10 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	debug->EnableDebugLayer();
 #endif
 
-	const unsigned int width = MODULE(Display::Window)->getWidth();
-	const unsigned int height = MODULE(Display::Window)->getHeight();
+	Display::Window* window = Engine::GetInstance()->GetModule<Display::Window>();
+
+	const unsigned int width = window->GetWidth();
+	const unsigned int height = window->GetHeight();
 
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
@@ -40,7 +42,7 @@ bool Module::Render::DirectX12::DirectX12::CreatePipeline()
 	factory->MakeDevice(&device);
 
 	factory->MakeCommandQueue(&commandQueue);
-	factory->MakeSwapChain(commandQueue, FRAME_BUFFER_COUNT, *MODULE(Display::Window)->getHandle(), width, height, MODULE(Display::Window)->isFullscreen(), &swapChain);
+	factory->MakeSwapChain(commandQueue, FRAME_BUFFER_COUNT, *window->GetHandle(), width, height, window->IsFullscreen(), &swapChain);
 	factory->MakeRenderTargetView(FRAME_BUFFER_COUNT, swapChain, &renderTargetDescriptorHeap, &renderTargetDescriptorSize, renderTargets);
 	factory->MakeCommandAllocator(FRAME_BUFFER_COUNT, commandAllocator);
 	factory->MakeCommandList(commandAllocator[0], &preRenderCommandList);
@@ -119,8 +121,9 @@ bool Module::Render::DirectX12::DirectX12::Cleanup()
 	FlushCommandQueue();
 	CloseHandle(fenceEvent);
 
-	BOOL fs = false;
-	if (swapChain->GetFullscreenState(&fs, nullptr))
+	BOOL fullscreen = false;
+	swapChain->GetFullscreenState(&fullscreen, nullptr);
+	if (fullscreen)
 		swapChain->SetFullscreenState(false, nullptr);
 
 	SAFE_RELEASE(swapChain);

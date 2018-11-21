@@ -3,8 +3,9 @@
 
 Module::Render::Camera::Camera()
 {
-	width = static_cast<FLOAT>(MODULE(Module::Display::Window)->getWidth());
-	height = static_cast<FLOAT>(MODULE(Module::Display::Window)->getHeight());
+	const Display::Window* window = Engine::GetInstance()->GetModule<Display::Window>();
+	width = static_cast<FLOAT>(window->GetWidth());
+	height = static_cast<FLOAT>(window->GetHeight());
 }
 
 void Module::Render::Camera::SetAsActiveCamera()
@@ -42,22 +43,22 @@ float Module::Render::Camera::GetFar() const
 	return farRender;
 }
 
-void Module::Render::Camera::SetFov(float _fov)
+void Module::Render::Camera::SetFov(const float _fov)
 {
 	fov = _fov;
 }
 
-void Module::Render::Camera::SetNear(float _near)
+void Module::Render::Camera::SetNear(const float _near)
 {
 	nearRender = _near;
 }
 
-void Module::Render::Camera::SetFar(float _far)
+void Module::Render::Camera::SetFar(const float _far)
 {
 	farRender = _far;
 }
 
-void Module::Render::Camera::SetTransform(Core::CoreType::Transform _transform)
+void Module::Render::Camera::SetTransform(const Core::CoreType::Transform _transform)
 {
 	transform = _transform;
 }

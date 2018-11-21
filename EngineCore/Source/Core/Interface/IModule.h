@@ -13,6 +13,8 @@
 		bool Destruct() override;\
 		void SetDefaultModuleName() override { moduleName = name; }
 
+class Engine;
+
 namespace Core
 {
 	namespace Interface
@@ -31,6 +33,7 @@ namespace Core
 			/**
 			 * \brief Initialize module
 			 * \return Is initialization successful
+			 * \note First safe place to call engine and modules elements
 			 */
 			virtual bool Initialize() = 0;
 			/**
@@ -54,10 +57,24 @@ namespace Core
 			virtual void SetDefaultModuleName() = 0;
 
 			/**
+			 * \brief Set reference to engine instance
+			 * \param _engine_reference Reference to engine instance
+			 */
+			void SetEngineInstance(Engine* _engine_reference) { engine = _engine_reference; }
+
+			/**
+			 * \brief Return first module found by type
+			 * \tparam T Module type (inherit from Core::Interface::IModule class)
+			 * \return Module founded (nullptr if any)
+			 */
+			template<typename T>
+			T* Module() const { return engine->GetModule<T>(); }
+
+			/**
 			 * \brief Set a new name for module
 			 * \param _new_name New name
 			 */
-			void SetModuleName(CoreType::String _new_name = S("Unnamed Module")) { moduleName = _new_name; }
+			void SetModuleName(const CoreType::String& _new_name = S("Unnamed Module")) { moduleName = _new_name; }
 			/**
 			 * \brief Return name of module
 			 * \return Module name
@@ -69,6 +86,12 @@ namespace Core
 			 * \brief Module name
 			 */
 			CoreType::String moduleName = S("Unnamed Module");
+
+			/**
+			 * \brief Engine reference
+			 * \note Set after constructor, don't use it before Initialize()
+			 */
+			Engine* engine = nullptr;
 		};
 	}
 }

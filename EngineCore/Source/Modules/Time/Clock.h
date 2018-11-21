@@ -68,22 +68,22 @@ namespace Module
 			 */
 			std::chrono::high_resolution_clock clock;
 			/**
-			 * \brief Time point set at the start of the programm
+			 * \brief Time point set at the start of the program
 			 */
-			std::chrono::high_resolution_clock::time_point startProgramPoint = clock.now();
+			std::chrono::high_resolution_clock::time_point startProgramPoint = std::chrono::high_resolution_clock::now();
 
 			/**
 			 * \brief Time point set at previous frame
 			 */
-			std::chrono::high_resolution_clock::time_point previousTimePoint = clock.now();
+			std::chrono::high_resolution_clock::time_point previousTimePoint = std::chrono::high_resolution_clock::now();
 			/**
 			 * \brief Time point set at current frame
 			 */
-			std::chrono::high_resolution_clock::time_point currentTimePoint = clock.now();
+			std::chrono::high_resolution_clock::time_point currentTimePoint = std::chrono::high_resolution_clock::now();
 			/**
 			 * \brief Current delta time
 			 */
-			std::chrono::high_resolution_clock::duration currentDeltaTime;
+			std::chrono::high_resolution_clock::duration currentDeltaTime = std::chrono::high_resolution_clock::duration::zero();
 
 			/**
 			 * \brief Count of total frame

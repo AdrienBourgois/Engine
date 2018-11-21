@@ -44,7 +44,8 @@ void Object::GameObject::SetParent(GameObject* _parent)
 void Object::GameObject::MakeMesh(const Core::CoreType::PrimitiveMesh::PrimitivesMeshType _mesh)
 {
 	Component::GraphicComponent* graphics = CreateComponent<Component::GraphicComponent>(_mesh);
-	MODULE(Module::Render::RenderInterface)->CreateBuffer(graphics);
+	auto render_interface = Engine::GetInstance()->GetModule<Module::Render::RenderInterface>();
+	render_interface->CreateBuffer(graphics);
 }
 
 void Object::GameObject::MakeMesh(const Core::CoreType::PrimitiveMesh::PrimitivesMeshType _mesh, const Core::CoreType::Color _color)
@@ -52,7 +53,8 @@ void Object::GameObject::MakeMesh(const Core::CoreType::PrimitiveMesh::Primitive
 	Core::CoreType::Mesh mesh = Core::CoreType::Mesh(_mesh);
 	mesh.SetColor(_color);
 	Component::GraphicComponent* graphics = CreateComponent<Component::GraphicComponent>(mesh);
-	MODULE(Module::Render::RenderInterface)->CreateBuffer(graphics);
+	auto render_interface = Engine::GetInstance()->GetModule<Module::Render::RenderInterface>();
+	render_interface->CreateBuffer(graphics);
 }
 
 

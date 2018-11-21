@@ -9,7 +9,7 @@
 #include "Core/Manager/ScriptManager.h"
 
 /**
- * \brief Engine (base class of engine)
+ * \brief Engine class
  */
 class ENGINEDLL_API Engine
 {
@@ -92,7 +92,7 @@ public:
 	/**
 	 * \brief List of engine states
 	 */
-	enum class EEngineStates : int
+	enum class EEngineState : int
 	{
 		/**
 		 * \brief Off
@@ -115,7 +115,7 @@ public:
 		 */
 		Running,
 		/**
-		 * \brief A script, module, ... (or the engine himself) ask to stop the engine
+		 * \brief A script, module, ... (or the engine himself) asked to stop the engine
 		 */
 		AskToStop,
 		/**
@@ -132,7 +132,13 @@ public:
 	 * \brief Get the current state of the engine
 	 * \return Current state
 	 */
-	EEngineStates GetState() const { return state; }
+	EEngineState GetState() const { return state; }
+
+	/**
+	 * \brief Is Engine currently initialized and running
+	 * \return Running state
+	 */
+	bool IsRunning() const { return state == EEngineState::Running; }
 
 private:
 	/**
@@ -166,7 +172,7 @@ private:
 	/**
 	 * \brief Store current engine state
 	 */
-	EEngineStates state = EEngineStates::Off;
+	EEngineState state = EEngineState::Off;
 
 	/**
 	 * \brief Singleton instance of Engine Class

@@ -25,7 +25,7 @@ BOOL WINAPI DllMain(const HINSTANCE _hinst_dll, const DWORD _fdw_reason, LPVOID 
 
 void Engine::Initialize(const HINSTANCE _h_instance)
 {
-	state = EEngineStates::Initializing;
+	state = EEngineState::Initializing;
 
 	if(_h_instance)
 		hInstance = _h_instance;
@@ -35,36 +35,36 @@ void Engine::Initialize(const HINSTANCE _h_instance)
 
 	scriptManager = new Core::Manager::ScriptManager();
 
-	moduleManager = new Core::Manager::ModuleManager();
+	moduleManager = new Core::Manager::ModuleManager(this);
 	moduleManager->InitializeModules();
 
-	state = EEngineStates::Ready;
+	state = EEngineState::Ready;
 }
 
 void Engine::Start()
 {
-	if (state == EEngineStates::Ready)
+	if (state == EEngineState::Ready)
 	{
 		moduleManager->StartModules();
 		scriptManager->StartScripts();
-		state = EEngineStates::Starting;
+		state = EEngineState::Starting;
 	}
 
-	if (state == EEngineStates::Starting)
+	if (state == EEngineState::Starting)
 	{
-		state = EEngineStates::Running;
+		state = EEngineState::Running;
 		Update();
 	}
 }
 
 void Engine::Update()
 {
-	while (state == EEngineStates::Running)
+	while (state == EEngineState::Running)
 	{
 		scriptManager->UpdateScripts();
 		moduleManager->UpdateModules();
 	}
-	if (state == EEngineStates::AskToStop)
+	if (state == EEngineState::AskToStop)
 	{
 		Destruct();
 	}
@@ -72,12 +72,12 @@ void Engine::Update()
 
 void Engine::Stop()
 {
-	state = EEngineStates::AskToStop;
+	state = EEngineState::AskToStop;
 }
 
 void Engine::Destruct()
 {
-	state = EEngineStates::Stopping;
+	state = EEngineState::Stopping;
 
 	delete parameters;
 	parameters = nullptr;
@@ -90,5 +90,5 @@ void Engine::Destruct()
 	delete moduleManager;
 	moduleManager = nullptr;
 
-	state = EEngineStates::Stopped;
+	state = EEngineState::Stopped;
 }

@@ -5,7 +5,7 @@
 
 bool Core::Manager::ScriptManager::StartScripts()
 {
-	while (scriptsToStart.size())
+	while (!scriptsToStart.empty())
 	{
 		scriptsToStart.front()->Start();
 		scriptsToStart.pop();
@@ -14,7 +14,7 @@ bool Core::Manager::ScriptManager::StartScripts()
 	return true;
 }
 
-Core::Interface::IScript* Core::Manager::ScriptManager::GetIScriptByName(CoreType::String _name) const
+Core::Interface::IScript* Core::Manager::ScriptManager::GetIScriptByName(const CoreType::String& _name) const
 {
 	for (Interface::IScript* script : scripts)
 	{
@@ -29,16 +29,18 @@ void Core::Manager::ScriptManager::UpdateScripts()
 {
 	StartScripts();
 
+	Module::Time::Clock* clock = Engine::GetInstance()->GetModule<Module::Time::Clock>();
+
 	for (Interface::IScript* script : scripts)
 	{
 		script->Update();
-		script->Update(MODULE(Module::Time::Clock)->GetDeltaTime());
+		script->Update(clock->GetDeltaTime());
 	}
 }
 
 void Core::Manager::ScriptManager::Stop()
 {
-	scriptsToStart.empty();
+	std::queue<Interface::IScript*>().swap(scriptsToStart);
 
 	for (Interface::IScript* script : scripts)
 	{

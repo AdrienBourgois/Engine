@@ -3,16 +3,23 @@
 
 #include "RedCube.h"
 #include "Camera.h"
+#include "SimpleScene.h"
+#include "Axis.h"
 
-int WINAPI wWinMain(HINSTANCE _h_instance, HINSTANCE _h_prev_instance, PWSTR _p_cmd_line, int _n_cmd_show)
+int WINAPI WinMain(HINSTANCE__* const _h_instance, HINSTANCE__* const _h_prev_instance, char* const _command_line, const int _command_show)
 {
 	HINSTANCE__* hinst_lib = LoadLibrary(L"EngineCore.dll");
-	Engine::GetInstance()->Initialize();
 
-	ADD_SCRIPT(RedCube);
-	ADD_SCRIPT(CameraScript);
+	Engine* engine = Engine::GetInstance();
+	engine->Initialize(_h_instance);
 
-	Engine::GetInstance()->Start();
+	//engine->AddScript<RedCube>();
+	engine->AddScript<SimpleScene>();
+	engine->AddScript<Axis>();
+
+	engine->AddScript<CameraScript>();
+
+	engine->Start();
 
 	FreeLibrary(hinst_lib);
 

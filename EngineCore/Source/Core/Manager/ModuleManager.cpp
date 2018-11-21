@@ -5,6 +5,10 @@
 #include "Modules/Inputs/Input.h"
 #include "Modules/Time/Clock.h"
 
+Core::Manager::ModuleManager::ModuleManager(Engine* _engine_reference) : engine(_engine_reference)
+{
+}
+
 bool Core::Manager::ModuleManager::InitializeModules()
 {
 	if (!CreateModule<Module::Time::Clock>(S("Clock")))
@@ -32,17 +36,6 @@ bool Core::Manager::ModuleManager::StartModules()
 	return true;
 }
 
-Core::Interface::IModule* Core::Manager::ModuleManager::GetIModuleByName(CoreType::String _name) const
-{
-	for (Interface::IModule* module : modules)
-	{
-		if (module->GetModuleName() == _name)
-			return module;
-	}
-
-	return nullptr;
-}
-
 void Core::Manager::ModuleManager::UpdateModules()
 {
 	for (Interface::IModule* module : modules)
@@ -54,7 +47,7 @@ void Core::Manager::ModuleManager::UpdateModules()
 
 void Core::Manager::ModuleManager::Stop()
 {
-	auto clock = MODULE(Module::Time::Clock);
+	const Module::Time::Clock* clock = Engine::GetInstance()->GetModule<Module::Time::Clock>();
 	LOG(S("Average FPS : ") + SN(clock->GetFpsAverage()) + S(" - Total time : ") + clock->GetTotalTime().ToString(), LOG_INFO);
 
 	for (Interface::IModule* module : modules)

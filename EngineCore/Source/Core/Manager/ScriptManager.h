@@ -30,13 +30,13 @@ namespace Core
 			/**
 			 * \brief Add script class to Engine
 			 * \tparam T Script class
-			 * \return Is script sucessfully created
+			 * \return Is script successfully created
 			 */
 			template <typename T, class U = typename std::enable_if<std::is_base_of<Interface::IScript, T>::value, T>::type>
 			bool AddScript();
 			/**
 			 * \brief Start all scripts
-			 * \return Is all scripts sucessfully started
+			 * \return Is all scripts successfully started
 			 */
 			bool StartScripts();
 
@@ -54,7 +54,7 @@ namespace Core
 			 * \param _name Script name
 			 * \return Script founded (nullptr if any)
 			 */
-			Interface::IScript* GetIScriptByName(CoreType::String _name) const;
+			Interface::IScript* GetIScriptByName(const CoreType::String& _name) const;
 
 			/**
 			 * \brief Update all scripts
